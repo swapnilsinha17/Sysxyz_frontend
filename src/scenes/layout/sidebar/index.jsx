@@ -1,25 +1,19 @@
 /* eslint-disable react/prop-types */
-import { Avatar, Box, IconButton, Typography, useTheme } from "@mui/material";
+import { Avatar, Box, IconButton,  useTheme } from "@mui/material";
+import { IoGlobeOutline } from "react-icons/io5";
 import { useContext, useState } from "react";
 import { tokens } from "../../../theme";
 import { Menu, MenuItem, Sidebar } from "react-pro-sidebar";
+import { ImTable } from "react-icons/im";
+import { LuUserRound } from "react-icons/lu";
+
+
+import { AiOutlineDashboard } from "react-icons/ai";
 import {
-  BarChartOutlined,
-  CalendarTodayOutlined,
-  ContactsOutlined,
-  DashboardOutlined,
-  DonutLargeOutlined,
-  HelpOutlineOutlined,
-  MapOutlined,
   MenuOutlined,
-  PeopleAltOutlined,
-  PersonOutlined,
-  ReceiptOutlined,
-  TimelineOutlined,
-  WavesOutlined,
 } from "@mui/icons-material";
-import avatar from "../../../assets/images/avatar.png";
-import logo from "../../../assets/images/logo.png";
+import avatar from "../../../assets/images/logo/XYZ_OPS_Logo.png";
+
 import Item from "./Item";
 import { ToggledContext } from "../../../App";
 
@@ -62,22 +56,15 @@ const SideBar = () => {
               <Box
                 display="flex"
                 alignItems="center"
-                gap="12px"
+               
                 sx={{ transition: ".3s ease" }}
               >
                 <img
-                  style={{ width: "30px", height: "30px", borderRadius: "8px" }}
-                  src={logo}
+                  style={{ width: "100px", height: "100px", marginTop:"50px", marginLeft:"30px", borderRadius: "8px", background:"white"  }}
+                  src={avatar}
                   alt="Argon"
                 />
-                <Typography
-                  variant="h4"
-                  fontWeight="bold"
-                  textTransform="capitalize"
-                  color={colors.greenAccent[500]}
-                >
-                  Argon
-                </Typography>
+               
               </Box>
             )}
             <IconButton onClick={() => setCollapsed(!collapsed)}>
@@ -86,37 +73,9 @@ const SideBar = () => {
           </Box>
         </MenuItem>
       </Menu>
-      {!collapsed && (
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            gap: "10px",
-            mb: "25px",
-          }}
-        >
-          <Avatar
-            alt="avatar"
-            src={avatar}
-            sx={{ width: "100px", height: "100px" }}
-          />
-          <Box sx={{ textAlign: "center" }}>
-            <Typography variant="h3" fontWeight="bold" color={colors.gray[100]}>
-              Tony Stark
-            </Typography>
-            <Typography
-              variant="h6"
-              fontWeight="500"
-              color={colors.greenAccent[500]}
-            >
-              VP Fancy Admin
-            </Typography>
-          </Box>
-        </Box>
-      )}
+      
 
-      <Box mb={5} pl={collapsed ? undefined : "5%"}>
+      <Box mb={5} mt={8} pl={collapsed ? undefined : "5%"}>
         <Menu
           menuItemStyles={{
             button: {
@@ -130,19 +89,37 @@ const SideBar = () => {
         >
           <Item
             title="Dashboard"
+            path="/dashboard"
+            colors={colors}
+            icon={<AiOutlineDashboard style={{height:"25px",width:"25px"}}/>}
+          />
+            <Item
+            title="Organizations"
+            path="/organizations"
+            colors={colors}
+            icon={< IoGlobeOutline style={{height:"25px",width:"25px"}}/>}
+          />
+            <Item
+            title="Departments"
+            path="/department"
+            colors={colors}
+            icon={< ImTable style={{height:"20px",width:"20px"}}/>}
+          />
+            <Item
+            title="Users"
             path="/"
             colors={colors}
-            icon={<DashboardOutlined />}
+            icon={<LuUserRound  style={{height:"25px",width:"25px"}} />}
           />
         </Menu>
-        <Typography
+        {/* <Typography
           variant="h6"
           color={colors.gray[300]}
           sx={{ m: "15px 0 5px 20px" }}
         >
           {!collapsed ? "Data" : " "}
-        </Typography>{" "}
-        <Menu
+        </Typography>{" "} */}
+        {/* <Menu
           menuItemStyles={{
             button: {
               ":hover": {
@@ -171,8 +148,8 @@ const SideBar = () => {
             colors={colors}
             icon={<ReceiptOutlined />}
           />
-        </Menu>
-        <Typography
+        </Menu> */}
+        {/* <Typography
           variant="h6"
           color={colors.gray[300]}
           sx={{ m: "15px 0 5px 20px" }}
@@ -215,8 +192,8 @@ const SideBar = () => {
           sx={{ m: "15px 0 5px 20px" }}
         >
           {!collapsed ? "Charts" : " "}
-        </Typography>
-        <Menu
+        </Typography> */}
+        {/* <Menu
           menuItemStyles={{
             button: {
               ":hover": {
@@ -257,7 +234,7 @@ const SideBar = () => {
             colors={colors}
             icon={<WavesOutlined />}
           />
-        </Menu>
+        </Menu> */}
       </Box>
     </Sidebar>
   );
