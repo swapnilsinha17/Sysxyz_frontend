@@ -24,8 +24,9 @@ export default function SignIn() {
     password: "",
   });
 
+
   const AccessToken = sessionStorage.getItem("auth_token");
-  
+
 
   useEffect(() => {
     if (AccessToken) {
@@ -70,9 +71,11 @@ export default function SignIn() {
       });
 console.log("response data of token",response?.data?.data?.token);
 
+
       if (response.status === 201) {
         sessionStorage.setItem(
           "auth_token",
+
           response?.data?.data?.token
         );
        

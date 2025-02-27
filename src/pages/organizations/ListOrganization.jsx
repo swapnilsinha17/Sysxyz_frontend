@@ -134,9 +134,9 @@ const ListOrganization = () => {
     }
   };
 
-  useEffect(() => {
-    fetchOrganizations();
-  }, []);
+  // useEffect(() => {
+  //   fetchOrganizations();
+  // }, []);
   return (
     <Box m="20px">
       <Header title="ORGANIZATION" />

@@ -78,6 +78,8 @@ const Navbar = () => {
           borderRadius="3px"
           sx={{ display: `${isXsDevices ? "none" : "flex"}` }}
         >
+
+          
         </Box>
       </Box>
 
@@ -89,6 +91,11 @@ const Navbar = () => {
             <DarkModeOutlined />
           )}
         </IconButton>
+
+        {/* <IconButton>
+          <NotificationsOutlined />
+        </IconButton> */}
+
         <IconButton>
           <SettingsOutlined />
         </IconButton>
