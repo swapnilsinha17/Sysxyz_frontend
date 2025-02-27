@@ -1,22 +1,28 @@
+
 import {
   Box,
   IconButton,
-  InputBase,
   useMediaQuery,
   useTheme,
 } from "@mui/material";
+import * as React from 'react';
+import Button from '@mui/material/Button';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import Fade from '@mui/material/Fade';
 import { tokens, ColorModeContext } from "../../../theme";
 import { useContext } from "react";
+
 import {
   DarkModeOutlined,
   LightModeOutlined,
   MenuOutlined,
-  NotificationsOutlined,
   PersonOutlined,
-  SearchOutlined,
   SettingsOutlined,
 } from "@mui/icons-material";
 import { ToggledContext } from "../../../App";
+import { useNavigate } from "react-router-dom";
+
 const Navbar = () => {
   const theme = useTheme();
   const colorMode = useContext(ColorModeContext);
@@ -24,6 +30,33 @@ const Navbar = () => {
   const isMdDevices = useMediaQuery("(max-width:768px)");
   const isXsDevices = useMediaQuery("(max-width:466px)");
   const colors = tokens(theme.palette.mode);
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
+  const navigate = useNavigate();
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleLogout = () => {
+    console.log("before logout", sessionStorage.getItem("auth_token"));
+
+    // Remove the token from sessionStorage
+    sessionStorage.removeItem("auth_token");
+
+    // Optional: Clear other session storage items if necessary
+    // sessionStorage.clear();
+
+    console.log("after logout", sessionStorage.getItem("auth_token"));
+
+    // Redirect to the login page after logout
+    navigate("/"); // Change the path to your login page
+  };
+
   return (
     <Box
       display="flex"
@@ -45,10 +78,6 @@ const Navbar = () => {
           borderRadius="3px"
           sx={{ display: `${isXsDevices ? "none" : "flex"}` }}
         >
-          <InputBase placeholder="Search" sx={{ ml: 2, flex: 1 }} />
-          <IconButton type="button" sx={{ p: 1 }}>
-            <SearchOutlined />
-          </IconButton>
         </Box>
       </Box>
 
@@ -61,13 +90,29 @@ const Navbar = () => {
           )}
         </IconButton>
         <IconButton>
-          <NotificationsOutlined />
-        </IconButton>
-        <IconButton>
           <SettingsOutlined />
         </IconButton>
         <IconButton>
-          <PersonOutlined />
+          <div>
+            <PersonOutlined
+              id="fade-button"
+              aria-controls={open ? 'fade-menu' : undefined}
+              aria-haspopup="true"
+              aria-expanded={open ? 'true' : undefined}
+              onClick={handleClick}
+            />
+            <Menu
+              id="fade-menu"
+              MenuListProps={{ 'aria-labelledby': 'fade-button' }}
+              anchorEl={anchorEl}
+              open={open}
+              onClose={handleClose}
+              TransitionComponent={Fade}
+            >
+              <MenuItem onClick={handleClose}>Change Password</MenuItem>
+              <MenuItem onClick={handleLogout}>Logout</MenuItem>
+            </Menu>
+          </div>
         </IconButton>
       </Box>
     </Box>
