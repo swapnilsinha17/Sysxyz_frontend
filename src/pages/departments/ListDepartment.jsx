@@ -7,6 +7,9 @@ import {
   Select,
   FormControl,
   InputLabel,
+  IconButton,
+  // Edit,
+  // Delete,
   Button,
 } from "@mui/material";
 import { Header } from "../../components";
@@ -68,6 +71,25 @@ const ListDepartment = () => {
       headerName: "Action",
       flex: 1,
       filterable: true,
+      renderCell: (params) => (
+        <Box display="flex" justifyContent="center">
+          {/* Edit Button */}
+          <IconButton
+            // onClick={() => handleEdit(params.row)}
+            sx={{ color: 'blue', marginRight: 1 }}
+          >Edit
+            {/* <Edit /> */}
+          </IconButton>
+
+          {/* Delete Button */}
+          <IconButton
+            // onClick={() => handleDelete(params.row.id)}
+            sx={{ color: 'red' }}
+          >Delete
+            {/* <Delete /> */}
+          </IconButton>
+        </Box>
+      ),
     },
   ];
 

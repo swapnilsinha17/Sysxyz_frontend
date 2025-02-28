@@ -45,7 +45,7 @@
         filterable: true,
       },
       {
-        field: "code",
+        field: "org_id",
         headerName: "Code",
         flex: 1,
         headerAlign: "left",
@@ -54,9 +54,9 @@
         filterable: true,
       },
       {
-        field: "access",
+        field: "access_end_date",
         headerName: "Access Ends On",
-        type: "date",
+        // type: "date",
         headerAlign: "left",
         align: "left",
         filterable: true,
@@ -70,12 +70,12 @@
         flex: 1,
         filterable: true,
       },
-      {
-        field: "action",
-        headerName: "Action",
-        flex: 1,
-        filterable: true,
-      },
+      // {
+      //   field: "action",
+      //   headerName: "Action",
+      //   flex: 1,
+      //   filterable: true,
+      // },
     ];
 
     // Handle page change
