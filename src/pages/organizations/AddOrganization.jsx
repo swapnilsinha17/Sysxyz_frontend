@@ -18,6 +18,7 @@ const initialValues = {
   state: "",
 };
 
+import axios from "axios";
 const checkoutSchema = Yup.object({
   // Company Information
   org_name: Yup.string()
@@ -53,14 +54,39 @@ const checkoutSchema = Yup.object({
     .min(Yup.ref("access_start_date"), "End date must be after start date"),
 });
 
+import { apis } from "../../utils/utills";
 const AddOrganization = () => {
   const isNonMobile = useMediaQuery("(min-width:600px)");
-  const handleFormSubmit = (values, actions) => {
-    console.log(values);
+
+const handleSubmit = async (values, actions) => {
+  try {
+    // Making the POST request to the backend API
+    const response = await axios.post(`${apis.baseUrl}/sa/addOrganization`, values,
+
+      {
+        headers: {
+          Authorization: sessionStorage.getItem("auth_token"), // `${AccesssToken}`,  // Basic authentication header
+        },
+      }
+    );
+
+    // Handle the response after successfully adding the data to the database
+    console.log('Organization added successfully:', response.data);
+
+    // Optionally reset the form after successful submission
     actions.resetForm({
       values: initialValues,
     });
-  };
+
+    // Optionally navigate to another page after submission
+    navigate('/organizations'); // Redirect to the organizations page
+
+  } catch (error) {
+    // Handle any errors that occur during the request
+    console.error('Error adding organization:', error);
+  }
+};
+
 
   const navigate = useNavigate();
 
@@ -75,7 +101,7 @@ const AddOrganization = () => {
       />
 
       <Formik
-        onSubmit={handleFormSubmit}
+        onSubmit={handleSubmit}
         initialValues={initialValues}
         validationSchema={checkoutSchema}
       >
@@ -127,8 +153,8 @@ const AddOrganization = () => {
                   onBlur={handleBlur}
                   onChange={handleChange}
                   value={values.org_name}
-                  name=" org_name"
-                  error={touched.org_name && errors.org_name}
+                  name="org_name"
+                  error={touched.org_name && Boolean(errors.org_name)}
                   helperText={touched.org_name && errors.org_name}
                   sx={{
                     gridColumn: "span 2",
@@ -170,7 +196,7 @@ const AddOrganization = () => {
                   onChange={handleChange}
                   value={values.PAN}
                   name="PAN"
-                  error={touched.PAN && errors.PAN}
+                  error={touched.PAN && Boolean(errors.PAN)}
                   helperText={touched.PAN && errors.PAN}
                   sx={{
                     gridColumn: "span 1",
@@ -189,10 +215,10 @@ const AddOrganization = () => {
                   label="GST No."
                   onBlur={handleBlur}
                   onChange={handleChange}
-                  value={values.cGST_No}
+                  value={values.GST_No}
                   name="GST_No"
-                  error={touched.contact && errors.GST_No}
-                  helperText={touched.contact && errors.GST_No}
+                  error={touched.GST_No && Boolean(errors.GST_No)}
+                  helperText={touched.GST_No && errors.GST_No}
                   sx={{
                     gridColumn: "span 1",
                     backgroundColor: "#F2F0F0",
@@ -212,7 +238,7 @@ const AddOrganization = () => {
                   onChange={handleChange}
                   value={values.state}
                   name="state"
-                  error={touched.state && errors.state}
+                  error={touched.state && Boolean(errors.state)}
                   helperText={touched.state && errors.state}
                   sx={{
                     gridColumn: "span 1",
@@ -233,7 +259,7 @@ const AddOrganization = () => {
                   onChange={handleChange}
                   value={values.city}
                   name="city"
-                  error={touched.city && errors.city}
+                  error={touched.city && Boolean(errors.city)}
                   helperText={touched.city && errors.city}
                   sx={{
                     gridColumn: "span 1",
@@ -289,7 +315,7 @@ const AddOrganization = () => {
                   name="primary_contact_person"
                   error={
                     touched.primary_contact_person &&
-                    errors.primary_contact_person
+                    Boolean(errors.primary_contact_person)
                   }
                   helperText={
                     touched.primary_contact_person &&
@@ -316,7 +342,7 @@ const AddOrganization = () => {
                   name="primary_contact_number"
                   error={
                     touched.primary_contact_number &&
-                    errors.primary_contact_number
+                    Boolean(errors.primary_contact_number)
                   }
                   helperText={
                     touched.primary_contact_number &&
@@ -343,7 +369,7 @@ const AddOrganization = () => {
                   name="primary_contact_email"
                   error={
                     touched.primary_contact_email &&
-                    errors.primary_contact_email
+                    Boolean(errors.primary_contact_email)
                   }
                   helperText={
                     touched.primary_contact_email &&
@@ -401,7 +427,7 @@ const AddOrganization = () => {
                   onChange={handleChange}
                   value={values.access_start_date}
                   name="access_start_date"
-                  error={touched.access_start_date && errors.access_start_date}
+                  error={touched.access_start_date && Boolean(errors.access_start_date)}
                   helperText={
                     touched.access_start_date && errors.access_start_date
                   }
@@ -423,8 +449,8 @@ const AddOrganization = () => {
                   onBlur={handleBlur}
                   onChange={handleChange}
                   value={values.access_end_date}
-                  name="lastName"
-                  error={touched.access_end_date && errors.access_end_date}
+                  name="access_end_date"
+                  error={touched.access_end_date && Boolean(errors.access_end_date)}
                   helperText={touched.access_end_date && errors.access_end_date}
                   sx={{
                     gridColumn: "span 1",
@@ -453,7 +479,7 @@ const AddOrganization = () => {
 
                     navigate("/organizations");
                   }}
-                  type="submit"
+                  type="button"
                   color="primary"
                   variant="contained"
                 >

@@ -101,13 +101,13 @@ const SideBar = () => {
           />
             <Item
             title="Departments"
-            path="/department"
+            path="/departments"
             colors={colors}
             icon={< ImTable style={{height:"20px",width:"20px"}}/>}
           />
             <Item
             title="Users"
-            path="/"
+            path="/users"
             colors={colors}
             icon={<LuUserRound  style={{height:"25px",width:"25px"}} />}
           />
