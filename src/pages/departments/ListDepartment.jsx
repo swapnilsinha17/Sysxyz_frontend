@@ -139,9 +139,10 @@ const ListDepartment = () => {
     
       if (orgData && orgData.length > 0) {
         console.log(organizations)
-        const updatedData = orgData.map((org) => ({
+        const updatedData = orgData.map((org, index) => ({
           ...org,
-          id: org.org_id, // Assuming 'org_id' is unique
+          id: index+1, // Assuming 'org_id' is unique
+          department_name:org.department_name
         }));
         
         setOrganizations(updatedData);
