@@ -1,10 +1,10 @@
 import { Box, Button, TextField, useMediaQuery,Typography, CircularProgress } from "@mui/material";
-import { Header } from "../../components";
+import { Header } from "../../../components";
 import { useNavigate, useParams } from "react-router-dom";
 import { Formik } from "formik";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { apis } from "../../utils/utills";
+import { apis } from "../../../utils/utills";
 
 const ViewOrganization = () => {
   const isNonMobile = useMediaQuery("(min-width:600px)");
@@ -68,10 +68,12 @@ const ViewOrganization = () => {
             <fieldset style={fieldsetStyle}>
               <legend style={legendStyle}>Point Of Contact :: Administrator</legend>
 
-              <Box display="grid" gap="20px" gridTemplateColumns="repeat(3, minmax(0, 1fr))" sx={gridStyle(isNonMobile)}>
+              <Box display="grid" gap="20px" gridTemplateColumns="repeat(2, minmax(0, 1fr))" sx={gridStyle(isNonMobile)}>
                 {renderTextField("Name", values.primary_contact_person, 1)}
                 {renderTextField("Phone", values.primary_contact_number, 1)}
                 {renderTextField("Email", values.primary_contact_email, 1)}
+                {renderTextField("Employee Code", values.employee_code, 1)}
+               
               </Box>
             </fieldset>
 
@@ -84,11 +86,11 @@ const ViewOrganization = () => {
               </Box>
             </fieldset>
 
-            <Box display="flex" justifyContent="end" mt="20px">
-              <Button onClick={() => navigate("/organizations")} type="button" color="primary" variant="contained">
+            <Box display="flex" justifyContent="end" mt="20px" gap="12px">
+              <Button onClick={() => navigate("/sa/organizations")} type="button" color="primary" variant="contained">
                 Back
               </Button>
-              <Button onClick={() => navigate(`/organizations/edit/${id}`)} type="button" color="secondary" variant="contained">
+              <Button onClick={() => navigate(`/sa/organizations/edit/${id}`)} type="button" color="secondary" variant="contained">
                 Edit
               </Button>
             </Box>

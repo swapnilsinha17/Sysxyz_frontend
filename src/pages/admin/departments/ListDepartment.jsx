@@ -14,11 +14,11 @@ import {
 } from "@mui/material";
 import { DeleteOutline } from '@mui/icons-material';
 
-import { Header } from "../../components";
+import { Header } from "../../../components";
 import { DataGrid } from "@mui/x-data-grid";
 
 //  import AccesssToken from "../../utils/utills";
-import { tokens } from "../../theme";
+import { tokens } from "../../../theme";
 import {
   AdminPanelSettingsOutlined,
   LockOpenOutlined,
@@ -28,7 +28,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 // import AddOrganization from "./AddOrganization";
 import axios from "axios";
-import { apis } from "../../utils/utills";
+import { apis } from "../../../utils/utills";
 const ListDepartment = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
@@ -77,15 +77,16 @@ const ListDepartment = () => {
         <Box display="flex" justifyContent="center" alignItems="center">
           {/* Edit Button with Text */}
           <Button
-          onClick={() => navigate(`/departments/edit/${params.row.dept_id}`)}// Assuming you have handleEdit logic
-            sx={{
-              color: colors.blueAccent[700],
-              marginRight: 2,
-              textTransform: 'none', // To avoid uppercase conversion
-              '&:hover': {
-                color: colors.blueAccent[800], // Darker blue on hover
-              },
-            }}
+      onClick={() => navigate(`/sa/departments/edit/${params.row.dept_id}`)}
+      sx={{
+        color: colors.blueAccent[100],
+        backgroundColor: '#fff', // Make background color visible
+        marginRight: 2,
+        textTransform: 'none',
+        '&:hover': {
+          color: colors.blueAccent[800],
+        },
+      }}
           >
             Edit
           </Button>
@@ -95,7 +96,7 @@ const ListDepartment = () => {
             onClick={() => handleDelete(params.row.id)} // Assuming you have handleDelete logic
             sx={{
               color: colors.redAccent[700],
-              textTransform: 'none', // To avoid uppercase conversion
+              textTransform: "none", // To avoid uppercase conversion
               '&:hover': {
                 color: colors.redAccent[800], // Darker red on hover
               },

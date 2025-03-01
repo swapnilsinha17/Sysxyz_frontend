@@ -1,11 +1,11 @@
 import { Box, Button, TextField, MenuItem, Select, InputLabel, FormControl, useMediaQuery } from "@mui/material";
-import { Header } from "../../components";
+import { Header } from "../../../components";
 import { useNavigate } from "react-router-dom";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { apis } from "../../utils/utills";
+import { apis } from "../../../utils/utills";
 
 // Initial values for Formik
 const initialValues = {
@@ -179,7 +179,7 @@ const AddDepartment = () => {
               {/* Cancel Button */}
               <Box display="flex" alignItems="center" justifyContent="end" mt="20px">
                 <Button
-                  onClick={() => navigate("/organizations")}
+                  onClick={() => navigate("/sa/departments")}
                   type="button"
                   color="primary"
                   variant="contained"

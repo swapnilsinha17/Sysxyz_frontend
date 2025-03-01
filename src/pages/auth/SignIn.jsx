@@ -30,7 +30,7 @@ export default function SignIn() {
 
   useEffect(() => {
     if (AccessToken) {
-      navigate("/dashboard");
+      navigate("/sa/dashboard");
     }
   }, [AccessToken]);
 
@@ -81,7 +81,7 @@ console.log("response data of token",response?.data?.data?.token);
        
         // console.log("as", response?.data?.data?.token);
         toast.success(response?.data?.message || "Login successful");
-        window.location.href = "/dashboard";
+        window.location.href = "/sa/dashboard";
       } else {
         toast.error(response?.data?.message || "Error while Login");
       }

@@ -1,11 +1,11 @@
 import { Box, Button, TextField, MenuItem, Select, InputLabel, FormControl, RadioGroup, FormControlLabel, Radio, useMediaQuery } from "@mui/material";
-import { Header } from "../../components";
+import { Header } from "../../../components";
 import { useNavigate } from "react-router-dom";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { apis } from "../../utils/utills";
+import { apis } from "../../../utils/utills";
 
 // Initial values for Formik
 const initialValues = {
@@ -98,7 +98,7 @@ const AddUser = () => {
         values: initialValues,
       });
 
-      navigate("/users");
+      navigate("/sa/users");
     } catch (error) {
       console.error("Error adding user:", error);
     }
@@ -390,7 +390,7 @@ const AddUser = () => {
               {/* Cancel Button */}
               <Box display="flex" alignItems="center" justifyContent="end" mt="20px">
                 <Button
-                  onClick={() => navigate("/users")}
+                  onClick={() => navigate("/sa/users")}
                   type="button"
                   color="primary"
                   variant="contained"

@@ -1,11 +1,11 @@
 import { Box, Button, TextField, MenuItem, Select, InputLabel, FormControl, useMediaQuery } from "@mui/material";
-import { Header } from "../../components";
-import { useNavigate, useParams } from "react-router-dom";
+import { Header } from "../../../components";
+import { useNavigate } from "react-router-dom";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { apis } from "../../utils/utills";
+import { apis } from "../../../utils/utills";
 
 // Initial values for Formik
 const initialValues = {
@@ -20,15 +20,13 @@ const checkoutSchema = Yup.object({
   org_id: Yup.string().required("Please select Organization"),
 });
 
-const EditDepartment = () => {
+const AddDepartment = () => {
   const [companies, setCompanies] = useState([]); // State to store company data
-  const [department, setDepartment] = useState(null); // State to store department data
   const [loading, setLoading] = useState(true); // Loading state for API request
   const isNonMobile = useMediaQuery("(min-width:600px)");
   const navigate = useNavigate();
-  const { departmentId } = useParams(); // Get departmentId from URL
 
-  // Fetch companies and department data when component mounts
+  // Fetch companies from API when component mounts
   useEffect(() => {
     const fetchCompanies = async () => {
       try {
@@ -40,31 +38,18 @@ const EditDepartment = () => {
         setCompanies(response?.data?.org?.organizations); // Assuming the response contains a list of companies
       } catch (error) {
         console.error("Error fetching companies:", error);
+      } finally {
+        setLoading(false); // Set loading to false once the data is fetched
       }
     };
-
-    const fetchDepartment = async () => {
-      try {
-        const response = await axios.get(`${apis.baseUrl}/sa/getDepartment/${departmentId}`, {
-          headers: {
-            Authorization: sessionStorage.getItem("auth_token"),
-          },
-        });
-        setDepartment(response?.data?.department); // Assuming the response contains the department data
-      } catch (error) {
-        console.error("Error fetching department:", error);
-      }
-    };
-
     fetchCompanies();
-    fetchDepartment();
-  }, [departmentId]);
+  }, []);
 
   // Handle form submission
   const handleSubmit = async (values, actions) => {
     try {
-      const response = await axios.put(
-        `${apis.baseUrl}/sa/updateDepartment/${departmentId}`,
+      const response = await axios.post(
+        `${apis.baseUrl}/sa/addDepartment`,
         values,
         {
           headers: {
@@ -73,7 +58,7 @@ const EditDepartment = () => {
         }
       );
 
-      console.log("Department updated successfully:", response.data);
+      console.log("Department added successfully:", response.data);
 
       actions.resetForm({
         values: initialValues,
@@ -81,25 +66,20 @@ const EditDepartment = () => {
 
       navigate("/departments");
     } catch (error) {
-      console.error("Error updating department:", error);
+      console.error("Error adding department:", error);
     }
   };
-
-  if (loading || !department) return <div>Loading...</div>; // Display loading if data is still being fetched
 
   return (
     <Box m="20px">
       <Header
-        title="EDIT DEPARTMENT"
-        subtitle="Update the department details on the platform by modifying the following information"
+        title="CREATE DEPARTMENT"
+        subtitle="Add new department on the platform by filling the following details"
       />
 
       <Formik
         onSubmit={handleSubmit}
-        initialValues={{
-          org_id: department.org_id || "",
-          department_name: department.department_name || "",
-        }}
+        initialValues={initialValues}
         validationSchema={checkoutSchema}
       >
         {({
@@ -154,11 +134,15 @@ const EditDepartment = () => {
                     onChange={handleChange}
                     error={touched.org_id && Boolean(errors.org_id)}
                   >
-                    {companies.map((company) => (
-                      <MenuItem key={company.org_id} value={company.org_id}>
-                        {company.org_name}
-                      </MenuItem>
-                    ))}
+                    {loading ? (
+                      <MenuItem disabled>Loading...</MenuItem>
+                    ) : (
+                      companies.map((company) => (
+                        <MenuItem key={company.org_id} value={company.org_id}>
+                          {company.org_name}
+                        </MenuItem>
+                      ))
+                    )}
                   </Select>
                   {touched.org_id && errors.org_id && (
                     <div style={{ color: "red", fontSize: "12px" }}>
@@ -195,7 +179,7 @@ const EditDepartment = () => {
               {/* Cancel Button */}
               <Box display="flex" alignItems="center" justifyContent="end" mt="20px">
                 <Button
-                  onClick={() => navigate("/departments")}
+                  onClick={() => navigate("/sa/departments")}
                   type="button"
                   color="primary"
                   variant="contained"
@@ -218,4 +202,4 @@ const EditDepartment = () => {
   );
 };
 
-export default EditDepartment;
+export default AddDepartment;

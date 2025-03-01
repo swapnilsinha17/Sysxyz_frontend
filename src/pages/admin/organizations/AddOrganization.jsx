@@ -1,5 +1,5 @@
 import { Box, Button, TextField, useMediaQuery } from "@mui/material";
-import { Header } from "../../components";
+import { Header } from "../../../components";
 import { useNavigate } from "react-router-dom";
 import { Formik } from "formik";
 import * as Yup from "yup";
@@ -54,7 +54,7 @@ const checkoutSchema = Yup.object({
     .min(Yup.ref("access_start_date"), "End date must be after start date"),
 });
 
-import { apis } from "../../utils/utills";
+import { apis } from "../../../utils/utills";
 const AddOrganization = () => {
   const isNonMobile = useMediaQuery("(min-width:600px)");
 
@@ -477,7 +477,7 @@ const handleSubmit = async (values, actions) => {
                   onClick={() => {
                     // Handle the 'New' button action, e.g., open a modal or redirect
 
-                    navigate("/organizations");
+                    navigate("/sa/organizations");
                   }}
                   type="button"
                   color="primary"

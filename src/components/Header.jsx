@@ -1,7 +1,6 @@
 /* eslint-disable react/prop-types */
 import { Box, Typography, useTheme } from "@mui/material";
 import { tokens } from "../theme";
-
 const Header = ({ title, subtitle }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
@@ -13,7 +12,7 @@ const Header = ({ title, subtitle }) => {
         color={colors.gray[100]}
         mb="5px"
         backgroundColor="#fff"
-        padding='10px'
+        padding="10px"
       >
         {title}
       </Typography>
@@ -24,4 +23,4 @@ const Header = ({ title, subtitle }) => {
   );
 };
 
-export default Header;
+export default Header; // Default export

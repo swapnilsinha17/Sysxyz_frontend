@@ -1,11 +1,11 @@
 import { Box, Button, TextField, MenuItem, Select, InputLabel, FormControl, RadioGroup, FormControlLabel, Radio, useMediaQuery } from "@mui/material";
-import { Header } from "../../components";
-import { useNavigate, useParams } from "react-router-dom";
+import { Header } from "../../../components";
+import { useNavigate } from "react-router-dom";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { apis } from "../../utils/utills";
+import { apis } from "../../../utils/utills";
 
 // Initial values for Formik
 const initialValues = {
@@ -28,14 +28,12 @@ const checkoutSchema = Yup.object({
   role: Yup.string().required("Please select a Role"),
 });
 
-const EditUser = () => {
+const AddUser = () => {
   const [companies, setCompanies] = useState([]); // State to store company data
   const [departments, setDepartments] = useState([]); // State to store department data
   const [loading, setLoading] = useState(true); // Loading state for API request
-  const [user, setUser] = useState(null); // State to store user data
   const isNonMobile = useMediaQuery("(min-width:600px)");
   const navigate = useNavigate();
-  const { userId } = useParams(); // Get userId from URL params
 
   // Fetch companies and departments from API when component mounts
   useEffect(() => {
@@ -46,6 +44,7 @@ const EditUser = () => {
             Authorization: sessionStorage.getItem("auth_token"),
           },
         });
+        console.log(response)
         setCompanies(response?.data?.org?.organizations); // Assuming the response contains a list of companies
       } catch (error) {
         console.error("Error fetching companies:", error);
@@ -54,23 +53,7 @@ const EditUser = () => {
       }
     };
     fetchCompanies();
-
-    // Fetch user details when the component mounts
-    const fetchUserDetails = async () => {
-      try {
-        const response = await axios.get(`${apis.baseUrl}/register/getUserDetails/${userId}`, {
-          headers: {
-            Authorization: sessionStorage.getItem("auth_token"),
-          },
-        });
-        setUser(response?.data?.user); // Assuming the response contains user data
-        fetchDepartments(response?.data?.user.org_id); // Fetch departments for the user's company
-      } catch (error) {
-        console.error("Error fetching user details:", error);
-      }
-    };
-    fetchUserDetails();
-  }, [userId]);
+  }, []);
 
   // Fetch departments when a company is selected
   const fetchDepartments = async (companyId) => {
@@ -80,7 +63,8 @@ const EditUser = () => {
           Authorization: sessionStorage.getItem("auth_token"),
         },
       });
-      setDepartments(response?.data?.org?.departments); // Assuming the response contains a list of departments
+      console.log(response.data)
+      setDepartments(response?.data?.org.departments); // Assuming the response contains a list of departments
     } catch (error) {
       console.error("Error fetching departments:", error);
     }
@@ -96,8 +80,10 @@ const EditUser = () => {
   // Handle form submission
   const handleSubmit = async (values, actions) => {
     try {
-      const response = await axios.put(
-        `${apis.baseUrl}/register/updateUser/${userId}`,
+        values.password = "Qwerty@123"
+        values.language_id = 1; 
+      const response = await axios.post(
+        `${apis.baseUrl}/register/addUser`,
         values,
         {
           headers: {
@@ -105,28 +91,29 @@ const EditUser = () => {
           },
         }
       );
-      console.log("User updated successfully:", response.data);
+
+      console.log("User added successfully:", response.data);
+
       actions.resetForm({
         values: initialValues,
       });
-      navigate("/users");
+
+      navigate("/sa/users");
     } catch (error) {
-      console.error("Error updating user:", error);
+      console.error("Error adding user:", error);
     }
   };
-
-  if (!user) return <div>Loading user data...</div>; // Show loading while fetching user details
 
   return (
     <Box m="20px">
       <Header
-        title="EDIT USER"
-        subtitle="Edit user details by filling the form below"
+        title="CREATE USER"
+        subtitle="Add new user to the platform by filling the following details"
       />
 
       <Formik
         onSubmit={handleSubmit}
-        initialValues={user} // Use the fetched user data as the initial values
+        initialValues={initialValues}
         validationSchema={checkoutSchema}
       >
         {({
@@ -403,7 +390,7 @@ const EditUser = () => {
               {/* Cancel Button */}
               <Box display="flex" alignItems="center" justifyContent="end" mt="20px">
                 <Button
-                  onClick={() => navigate("/users")}
+                  onClick={() => navigate("/sa/users")}
                   type="button"
                   color="primary"
                   variant="contained"
@@ -426,4 +413,4 @@ const EditUser = () => {
   );
 };
 
-export default EditUser;
+export default AddUser;

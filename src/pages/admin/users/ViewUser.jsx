@@ -1,9 +1,9 @@
 import { Box, Button, TextField, MenuItem, Select, InputLabel, FormControl, RadioGroup, FormControlLabel, Radio, useMediaQuery } from "@mui/material";
-import { Header } from "../../components";
+import { Header } from "../../../components";
 import { useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { apis } from "../../utils/utills";
+import { apis } from "../../../utils/utills";
 
 // Initial values for Formik
 const initialValues = {
@@ -312,7 +312,7 @@ const ViewUser = () => {
           {/* Cancel Button */}
           <Box display="flex" alignItems="center" justifyContent="end" mt="20px">
             <Button
-              onClick={() => navigate("/users")}
+              onClick={() => navigate("/sa/users")}
               type="button"
               color="primary"
               variant="contained"

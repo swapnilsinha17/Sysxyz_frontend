@@ -1,11 +1,11 @@
 import { Box, Button, TextField, useMediaQuery } from "@mui/material";
-import { Header } from "../../components";
+import { Header } from "../../../components";
 import { useNavigate, useParams } from "react-router-dom";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { apis } from "../../utils/utills";
+import { apis } from "../../../utils/utills";
 
 // Validation Schema (same as Add)
 const validationSchema = Yup.object({
@@ -146,7 +146,7 @@ const EditOrganization = () => {
               </Box>
             </fieldset>
             <Box display="flex" justifyContent="space-between" mt="20px">
-              <Button onClick={() => navigate("/organizations")} color="primary" variant="contained">
+              <Button onClick={() => navigate("/sa/organizations")} color="primary" variant="contained">
                 Cancel
               </Button>
               <Button type="submit" color="secondary" variant="contained">

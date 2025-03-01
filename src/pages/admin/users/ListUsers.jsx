@@ -10,14 +10,14 @@ import {
     IconButton,
     Button,
   } from "@mui/material";
-  import { Header } from "../../components";
+  import  Header from "../../../components/Header";
   import { DataGrid } from "@mui/x-data-grid";
-  import { tokens } from "../../theme";
+  import { tokens } from "../../../theme";
   import { EditOutlined, LockResetOutlined } from "@mui/icons-material";
   import { useState, useEffect } from "react";
   import { useNavigate } from "react-router-dom";
   import axios from "axios";
-  import { apis } from "../../utils/utills";
+  import { apis } from "../../../utils/utills";
   
   const ListUsers = () => {
     const theme = useTheme();

@@ -10,14 +10,14 @@
     InputLabel,
     Button,
   } from "@mui/material";
-  import { Header } from "../../components";
+  import { Header } from "../../../components";
   import { DataGrid } from "@mui/x-data-grid";
   import { toast , ToastContainer} from "react-toastify";
   import "react-toastify/dist/ReactToastify.css";
   
   // toast.configure();
   //  import AccesssToken from "../../utils/utills";
-  import { tokens } from "../../theme";
+  import { tokens } from "../../../theme";
   import {
     AdminPanelSettingsOutlined,
     LockOpenOutlined,
@@ -27,7 +27,7 @@
   import { useNavigate } from "react-router-dom";
   import AddOrganization from "./AddOrganization";
   import axios from "axios";
-  import { apis } from "../../utils/utills";
+  import { apis } from "../../../utils/utills";
   const ListOrganization = () => {
     const theme = useTheme();
 
@@ -112,7 +112,7 @@
               cursor: "pointer",
               "&:hover": { color: "#0056b3" },
             }}
-            onClick={() => navigate(`/organizations/view/${params.row.org_id}`)}
+            onClick={() => navigate(`/sa/organizations/view/${params.row.org_id}`)}
           >
             {params.value}
           </Typography>

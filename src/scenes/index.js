@@ -8,6 +8,5 @@ import Dashboard from "./dashboard";
 export {
   Navbar,
   SideBar,
-  Dashboard,
-
+  Dashboard
 };

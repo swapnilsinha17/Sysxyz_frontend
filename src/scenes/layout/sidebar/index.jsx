@@ -89,73 +89,33 @@ const SideBar = () => {
         >
           <Item
             title="Dashboard"
-            path="/dashboard"
+            path="/sa/dashboard"
             colors={colors}
             icon={<AiOutlineDashboard style={{height:"25px",width:"25px"}}/>}
           />
             <Item
             title="Organizations"
-            path="/organizations"
+            path="/sa/organizations"
             colors={colors}
             icon={< IoGlobeOutline style={{height:"25px",width:"25px"}}/>}
           />
             <Item
             title="Departments"
-            path="/departments"
+            path="/sa/departments"
             colors={colors}
             icon={< ImTable style={{height:"20px",width:"20px"}}/>}
           />
             <Item
             title="Users"
-            path="/users"
+            path="/sa/users"
             colors={colors}
             icon={<LuUserRound  style={{height:"25px",width:"25px"}} />}
           />
         </Menu>
-        {/* <Typography
-          variant="h6"
-          color={colors.gray[300]}
-          sx={{ m: "15px 0 5px 20px" }}
-        >
-          {!collapsed ? "Data" : " "}
-        </Typography>{" "} */}
-        {/* <Menu
-          menuItemStyles={{
-            button: {
-              ":hover": {
-                color: "#868dfb",
-                background: "transparent",
-                transition: ".4s ease",
-              },
-            },
-          }}
-        >
-          <Item
-            title="Manage Team"
-            path="/team"
-            colors={colors}
-            icon={<PeopleAltOutlined />}
-          />
-          <Item
-            title="Contacts Information"
-            path="/contacts"
-            colors={colors}
-            icon={<ContactsOutlined />}
-          />
-          <Item
-            title="Invoices Balances"
-            path="/invoices"
-            colors={colors}
-            icon={<ReceiptOutlined />}
-          />
-        </Menu> */}
-        {/* <Typography
-          variant="h6"
-          color={colors.gray[300]}
-          sx={{ m: "15px 0 5px 20px" }}
-        >
-          {!collapsed ? "Pages" : " "}
-        </Typography>
+      
+      </Box> 
+      
+      {/* <Box mb={5} mt={8} pl={collapsed ? undefined : "5%"}>
         <Menu
           menuItemStyles={{
             button: {
@@ -168,74 +128,27 @@ const SideBar = () => {
           }}
         >
           <Item
-            title="Profile Form"
-            path="/form"
+            title="Dashboard"
+            path="/a/dashboard"
             colors={colors}
-            icon={<PersonOutlined />}
+            icon={<AiOutlineDashboard style={{height:"25px",width:"25px"}}/>}
           />
-          <Item
-            title="Calendar"
-            path="/calendar"
+          
+            <Item
+            title="Departments"
+            path="/a/departments"
             colors={colors}
-            icon={<CalendarTodayOutlined />}
+            icon={< ImTable style={{height:"20px",width:"20px"}}/>}
           />
-          <Item
-            title="FAQ Page"
-            path="/faq"
+            <Item
+            title="Users"
+            path="/sa/users"
             colors={colors}
-            icon={<HelpOutlineOutlined />}
+            icon={<LuUserRound  style={{height:"25px",width:"25px"}} />}
           />
         </Menu>
-        <Typography
-          variant="h6"
-          color={colors.gray[300]}
-          sx={{ m: "15px 0 5px 20px" }}
-        >
-          {!collapsed ? "Charts" : " "}
-        </Typography> */}
-        {/* <Menu
-          menuItemStyles={{
-            button: {
-              ":hover": {
-                color: "#868dfb",
-                background: "transparent",
-                transition: ".4s ease",
-              },
-            },
-          }}
-        >
-          <Item
-            title="Bar Chart"
-            path="/bar"
-            colors={colors}
-            icon={<BarChartOutlined />}
-          />
-          <Item
-            title="Pie Chart"
-            path="/pie"
-            colors={colors}
-            icon={<DonutLargeOutlined />}
-          />
-          <Item
-            title="Line Chart"
-            path="/line"
-            colors={colors}
-            icon={<TimelineOutlined />}
-          />
-          <Item
-            title="Geography Chart"
-            path="/geography"
-            colors={colors}
-            icon={<MapOutlined />}
-          />
-          <Item
-            title="Stream Chart"
-            path="/stream"
-            colors={colors}
-            icon={<WavesOutlined />}
-          />
-        </Menu> */}
-      </Box>
+      
+      </Box> */}
     </Sidebar>
   );
 };
