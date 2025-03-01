@@ -12,6 +12,8 @@ const Header = ({ title, subtitle }) => {
         fontWeight="bold"
         color={colors.gray[100]}
         mb="5px"
+        backgroundColor="#fff"
+        padding='10px'
       >
         {title}
       </Typography>

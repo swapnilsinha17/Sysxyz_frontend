@@ -6,12 +6,16 @@
     MenuItem,
     Select,
     FormControl,
+    Switch,
     InputLabel,
     Button,
   } from "@mui/material";
   import { Header } from "../../components";
   import { DataGrid } from "@mui/x-data-grid";
-
+  import { toast , ToastContainer} from "react-toastify";
+  import "react-toastify/dist/ReactToastify.css";
+  
+  // toast.configure();
   //  import AccesssToken from "../../utils/utills";
   import { tokens } from "../../theme";
   import {
@@ -26,6 +30,7 @@
   import { apis } from "../../utils/utills";
   const ListOrganization = () => {
     const theme = useTheme();
+
     const colors = tokens(theme.palette.mode);
     const navigate = useNavigate();
     const [pageSize, setPageSize] = useState(10); // Track the current page size
@@ -35,14 +40,83 @@
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
+    const handleStatusToggle = async (id, currentStatus) => {
+      try {
+        const newStatus = currentStatus === 1 ? "Inactive" : "Active";
+
+        // Optimistically update the UI before the API call
+        setOrganizations((prevOrgs) =>
+          prevOrgs.map((org) =>
+            org.org_id === id ? { ...org, status: currentStatus === 1 ? 0 : 1 } : org
+          )
+        );
+    
+        // Send the update request to the server
+        const response = await axios.post(
+          `${apis.baseUrl}/sa/updateOrganizationStatus`,
+          { org_id: id, status: currentStatus == 1 ? 0 : 1 },
+          {
+            headers: {
+              Authorization: sessionStorage.getItem("auth_token"),
+            },
+          }
+        );
+        toast.success(`Status updated to ${newStatus}`, {
+          position: "top-right",
+          autoClose: 3000, // Closes after 3 seconds
+        });
+        console.log("Status updated successfully:", response.data);
+        fetchOrganizations()
+      } catch (error) {
+        console.error("Error updating status:", error);
+        // Revert the UI change if the API call fails
+        setOrganizations((prevOrgs) =>
+          prevOrgs.map((org) =>
+            org.org_id === id ? { ...org, status: currentStatus } : org
+          )
+        );
+      }
+    };
     const columns = [
-      { field: "id", headerName: "SN", filterable: true },
       {
+        field: "id",
+        headerName: "SN",
+        filterable: true,
+        renderCell: (params) => (
+          <Box
+            sx={{
+              backgroundColor: "red", // Blue color for badge
+              color: "#fff",
+              padding: "5px 5px",
+              borderRadius: "12px",
+              textAlign: "center",
+              minWidth: "40px",
+              fontWeight: "bold",
+              display: "inline-block",
+            }}
+          >
+            {params.value}
+          </Box>
+        ),
+      },{
         field: "org_name",
         headerName: "Company",
         flex: 1,
         cellClassName: "company-column--cell",
         filterable: true,
+        renderCell: (params) => (
+          <Typography
+            sx={{
+              color: "#007bff",
+              textDecoration: "underline",
+              cursor: "pointer",
+              "&:hover": { color: "#0056b3" },
+            }}
+            onClick={() => navigate(`/organizations/view/${params.row.org_id}`)}
+          >
+            {params.value}
+          </Typography>
+        ),
       },
       {
         field: "org_id",
@@ -62,7 +136,19 @@
         filterable: true,
         flex: 1,
       },
-      { field: "status", headerName: "Status", flex: 1, filterable: true },
+      {
+        field: "is_active",
+        headerName: "Status",
+        flex: 1,
+        filterable: true,
+        renderCell: (params) => (
+          <Switch
+            checked={params.value == 1}
+            onChange={() => handleStatusToggle(params.row.org_id, params.value)}
+            color="primary"
+          />
+        ),
+      },
       { field: "city", headerName: "City", flex: 1, filterable: true },
       {
         field: "state",
@@ -124,9 +210,9 @@
       
         if (orgData && orgData.length > 0) {
           console.log(organizations)
-          const updatedData = orgData.map((org) => ({
+          const updatedData = orgData.map((org, index) => ({
             ...org,
-            id: org.org_id, // Assuming 'org_id' is unique
+            id: index +1, // Assuming 'org_id' is unique
           }));
           
           setOrganizations(updatedData);
@@ -148,15 +234,21 @@
       fetchOrganizations();
     }, []);
     return (
+
+
       <Box m="20px">
+         <ToastContainer position="top-right" autoClose={3000} />
+   
         <Header title="ORGANIZATION" />
 
         {/* Search Box and New Button */}
+        
         <Box
           mb={2}
           display="flex"
           justifyContent="space-between"
           alignItems="center"
+         
         >
           <TextField
             label="Search"
@@ -194,7 +286,7 @@
         </Box>
 
         {/* Per Page Dropdown */}
-        <Box
+        {/* <Box
           mb={2}
           display="flex"
           justifyContent="space-between"
@@ -215,7 +307,7 @@
               ))}
             </Select>
           </FormControl>
-        </Box>
+        </Box> */}
 
         <Box
           mt="40px"
@@ -233,9 +325,11 @@
             },
 
             "& .MuiDataGrid-columnHeaders": {
+              // backgroundColor: '#fafafa',
+              
               backgroundColor: colors.blueAccent[700],
               borderBottom: "none",
-              color: colors.primary[500],
+              color: '#000',
             },
             "& .MuiDataGrid-virtualScroller": {
               backgroundColor: colors.primary[400],

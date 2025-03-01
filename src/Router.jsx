@@ -16,6 +16,12 @@ import AddDepartment from "./pages/departments/AddDepartment";
 import ViewDepartment from "./pages/departments/ViewDepartment";
 import Signup from "../src/pages/auth/SignIn";
 import PrivateRoute from "./scenes/layout/privateroute/PrivateRoute";
+import EditOrganization from "./pages/organizations/EditOrganization";
+import ListUsers from "./pages/users/ListUsers";
+import AddUser from "./pages/users/AddUser";
+import ViewUser from "./pages/users/ViewUser";
+import EditUser from "./pages/users/EditUSer";
+import EditDepartment from "./pages/departments/EditDepartment";
 
 const AppRouter = () => {
   return (
@@ -30,12 +36,19 @@ const AppRouter = () => {
           <Route path="organizations">
             <Route index element={<ListOrganization />} />
             <Route path="add" element={<AddOrganization />} />
-            <Route path="view" element={<ViewOrganization />} />
+            <Route path="view/:id" element={<ViewOrganization />} />
+            <Route path="edit/:id" element={<EditOrganization />} />
           </Route>
           <Route path="departments">
             <Route index element={<ListDepartment/>} />
             <Route path="add" element={<AddDepartment/>} />
-            <Route path="view" element={<ViewDepartment />} />
+            <Route path="edit/:id" element={<EditDepartment />} />
+          </Route>
+          <Route path="users">
+            <Route index element={<ListUsers />} />
+            <Route path="add" element={<AddUser />} />
+            <Route path="view/:id" element={<ViewUser />} />
+            <Route path="edit/:id" element={<EditUser />} />
           </Route>
           </Route>
         

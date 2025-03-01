@@ -12,6 +12,8 @@ import {
   // Delete,
   Button,
 } from "@mui/material";
+import { DeleteOutline } from '@mui/icons-material';
+
 import { Header } from "../../components";
 import { DataGrid } from "@mui/x-data-grid";
 
@@ -72,25 +74,39 @@ const ListDepartment = () => {
       flex: 1,
       filterable: true,
       renderCell: (params) => (
-        <Box display="flex" justifyContent="center">
-          {/* Edit Button */}
-          <IconButton
-            // onClick={() => handleEdit(params.row)}
-            sx={{ color: 'blue', marginRight: 1 }}
-          >Edit
-            {/* <Edit /> */}
-          </IconButton>
-
-          {/* Delete Button */}
-          <IconButton
-            // onClick={() => handleDelete(params.row.id)}
-            sx={{ color: 'red' }}
-          >Delete
-            {/* <Delete /> */}
-          </IconButton>
+        <Box display="flex" justifyContent="center" alignItems="center">
+          {/* Edit Button with Text */}
+          <Button
+          onClick={() => navigate(`/departments/edit/${params.row.dept_id}`)}// Assuming you have handleEdit logic
+            sx={{
+              color: colors.blueAccent[700],
+              marginRight: 2,
+              textTransform: 'none', // To avoid uppercase conversion
+              '&:hover': {
+                color: colors.blueAccent[800], // Darker blue on hover
+              },
+            }}
+          >
+            Edit
+          </Button>
+    
+          {/* Delete Button with Text */}
+          <Button
+            onClick={() => handleDelete(params.row.id)} // Assuming you have handleDelete logic
+            sx={{
+              color: colors.redAccent[700],
+              textTransform: 'none', // To avoid uppercase conversion
+              '&:hover': {
+                color: colors.redAccent[800], // Darker red on hover
+              },
+            }}
+          >
+            Delete
+          </Button>
         </Box>
       ),
-    },
+    }
+    
   ];
 
   // Handle page change
