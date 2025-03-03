@@ -26,7 +26,7 @@ const EditDepartment = () => {
   const [loading, setLoading] = useState(true); // Loading state for API request
   const isNonMobile = useMediaQuery("(min-width:600px)");
   const navigate = useNavigate();
-  const { departmentId } = useParams(); // Get departmentId from URL
+  const { id } = useParams(); // Get departmentId from URL
 
   // Fetch companies and department data when component mounts
   useEffect(() => {
@@ -45,26 +45,29 @@ const EditDepartment = () => {
 
     const fetchDepartment = async () => {
       try {
-        const response = await axios.get(`${apis.baseUrl}/sa/getDepartment/${departmentId}`, {
+        const response = await axios.post(`${apis.baseUrl}/sa/getDepartmentById`,
+          {dept_id:id},
+          {
           headers: {
             Authorization: sessionStorage.getItem("auth_token"),
           },
         });
-        setDepartment(response?.data?.department); // Assuming the response contains the department data
+        setDepartment(response?.data?.org); // Assuming the response contains the department data
       } catch (error) {
         console.error("Error fetching department:", error);
       }
     };
-
+    setLoading(false);
     fetchCompanies();
     fetchDepartment();
-  }, [departmentId]);
+  }, [id]);
 
   // Handle form submission
   const handleSubmit = async (values, actions) => {
     try {
-      const response = await axios.put(
-        `${apis.baseUrl}/sa/updateDepartment/${departmentId}`,
+      values.dept_id= id;
+      const response = await axios.post(
+        `${apis.baseUrl}/sa/editDepartment`,
         values,
         {
           headers: {
@@ -79,7 +82,7 @@ const EditDepartment = () => {
         values: initialValues,
       });
 
-      navigate("/departments");
+      navigate("/sa/departments");
     } catch (error) {
       console.error("Error updating department:", error);
     }

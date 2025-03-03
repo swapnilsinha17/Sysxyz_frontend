@@ -35,7 +35,7 @@ const EditUser = () => {
   const [user, setUser] = useState(null); // State to store user data
   const isNonMobile = useMediaQuery("(min-width:600px)");
   const navigate = useNavigate();
-  const { userId } = useParams(); // Get userId from URL params
+  const { id } = useParams(); // Get userId from URL params
 
   // Fetch companies and departments from API when component mounts
   useEffect(() => {
@@ -58,19 +58,20 @@ const EditUser = () => {
     // Fetch user details when the component mounts
     const fetchUserDetails = async () => {
       try {
-        const response = await axios.get(`${apis.baseUrl}/register/getUserDetails/${userId}`, {
+        const response = await axios.post(`${apis.baseUrl}/register/getUserById`,{user_id:id}, {
           headers: {
             Authorization: sessionStorage.getItem("auth_token"),
           },
         });
-        setUser(response?.data?.user); // Assuming the response contains user data
-        fetchDepartments(response?.data?.user.org_id); // Fetch departments for the user's company
+        setUser(response?.data?.data); // Assuming the response contains user data
+        fetchDepartments(response?.data?.org_id); // Fetch departments for the user's company
+        setLoading(false);
       } catch (error) {
         console.error("Error fetching user details:", error);
       }
     };
     fetchUserDetails();
-  }, [userId]);
+  }, [id]);
 
   // Fetch departments when a company is selected
   const fetchDepartments = async (companyId) => {

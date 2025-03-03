@@ -82,22 +82,22 @@
         field: "id",
         headerName: "SN",
         filterable: true,
-        renderCell: (params) => (
-          <Box
-            sx={{
-              backgroundColor: "red", // Blue color for badge
-              color: "#fff",
-              padding: "5px 5px",
-              borderRadius: "12px",
-              textAlign: "center",
-              minWidth: "40px",
-              fontWeight: "bold",
-              display: "inline-block",
-            }}
-          >
-            {params.value}
-          </Box>
-        ),
+        // renderCell: (params) => (
+        //   <Box
+        //     sx={{
+        //       backgroundColor: "red", // Blue color for badge
+        //       color: "#fff",
+        //       padding: "5px 5px",
+        //       borderRadius: "12px",
+        //       textAlign: "center",
+        //       minWidth: "40px",
+        //       fontWeight: "bold",
+        //       display: "inline-block",
+        //     }}
+        //   >
+        //     {params.value}
+        //   </Box>
+        // ),
       },{
         field: "org_name",
         headerName: "Company",

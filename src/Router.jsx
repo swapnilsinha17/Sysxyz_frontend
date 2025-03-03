@@ -21,7 +21,7 @@ import EditOrganization from "./pages/sa/organizations/EditOrganization";
 import ListUsers from "./pages/sa/users/ListUsers";
 import AddUser from "./pages/sa/users/AddUser";
 import ViewUser from "./pages/sa/users/ViewUser";
-import EditUser from "./pages/sa/users/EditUSer";
+import EditUser from "./pages/sa/users/EditUser";
 import EditDepartment from "./pages/sa/departments/EditDepartment";
 
 // admin 
