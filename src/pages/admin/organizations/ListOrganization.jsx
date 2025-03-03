@@ -285,29 +285,7 @@
           </Button>
         </Box>
 
-        {/* Per Page Dropdown */}
-        {/* <Box
-          mb={2}
-          display="flex"
-          justifyContent="space-between"
-          alignItems="center"
-        >
-          <Typography>Rows per page:</Typography>
-          <FormControl sx={{ minWidth: 100 }}>
-            <InputLabel>Per Page</InputLabel>
-            <Select
-              value={pageSize}
-              onChange={handlePageSizeChange}
-              label="Rows per page"
-            >
-              {[10, 20, 50, 100].map((size) => (
-                <MenuItem key={size} value={size}>
-                  {size}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-        </Box> */}
+      
 
         <Box
           mt="40px"

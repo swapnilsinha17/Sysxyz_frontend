@@ -200,7 +200,9 @@ const ListUsers = () => {
           fullWidth
           value={searchTerm}
           onChange={handleSearchChange}
-          sx={{ maxWidth: "300px" }}
+          sx={{ maxWidth: "300px",
+            bgcolor: colors.blueAccent[700],
+           }}
         />
 
         {/* New Button */}
@@ -222,11 +224,11 @@ const ListUsers = () => {
       </Box>
 
       {/* Per Page Dropdown */}
-      <Box mb={2} display="flex" justifyContent="space-between" alignItems="center">
+      {/* <Box mb={2} display="flex" justifyContent="space-between" alignItems="center">
         <Typography>Rows per page:</Typography>
         <FormControl sx={{ minWidth: 100 }}>
           <InputLabel>Per Page</InputLabel>
-          <Select value={pageSize} onChange={handlePageSizeChange} label="Rows per page">
+          <Select value={pageSize} onChange={handlePageSizeChange} label="">
             {[10, 20, 50, 100].map((size) => (
               <MenuItem key={size} value={size}>
                 {size}
@@ -234,7 +236,7 @@ const ListUsers = () => {
             ))}
           </Select>
         </FormControl>
-      </Box>
+      </Box> */}
 
       {/* DataGrid */}
       <Box mt="40px" height="75vh" flex={1} sx={{
@@ -243,12 +245,12 @@ const ListUsers = () => {
         "& .MuiDataGrid-columnHeaders": {
           backgroundColor: colors.blueAccent[700],
           borderBottom: "none",
-          color: colors.primary[500],
+          color: "white",
         },
         "& .MuiDataGrid-virtualScroller": { backgroundColor: colors.primary[400] },
         "& .MuiDataGrid-footerContainer": {
           borderTop: "none",
-          color: colors.primary[500],
+          color: "white",
           backgroundColor: colors.blueAccent[700],
         },
       }}>
@@ -265,13 +267,13 @@ const ListUsers = () => {
       </Box>
 
       {/* Pagination Info */}
-      <Box display="flex" justifyContent="flex-end" mt={2}>
+      {/* <Box display="flex" justifyContent="flex-end" mt={2}>
         <Typography>
           {searchTerm
             ? `Showing ${page * pageSize + 1} to ${Math.min((page + 1) * pageSize, users.length)} of ${users.length} entries (filtered)`
             : `Showing ${page * pageSize + 1} to ${Math.min((page + 1) * pageSize, users.length)} of ${users.length} entries`}
         </Typography>
-      </Box>
+      </Box> */}
 
       {/* Reset Password Dialog */}
       <Dialog open={openResetDialog} onClose={handleCloseResetDialog}>

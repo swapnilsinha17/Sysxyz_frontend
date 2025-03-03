@@ -11,12 +11,12 @@ const Header = ({ title, subtitle }) => {
         fontWeight="bold"
         color={colors.gray[100]}
         mb="5px"
-        backgroundColor="#fff"
+        // backgroundColor="#fff"
         padding="10px"
       >
         {title}
       </Typography>
-      <Typography variant="h5" color={colors.greenAccent[400]}>
+      <Typography variant="h5" color={colors.blueAccent[400]}>
         {subtitle}
       </Typography>
     </Box>

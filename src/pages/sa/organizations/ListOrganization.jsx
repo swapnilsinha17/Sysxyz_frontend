@@ -255,8 +255,9 @@
             variant="outlined"
             fullWidth
             value={searchTerm}
+            
             onChange={handleSearchChange}
-            sx={{ maxWidth: "300px" }} // Limit the width of the search box
+            sx={{ maxWidth: "300px",  backgroundColor: colors.blueAccent[700]}} // Limit the width of the search box
           />
 
           {/* New Button */}
@@ -284,32 +285,7 @@
             Add New
           </Button>
         </Box>
-
-        {/* Per Page Dropdown */}
-        {/* <Box
-          mb={2}
-          display="flex"
-          justifyContent="space-between"
-          alignItems="center"
-        >
-          <Typography>Rows per page:</Typography>
-          <FormControl sx={{ minWidth: 100 }}>
-            <InputLabel>Per Page</InputLabel>
-            <Select
-              value={pageSize}
-              onChange={handlePageSizeChange}
-              label="Rows per page"
-            >
-              {[10, 20, 50, 100].map((size) => (
-                <MenuItem key={size} value={size}>
-                  {size}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-        </Box> */}
-
-        <Box
+  <Box
           mt="40px"
           height="75vh"
           flex={1}
@@ -329,7 +305,7 @@
               
               backgroundColor: colors.blueAccent[700],
               borderBottom: "none",
-              color: '#000',
+              color: "#fcfcfc",
             },
             "& .MuiDataGrid-virtualScroller": {
               backgroundColor: colors.primary[400],
@@ -348,11 +324,13 @@
             },
             "& .MuiTablePagination-root": {
               // color: colors.primary[100],
-              color: colors.primary[500],
+            
+              color: "#fcfcfc",
             },
             "& .MuiButtonBase-root": {
               // color: colors.primary[100],
-              color: colors.primary[500],
+             
+              color: "#fcfcfc",
             },
           }}
         >
@@ -366,20 +344,7 @@
             pagination
           />
 
-          {/* Custom Pagination Info */}
-          <Box display="flex" justifyContent="flex-end" mt={2}>
-            <Typography>
-              {searchTerm
-                ? `Showing ${page * pageSize + 1} to ${Math.min(
-                    (page + 1) * pageSize,
-                    filteredRowsCount
-                  )} of ${filteredRowsCount} entries (filtered from ${totalRows} total entries)`
-                : `Showing ${page * pageSize + 1} to ${Math.min(
-                    (page + 1) * pageSize,
-                    totalRows
-                  )} of ${totalRows} entries`}
-            </Typography>
-          </Box>
+          
         </Box>
       </Box>
     );

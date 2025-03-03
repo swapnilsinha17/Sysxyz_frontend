@@ -133,7 +133,7 @@ const handleSubmit = async (values, actions) => {
                   marginBottom: "10px",
                 }}
               >
-                Company Information
+                <p style={{color:"gray"}}>Company Information</p>
               </legend>
 
               <Box
@@ -159,12 +159,12 @@ const handleSubmit = async (values, actions) => {
                   helperText={touched.org_name && errors.org_name}
                   sx={{
                     gridColumn: "span 2",
-                    backgroundColor: "#F2F0F0", // Set background color to white
-                    border: "1px solid #ddd", // Set border color
-                    borderRadius: "4px", // Rounded corners for the input box
-                    "& .MuiFilledInput-root": {
-                      backgroundColor: "#F2F0F0", // Ensure the background color is white
-                    },
+                    // backgroundColor: "#F2F0F0", // Set background color to white
+                    // border: "1px solid #ddd", // Set border color
+                    // borderRadius: "4px", // Rounded corners for the input box
+                    // "& .MuiFilledInput-root": {
+                    //   backgroundColor: "#F2F0F0", // Ensure the background color is white
+                    // },
                   }}
                 />
                 <TextField
@@ -180,12 +180,12 @@ const handleSubmit = async (values, actions) => {
                   helperText={touched.website && errors.website}
                   sx={{
                     gridColumn: "span 2",
-                    backgroundColor: "#F2F0F0",
-                    border: "1px solid #ddd",
-                    borderRadius: "4px",
-                    "& .MuiFilledInput-root": {
-                      backgroundColor: "#F2F0F0", // Ensure the background color is white
-                    },
+                    // backgroundColor: "#F2F0F0",
+                    // border: "1px solid #ddd",
+                    // borderRadius: "4px",
+                    // "& .MuiFilledInput-root": {
+                    //   backgroundColor: "#F2F0F0", // Ensure the background color is white
+                    // },
                   }}
                 />
                 <TextField
@@ -201,12 +201,12 @@ const handleSubmit = async (values, actions) => {
                   helperText={touched.PAN && errors.PAN}
                   sx={{
                     gridColumn: "span 1",
-                    backgroundColor: "#F2F0F0",
-                    border: "1px solid #ddd",
-                    borderRadius: "4px",
-                    "& .MuiFilledInput-root": {
-                      backgroundColor: "#F2F0F0", // Ensure the background color is white
-                    },
+                    // backgroundColor: "#F2F0F0",
+                    // border: "1px solid #ddd",
+                    // borderRadius: "4px",
+                    // "& .MuiFilledInput-root": {
+                    //   backgroundColor: "#F2F0F0", // Ensure the background color is white
+                    // },
                   }}
                 />
                 <TextField
@@ -222,12 +222,12 @@ const handleSubmit = async (values, actions) => {
                   helperText={touched.GST_No && errors.GST_No}
                   sx={{
                     gridColumn: "span 1",
-                    backgroundColor: "#F2F0F0",
-                    border: "1px solid #ddd",
-                    borderRadius: "4px",
-                    "& .MuiFilledInput-root": {
-                      backgroundColor: "#F2F0F0", // Ensure the background color is white
-                    },
+                    // backgroundColor: "#F2F0F0",
+                    // border: "1px solid #ddd",
+                    // borderRadius: "4px",
+                    // "& .MuiFilledInput-root": {
+                    //   backgroundColor: "#F2F0F0", // Ensure the background color is white
+                    // },
                   }}
                 />
                 <TextField
@@ -243,12 +243,12 @@ const handleSubmit = async (values, actions) => {
                   helperText={touched.state && errors.state}
                   sx={{
                     gridColumn: "span 1",
-                    backgroundColor: "#F2F0F0",
-                    border: "1px solid #ddd",
-                    borderRadius: "4px",
-                    "& .MuiFilledInput-root": {
-                      backgroundColor: "#F2F0F0", // Ensure the background color is white
-                    },
+                    // backgroundColor: "#F2F0F0",
+                    // border: "1px solid #ddd",
+                    // borderRadius: "4px",
+                    // "& .MuiFilledInput-root": {
+                    //   backgroundColor: "#F2F0F0", // Ensure the background color is white
+                    // },
                   }}
                 />
                 <TextField
@@ -264,12 +264,12 @@ const handleSubmit = async (values, actions) => {
                   helperText={touched.city && errors.city}
                   sx={{
                     gridColumn: "span 1",
-                    backgroundColor: "#F2F0F0",
-                    border: "1px solid #ddd",
-                    borderRadius: "4px",
-                    "& .MuiFilledInput-root": {
-                      backgroundColor: "#F2F0F0", // Ensure the background color is white
-                    },
+                    // backgroundColor: "#F2F0F0",
+                    // border: "1px solid #ddd",
+                    // borderRadius: "4px",
+                    // "& .MuiFilledInput-root": {
+                    //   backgroundColor: "#F2F0F0", // Ensure the background color is white
+                    // },
                   }}
                 />
               </Box>
@@ -292,7 +292,8 @@ const handleSubmit = async (values, actions) => {
                   marginBottom: "10px",
                 }}
               >
-                Point Of Contact :: Administrator
+                <p style={{color:"gray"}}>  Point Of Contact :: Administrator</p>
+              
               </legend>
 
               <Box
@@ -324,12 +325,12 @@ const handleSubmit = async (values, actions) => {
                   }
                   sx={{
                     gridColumn: "span 1",
-                    backgroundColor: "#F2F0F0", // Set background color to white
-                    border: "1px solid #ddd", // Set border color
-                    borderRadius: "4px", // Rounded corners for the input box
-                    "& .MuiFilledInput-root": {
-                      backgroundColor: "#F2F0F0", // Ensure the background color is white
-                    },
+                    // backgroundColor: "#F2F0F0", // Set background color to white
+                    // border: "1px solid #ddd", // Set border color
+                    // borderRadius: "4px", // Rounded corners for the input box
+                    // "& .MuiFilledInput-root": {
+                    //   backgroundColor: "#F2F0F0", // Ensure the background color is white
+                    // },
                   }}
                 />
                 <TextField
@@ -351,12 +352,12 @@ const handleSubmit = async (values, actions) => {
                   }
                   sx={{
                     gridColumn: "span 1",
-                    backgroundColor: "#F2F0F0",
-                    border: "1px solid #ddd",
-                    borderRadius: "4px",
-                    "& .MuiFilledInput-root": {
-                      backgroundColor: "#F2F0F0", // Ensure the background color is white
-                    },
+                    // backgroundColor: "#F2F0F0",
+                    // border: "1px solid #ddd",
+                    // borderRadius: "4px",
+                    // "& .MuiFilledInput-root": {
+                    //   backgroundColor: "#F2F0F0", // Ensure the background color is white
+                    // },
                   }}
                 />
                 <TextField
@@ -378,12 +379,12 @@ const handleSubmit = async (values, actions) => {
                   }
                   sx={{
                     gridColumn: "span 1",
-                    backgroundColor: "#F2F0F0",
-                    border: "1px solid #ddd",
-                    borderRadius: "4px",
-                    "& .MuiFilledInput-root": {
-                      backgroundColor: "#F2F0F0", // Ensure the background color is white
-                    },
+                    // backgroundColor: "#F2F0F0",
+                    // border: "1px solid #ddd",
+                    // borderRadius: "4px",
+                    // "& .MuiFilledInput-root": {
+                    //   backgroundColor: "#F2F0F0", // Ensure the background color is white
+                    // },
                   }}
                 />
                  <TextField
@@ -405,12 +406,12 @@ const handleSubmit = async (values, actions) => {
                   }
                   sx={{
                     gridColumn: "span 1",
-                    backgroundColor: "#F2F0F0",
-                    border: "1px solid #ddd",
-                    borderRadius: "4px",
-                    "& .MuiFilledInput-root": {
-                      backgroundColor: "#F2F0F0", // Ensure the background color is white
-                    },
+                    // backgroundColor: "#F2F0F0",
+                    // border: "1px solid #ddd",
+                    // borderRadius: "4px",
+                    // "& .MuiFilledInput-root": {
+                    //   backgroundColor: "#F2F0F0", // Ensure the background color is white
+                    // },
                   }}
                 />
               </Box>
@@ -433,7 +434,8 @@ const handleSubmit = async (values, actions) => {
                   marginBottom: "10px",
                 }}
               >
-                Subscription
+                <p style={{color:"gray"}}> Subscription</p>
+               
               </legend>
 
               <Box
@@ -461,12 +463,12 @@ const handleSubmit = async (values, actions) => {
                   }
                   sx={{
                     gridColumn: "span 1",
-                    backgroundColor: "#F2F0F0", // Set background color to white
-                    border: "1px solid #ddd", // Set border color
-                    borderRadius: "4px", // Rounded corners for the input box
-                    "& .MuiFilledInput-root": {
-                      backgroundColor: "#F2F0F0", // Ensure the background color is white
-                    },
+                    // backgroundColor: "#F2F0F0", // Set background color to white
+                    // border: "1px solid #ddd", // Set border color
+                    // borderRadius: "4px", // Rounded corners for the input box
+                    // "& .MuiFilledInput-root": {
+                    //   backgroundColor: "#F2F0F0", // Ensure the background color is white
+                    // },
                   }}
                 />
                 <TextField
@@ -482,12 +484,12 @@ const handleSubmit = async (values, actions) => {
                   helperText={touched.access_end_date && errors.access_end_date}
                   sx={{
                     gridColumn: "span 1",
-                    backgroundColor: "#F2F0F0",
-                    border: "1px solid #ddd",
-                    borderRadius: "4px",
-                    "& .MuiFilledInput-root": {
-                      backgroundColor: "#F2F0F0", // Ensure the background color is white
-                    },
+                    // backgroundColor: "#F2F0F0",
+                    // border: "1px solid #ddd",
+                    // borderRadius: "4px",
+                    // "& .MuiFilledInput-root": {
+                    //   backgroundColor: "#F2F0F0", // Ensure the background color is white
+                    // },
                   }}
                 />
               </Box>
@@ -513,6 +515,7 @@ const handleSubmit = async (values, actions) => {
                 >
                   Cancel
                 </Button>
+                
               </Box>
 
               {/* Submit Button */}
@@ -522,7 +525,7 @@ const handleSubmit = async (values, actions) => {
                 justifyContent="end"
                 mt="20px"
               >
-                <Button type="submit" color="secondary" variant="contained">
+                <Button type="submit" color="primary" variant="contained">
                   Submit
                 </Button>
               </Box>

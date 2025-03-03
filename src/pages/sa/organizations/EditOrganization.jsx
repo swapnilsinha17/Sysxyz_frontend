@@ -82,7 +82,8 @@ const EditOrganization = () => {
           <form onSubmit={handleSubmit}>
             <fieldset style={{ border: "2px solid #ddd", borderRadius: "8px", padding: "20px", marginBottom: "20px" }}>
               <legend style={{ fontSize: "1.2rem", fontWeight: "bold", color: "#333", padding: "0 10px", marginBottom: "10px" }}>
-                Company Information
+            
+                <p style={{color:"gray"}}> Company Information</p>
               </legend>
 
               <Box display="grid" gap="30px" gridTemplateColumns="repeat(4, minmax(0, 1fr))" sx={{ "& > div": { gridColumn: isNonMobile ? undefined : "span 4" } }}>
@@ -114,7 +115,8 @@ const EditOrganization = () => {
 
             <fieldset style={{ border: "2px solid #ddd", borderRadius: "8px", padding: "20px", marginBottom: "20px" }}>
               <legend style={{ fontSize: "1.2rem", fontWeight: "bold", color: "#333", padding: "0 10px", marginBottom: "10px" }}>
-                Point Of Contact
+              
+                <p style={{color:"gray"}}>  Point Of Contact</p>
               </legend>
 
               <Box display="grid" gap="30px" gridTemplateColumns="repeat(2, minmax(0, 1fr))">
@@ -152,7 +154,9 @@ const EditOrganization = () => {
             </fieldset>
             <fieldset style={{ border: "2px solid #ddd", borderRadius: "8px", padding: "20px", marginBottom: "20px" }}>
               <legend style={{ fontSize: "1.2rem", fontWeight: "bold", color: "#333", padding: "0 10px", marginBottom: "10px" }}>
-        Subscription</legend>
+       
+        <p style={{color:"gray"}}> Subscription</p>
+        </legend>
               <Box display="grid" gap="30px" gridTemplateColumns="repeat(2, minmax(0, 1fr))">
                 <TextField fullWidth variant="filled" type="date" label="Start Date" name="access_start_date"
                   onBlur={handleBlur} onChange={handleChange} value={values.access_start_date}

@@ -109,7 +109,8 @@ const AddDepartment = () => {
                   marginBottom: "10px",
                 }}
               >
-                Department Information
+              
+                <p style={{color:"gray"}}>  Department Information</p>
               </legend>
 
               <Box
@@ -124,6 +125,7 @@ const AddDepartment = () => {
               >
                 <FormControl fullWidth sx={{ gridColumn: "span 2" }}>
                   <InputLabel id="org_id-label">Select Company</InputLabel>
+                  
                   <Select
                     labelId="org_id-label"
                     id="org_id"
@@ -164,12 +166,12 @@ const AddDepartment = () => {
                   helperText={touched.department_name && errors.department_name}
                   sx={{
                     gridColumn: "span 2",
-                    backgroundColor: "#F2F0F0", // Set background color to white
-                    border: "1px solid #ddd", // Set border color
-                    borderRadius: "4px", // Rounded corners for the input box
-                    "& .MuiFilledInput-root": {
-                      backgroundColor: "#F2F0F0", // Ensure the background color is white
-                    },
+                    // backgroundColor: "#F2F0F0", // Set background color to white
+                    // border: "1px solid #ddd", // Set border color
+                    // borderRadius: "4px", // Rounded corners for the input box
+                    // "& .MuiFilledInput-root": {
+                    //   backgroundColor: "#F2F0F0", // Ensure the background color is white
+                    // },
                   }}
                 />
               </Box>
@@ -190,7 +192,7 @@ const AddDepartment = () => {
 
               {/* Submit Button */}
               <Box display="flex" alignItems="center" justifyContent="end" mt="20px">
-                <Button type="submit" color="secondary" variant="contained">
+                <Button type="submit" color="primary" variant="contained">
                   Submit
                 </Button>
               </Box>

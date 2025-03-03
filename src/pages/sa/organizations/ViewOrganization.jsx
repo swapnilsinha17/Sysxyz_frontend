@@ -46,58 +46,58 @@ const ViewOrganization = () => {
 
   return (
     <Box m="20px">
-      <Header title="VIEW ORGANIZATION" subtitle="Organization details" />
-
-      <Formik initialValues={initialValues} enableReinitialize>
-        {({ values }) => (
-          <form>
-            {/* Fieldset Wrapper */}
-            <fieldset style={fieldsetStyle}>
-              <legend style={legendStyle}>Company Information</legend>
-
-              <Box display="grid" gap="20px" gridTemplateColumns="repeat(4, minmax(0, 1fr))" sx={gridStyle(isNonMobile)}>
-                {renderTextField("Company Name", values.org_name, 2)}
-                {renderTextField("Website", values.website, 2)}
-                {renderTextField("PAN", values.PAN, 1)}
-                {renderTextField("GST No.", values.GST_No, 1)}
-                {renderTextField("State", values.state, 1)}
-                {renderTextField("City", values.city, 1)}
-              </Box>
-            </fieldset>
-
-            <fieldset style={fieldsetStyle}>
-              <legend style={legendStyle}>Point Of Contact :: Administrator</legend>
-
-              <Box display="grid" gap="20px" gridTemplateColumns="repeat(2, minmax(0, 1fr))" sx={gridStyle(isNonMobile)}>
-                {renderTextField("Name", values.primary_contact_person, 1)}
-                {renderTextField("Phone", values.primary_contact_number, 1)}
-                {renderTextField("Email", values.primary_contact_email, 1)}
-                {renderTextField("Employee Code", values.employee_code, 1)}
-               
-              </Box>
-            </fieldset>
-
-            <fieldset style={fieldsetStyle}>
-              <legend style={legendStyle}>Subscription</legend>
-
-              <Box display="grid" gap="20px" gridTemplateColumns="repeat(2, minmax(0, 1fr))" sx={gridStyle(isNonMobile)}>
-                {renderTextField("Start Date", values.access_start_date, 1)}
-                {renderTextField("End Date", values.access_end_date, 1)}
-              </Box>
-            </fieldset>
-
-            <Box display="flex" justifyContent="end" mt="20px" gap="12px">
-              <Button onClick={() => navigate("/sa/organizations")} type="button" color="primary" variant="contained">
-                Back
-              </Button>
-              <Button onClick={() => navigate(`/sa/organizations/edit/${id}`)} type="button" color="secondary" variant="contained">
-                Edit
-              </Button>
+    <Header title="VIEW ORGANIZATION" subtitle="Organization details" />
+  
+    <Formik initialValues={initialValues} enableReinitialize>
+      {({ values }) => (
+        <form>
+          {/* Fieldset Wrapper */}
+          <fieldset style={fieldsetStyle}>
+            <legend style={{ ...legendStyle, color: "gray" }}>Company Information</legend>
+  
+            <Box display="grid" gap="20px" gridTemplateColumns="repeat(4, minmax(0, 1fr))" sx={gridStyle(isNonMobile)}>
+              {renderTextField("Company Name", values.org_name, 2, { color: "gray" })}
+              {renderTextField("Website", values.website, 2, { color: "gray" })}
+              {renderTextField("PAN", values.PAN, 1, { color: "gray" })}
+              {renderTextField("GST No.", values.GST_No, 1, { color: "gray" })}
+              {renderTextField("State", values.state, 1, { color: "gray" })}
+              {renderTextField("City", values.city, 1, { color: "gray" })}
             </Box>
-          </form>
-        )}
-      </Formik>
-    </Box>
+          </fieldset>
+  
+          <fieldset style={fieldsetStyle}>
+            <legend style={{ ...legendStyle, color: "gray" }}>Point Of Contact :: Administrator</legend>
+  
+            <Box display="grid" gap="20px" gridTemplateColumns="repeat(2, minmax(0, 1fr))" sx={gridStyle(isNonMobile)}>
+              {renderTextField("Name", values.primary_contact_person, 1, { color: "gray" })}
+              {renderTextField("Phone", values.primary_contact_number, 1, { color: "gray" })}
+              {renderTextField("Email", values.primary_contact_email, 1, { color: "gray" })}
+              {renderTextField("Employee Code", values.employee_code, 1, { backgroundColor: "red" })}
+            </Box>
+          </fieldset>
+  
+          <fieldset style={fieldsetStyle}>
+            <legend style={{ ...legendStyle, color: "gray" }}>Subscription</legend>
+  
+            <Box display="grid" gap="20px" gridTemplateColumns="repeat(2, minmax(0, 1fr))" sx={gridStyle(isNonMobile)}>
+              {renderTextField("Start Date", values.access_start_date, 1, { color: "gray" })}
+              {renderTextField("End Date", values.access_end_date, 1, { color: "gray" })}
+            </Box>
+          </fieldset>
+  
+          <Box display="flex" justifyContent="end" mt="20px" gap="12px">
+            <Button onClick={() => navigate("/sa/organizations")} type="button" color="primary" variant="contained">
+              Back
+            </Button>
+            <Button onClick={() => navigate(`/sa/organizations/edit/${id}`)} type="button" color="primary" variant="contained">
+              Edit
+            </Button>
+          </Box>
+        </form>
+      )}
+    </Formik>
+  </Box>
+  
   );
 };
 const renderTextField = (label, value, span) => (
@@ -132,11 +132,11 @@ const gridStyle = (isNonMobile) => ({
 
 const inputStyle = (span) => ({
   gridColumn: `span ${span}`,
-  backgroundColor: "#F2F0F0",
+  // backgroundColor: "#F2F0F0",
   border: "1px solid #ddd",
   borderRadius: "4px",
   "& .MuiFilledInput-root": {
-    backgroundColor: "#F2F0F0",
+    // backgroundColor: "#F2F0F0",
   },
 });
 

@@ -200,7 +200,7 @@ const ListDepartment = () => {
         </Button>
       </Box>
 
-      <Box mb={2} display="flex" justifyContent="space-between" alignItems="center">
+      {/* <Box mb={2} display="flex" justifyContent="space-between" alignItems="center">
         <Typography>Rows per page:</Typography>
         <FormControl sx={{ minWidth: 100 }}>
           <InputLabel>Per Page</InputLabel>
@@ -216,7 +216,7 @@ const ListDepartment = () => {
             ))}
           </Select>
         </FormControl>
-      </Box>
+      </Box> */}
 
       <Box mt="40px" height="75vh" flex={1}>
         <DataGrid
@@ -228,13 +228,13 @@ const ListDepartment = () => {
           onPageSizeChange={handlePageSizeChange}
           pagination
         />
-        <Box display="flex" justifyContent="flex-end" mt={2}>
+        {/* <Box display="flex" justifyContent="flex-end" mt={2}>
           <Typography>
             {searchTerm
               ? `Showing ${page * pageSize + 1} to ${Math.min((page + 1) * pageSize, filteredRows.length)} of ${filteredRows.length} entries (filtered from ${organizations.length} total entries)`
               : `Showing ${page * pageSize + 1} to ${Math.min((page + 1) * pageSize, organizations.length)} of ${organizations.length} entries`}
           </Typography>
-        </Box>
+        </Box> */}
       </Box>
 
       {/* Delete Confirmation Dialog */}

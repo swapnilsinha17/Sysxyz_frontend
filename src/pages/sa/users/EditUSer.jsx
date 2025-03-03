@@ -158,7 +158,8 @@ const EditUser = () => {
                   marginBottom: "10px",
                 }}
               >
-                Company Information
+              
+                <p style={{color:"gray"}}>  Company Information</p>
               </legend>
 
               <Box
@@ -238,12 +239,7 @@ const EditUser = () => {
                   helperText={touched.employee_code && errors.employee_code}
                   sx={{
                     gridColumn: "span 2",
-                    backgroundColor: "#F2F0F0",
-                    border: "1px solid #ddd",
-                    borderRadius: "4px",
-                    "& .MuiFilledInput-root": {
-                      backgroundColor: "#F2F0F0",
-                    },
+                   
                   }}
                 />
               </Box>
@@ -267,7 +263,8 @@ const EditUser = () => {
                   marginBottom: "10px",
                 }}
               >
-                User Information
+                
+                <p style={{color:"gray"}}>  User Information</p>
               </legend>
 
               <Box
@@ -293,12 +290,12 @@ const EditUser = () => {
                   helperText={touched.full_name && errors.full_name}
                   sx={{
                     gridColumn: "span 2",
-                    backgroundColor: "#F2F0F0",
-                    border: "1px solid #ddd",
-                    borderRadius: "4px",
-                    "& .MuiFilledInput-root": {
-                      backgroundColor: "#F2F0F0",
-                    },
+                    // backgroundColor: "#F2F0F0",
+                    // border: "1px solid #ddd",
+                    // borderRadius: "4px",
+                    // "& .MuiFilledInput-root": {
+                    //   backgroundColor: "#F2F0F0",
+                    // },
                   }}
                 />
 
@@ -315,12 +312,12 @@ const EditUser = () => {
                   helperText={touched.phone && errors.phone}
                   sx={{
                     gridColumn: "span 2",
-                    backgroundColor: "#F2F0F0",
-                    border: "1px solid #ddd",
-                    borderRadius: "4px",
-                    "& .MuiFilledInput-root": {
-                      backgroundColor: "#F2F0F0",
-                    },
+                    // backgroundColor: "#F2F0F0",
+                    // border: "1px solid #ddd",
+                    // borderRadius: "4px",
+                    // "& .MuiFilledInput-root": {
+                    //   backgroundColor: "#F2F0F0",
+                    // },
                   }}
                 />
 
@@ -337,12 +334,12 @@ const EditUser = () => {
                   helperText={touched.email && errors.email}
                   sx={{
                     gridColumn: "span 2",
-                    backgroundColor: "#F2F0F0",
-                    border: "1px solid #ddd",
-                    borderRadius: "4px",
-                    "& .MuiFilledInput-root": {
-                      backgroundColor: "#F2F0F0",
-                    },
+                    // backgroundColor: "#F2F0F0",
+                    // border: "1px solid #ddd",
+                    // borderRadius: "4px",
+                    // "& .MuiFilledInput-root": {
+                    //   backgroundColor: "#F2F0F0",
+                    // },
                   }}
                 />
               </Box>
@@ -415,7 +412,7 @@ const EditUser = () => {
 
               {/* Submit Button */}
               <Box display="flex" alignItems="center" justifyContent="end" mt="20px">
-                <Button type="submit" color="secondary" variant="contained">
+                <Button type="submit" color="primary" variant="contained">
                   Submit
                 </Button>
               </Box>
