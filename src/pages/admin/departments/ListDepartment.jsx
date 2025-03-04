@@ -293,6 +293,7 @@ const ListDepartment = () => {
             // color: colors.primary[100],
             color: colors.primary[500],
           },
+         
         }}
       >
         <DataGrid

@@ -182,7 +182,9 @@ const ListDepartment = () => {
           fullWidth
           value={searchTerm}
           onChange={handleSearchChange}
-          sx={{ maxWidth: "300px" }}
+          sx={{ maxWidth: "300px",
+            bgcolor: colors.blueAccent[700],
+           }}
         />
         <Button
           variant="contained"
