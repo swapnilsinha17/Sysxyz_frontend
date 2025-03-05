@@ -86,10 +86,10 @@ const ViewOrganization = () => {
           </fieldset>
   
           <Box display="flex" justifyContent="end" mt="20px" gap="12px">
-            <Button onClick={() => navigate("/sa/organizations")} type="button" color="primary" variant="contained">
+            <Button onClick={() => navigate("/sa/organizations")} type="button" color="secondary" variant="contained">
               Back
             </Button>
-            <Button onClick={() => navigate(`/sa/organizations/edit/${id}`)} type="button" color="primary" variant="contained">
+            <Button onClick={() => navigate(`/sa/organizations/edit/${id}`)} type="button" color="secondary" variant="contained">
               Edit
             </Button>
           </Box>

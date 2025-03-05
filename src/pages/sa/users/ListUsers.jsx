@@ -199,9 +199,10 @@ const ListUsers = () => {
           variant="outlined"
           fullWidth
           value={searchTerm}
+            color="secondary"
           onChange={handleSearchChange}
           sx={{ maxWidth: "300px",
-            bgcolor: colors.blueAccent[700],
+           
            }}
         />
 
@@ -247,22 +248,36 @@ const ListUsers = () => {
           borderBottom: "none",
           color: "white",
         },
+
         "& .MuiDataGrid-virtualScroller": { backgroundColor: colors.primary[400] },
         "& .MuiDataGrid-footerContainer": {
           borderTop: "none",
           color: "white",
           backgroundColor: colors.blueAccent[700],
         },
+        "& .css-7ms3qr-MuiTablePagination-displayedRows": { 
+          color: "#fcfcfc",
+        },
+        "& .css-1hgjne-MuiButtonBase-root-MuiIconButton-root.Mui-disabled": {
+          color:"#fcfcfc",
+        },
+       
       }}>
         <DataGrid
           rows={users}
           columns={columns}
-          pageSize={pageSize}
-          page={page}
-          onPageChange={handlePageChange}
-          onPageSizeChange={handlePageSizeChange}
-          pagination
-          loading={loading}
+          // pageSize={pageSize}
+          // page={page}
+          // onPageChange={handlePageChange}
+          // onPageSizeChange={handlePageSizeChange}
+          // pagination
+          // loading={loading}
+
+          // rows={filteredRows}
+          // columns={columns}
+          pageSize="10"
+          
+          pageSizeOptions={[5, 10, 25, { value: -1, label: 'All' }]}
         />
       </Box>
 

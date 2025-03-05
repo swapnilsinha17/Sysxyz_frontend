@@ -22,7 +22,8 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { apis } from "../../../utils/utills";
 import { tokens } from "../../../theme";
-
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
 const ListDepartment = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
@@ -71,33 +72,33 @@ const ListDepartment = () => {
       renderCell: (params) => (
         <Box display="flex" justifyContent="center" alignItems="center">
           {/* Edit Button */}
+          
           <Button
             onClick={() => navigate(`/sa/departments/edit/${params.row.dept_id}`)}
             sx={{
-              color: colors.blueAccent[100],
-              backgroundColor: '#fff',
+              backgroundColor: colors.blueAccent[700],
               marginRight: 2,
               textTransform: 'none',
               '&:hover': {
-                color: colors.blueAccent[800],
+                backgroundColor: colors.blueAccent[700],
               },
             }}
           >
-            Edit
+           < EditIcon/>
           </Button>
 
           {/* Delete Button */}
           <Button
             onClick={() => handleOpenDeleteDialog(params.row.dept_id)}
             sx={{
-              color: colors.redAccent[700],
+              backgroundColor: colors.blueAccent[700],
               textTransform: "none",
               '&:hover': {
-                color: colors.redAccent[800],
+                backgroundColor: colors.blueAccent[700],
               },
             }}
           >
-            Delete
+            < DeleteIcon/>
           </Button>
         </Box>
       ),
@@ -180,10 +181,11 @@ const ListDepartment = () => {
           label="Search"
           variant="outlined"
           fullWidth
+            color="secondary"
           value={searchTerm}
           onChange={handleSearchChange}
           sx={{ maxWidth: "300px",
-            bgcolor: colors.blueAccent[700],
+         
            }}
         />
         <Button
@@ -224,12 +226,43 @@ const ListDepartment = () => {
         <DataGrid
           rows={filteredRows}
           columns={columns}
-          pageSize={pageSize}
-          page={page}
-          onPageChange={handlePageChange}
-          onPageSizeChange={handlePageSizeChange}
-          pagination
+          // pageSize={pageSize}
+          // page={page}
+          // onPageChange={handlePageChange}
+          // onPageSizeChange={handlePageSizeChange}
+          // pagination
+          pageSize="10"
+          
+          pageSizeOptions={[5, 10, 25, { value: -1, label: 'All' }]}
+
+          sx={{ "& .MuiDataGrid-columnHeaders": {
+            // backgroundColor: '#fafafa',
+            
+            backgroundColor: colors.blueAccent[700],
+            borderBottom: "none",
+            color: "#fcfcfc",
+          },
+          "& .MuiButtonBase-root": {
+            color: "#fcfcfc",
+          },
+          "& .MuiDataGrid-footerContainer": {
+            backgroundColor: colors.blueAccent[700],
+            borderBottom: "none",
+            color: "#fcfcfc",
+          },
+          "& .css-7ms3qr-MuiTablePagination-displayedRows": {
+            color: "#fcfcfc",
+          },
+          "& .css-1hgjne-MuiButtonBase-root-MuiIconButton-root.Mui-disabled": {
+            color: "#fcfcfc",
+          },
+          "& .css-jtezpp-MuiDataGrid-root .MuiButtonBase-root": {
+            color: "#fcfcfc",
+         
+          }
+        }}
         />
+       
         {/* <Box display="flex" justifyContent="flex-end" mt={2}>
           <Typography>
             {searchTerm

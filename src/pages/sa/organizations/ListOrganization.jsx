@@ -32,6 +32,7 @@
     const theme = useTheme();
 
     const colors = tokens(theme.palette.mode);
+    console.log("tata color",colors);
     const navigate = useNavigate();
     const [pageSize, setPageSize] = useState(10); // Track the current page size
     const [page, setPage] = useState(0); // Track the current page number
@@ -40,64 +41,66 @@
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    const handleStatusToggle = async (id, currentStatus) => {
-      try {
-        const newStatus = currentStatus === 1 ? "Inactive" : "Active";
+   const handleStatusToggle = async (id, currentStatus) => {
+  try {
+    // Determine new status based on current status
+    const newStatus = currentStatus === 1 ? 0 : 1;  // Toggling between 1 (Active) and 0 (Inactive)
 
-        // Optimistically update the UI before the API call
-        setOrganizations((prevOrgs) =>
-          prevOrgs.map((org) =>
-            org.org_id === id ? { ...org, status: currentStatus === 1 ? 0 : 1 } : org
-          )
-        );
-    
-        // Send the update request to the server
-        const response = await axios.post(
-          `${apis.baseUrl}/sa/updateOrganizationStatus`,
-          { org_id: id, status: currentStatus == 1 ? 0 : 1 },
-          {
-            headers: {
-              Authorization: sessionStorage.getItem("auth_token"),
-            },
-          }
-        );
-        toast.success(`Status updated to ${newStatus}`, {
-          position: "top-right",
-          autoClose: 3000, // Closes after 3 seconds
-        });
-        console.log("Status updated successfully:", response.data);
-        fetchOrganizations()
-      } catch (error) {
-        console.error("Error updating status:", error);
-        // Revert the UI change if the API call fails
-        setOrganizations((prevOrgs) =>
-          prevOrgs.map((org) =>
-            org.org_id === id ? { ...org, status: currentStatus } : org
-          )
-        );
+    // Optimistically update the UI before the API call
+    setOrganizations((prevOrgs) =>
+      prevOrgs.map((org) =>
+        org.org_id === id ? { ...org, status: newStatus } : org
+      )
+    );
+
+    // Send the update request to the server
+    const response = await axios.post(
+      `${apis.baseUrl}/sa/updateOrganizationStatus`,
+      { org_id: id, status: newStatus },
+      {
+        headers: {
+          Authorization: sessionStorage.getItem("auth_token"),
+        },
       }
-    };
+    );
+
+    // Display a success toast notification
+    const statusText = newStatus === 1 ? "Active" : "Inactive";
+    toast.success(`Status updated to ${statusText}`, {
+      position: "top-right",
+      autoClose: 3000, // Closes after 3 seconds
+    });
+
+    // Optionally log the server response
+    console.log("Status updated successfully:", response.data);
+
+    // Re-fetch organizations to ensure data consistency if needed
+    fetchOrganizations();
+  } catch (error) {
+    // Log the error if the API call fails
+    console.error("Error updating status:", error);
+
+    // Revert the UI change if the API call fails
+    setOrganizations((prevOrgs) =>
+      prevOrgs.map((org) =>
+        org.org_id === id ? { ...org, status: currentStatus } : org
+      )
+    );
+
+    // Optionally, show an error toast
+    toast.error("Failed to update status. Please try again later.", {
+      position: "top-right",
+      autoClose: 3000, // Closes after 3 seconds
+    });
+  }
+};
+
     const columns = [
       {
         field: "id",
         headerName: "SN",
         filterable: true,
-        // renderCell: (params) => (
-        //   <Box
-        //     sx={{
-        //       backgroundColor: "red", // Blue color for badge
-        //       color: "#fff",
-        //       padding: "5px 5px",
-        //       borderRadius: "12px",
-        //       textAlign: "center",
-        //       minWidth: "40px",
-        //       fontWeight: "bold",
-        //       display: "inline-block",
-        //     }}
-        //   >
-        //     {params.value}
-        //   </Box>
-        // ),
+     
       },{
         field: "org_name",
         headerName: "Company",
@@ -107,10 +110,10 @@
         renderCell: (params) => (
           <Typography
             sx={{
-              color: "#007bff",
+              color: colors.blueAccent[500],
               textDecoration: "underline",
               cursor: "pointer",
-              "&:hover": { color: "#0056b3" },
+              "&:hover": colors.blueAccent[800],
             }}
             onClick={() => navigate(`/sa/organizations/view/${params.row.org_id}`)}
           >
@@ -145,7 +148,7 @@
           <Switch
             checked={params.value == 1}
             onChange={() => handleStatusToggle(params.row.org_id, params.value)}
-            color="primary"
+           
           />
         ),
       },
@@ -156,12 +159,7 @@
         flex: 1,
         filterable: true,
       },
-      // {
-      //   field: "action",
-      //   headerName: "Action",
-      //   flex: 1,
-      //   filterable: true,
-      // },
+     
     ];
 
     // Handle page change
@@ -252,30 +250,31 @@
         >
           <TextField
             label="Search"
+            // bgcolor={colors.primary[400]}
             variant="outlined"
             fullWidth
+            color="secondary"
             value={searchTerm}
-            
             onChange={handleSearchChange}
-            sx={{ maxWidth: "300px",  backgroundColor: colors.blueAccent[700]}} // Limit the width of the search box
+            sx={{ maxWidth: "300px" }} // Limit the width of the search box
           />
 
           {/* New Button */}
 
           <Button
             variant="contained"
-            sx={{
-              bgcolor: colors.blueAccent[700],
-              color: "#fcfcfc",
-              // fontSize: isMdDevices ? "14px" : "10px",
-              fontWeight: "bold",
-              p: "10px 20px",
-              mt: "18px",
-              transition: ".3s ease",
-              ":hover": {
-                bgcolor: colors.blueAccent[800],
-              },
-            }}
+            color="secondary"
+            // sx={{
+            //   bgcolor: colors.blueAccent[700],
+             
+            //   fontWeight: "bold",
+            //   p: "10px 20px",
+            //   mt: "18px",
+            //   transition: ".3s ease",
+            //   ":hover": {
+            //     bgcolor: colors.blueAccent[800],
+            //   },
+            // }}
             onClick={() => {
               // Handle the 'New' button action, e.g., open a modal or redirect
               console.log("New Button Clicked");
@@ -301,47 +300,45 @@
             },
 
             "& .MuiDataGrid-columnHeaders": {
-              // backgroundColor: '#fafafa',
+              
               
               backgroundColor: colors.blueAccent[700],
               borderBottom: "none",
-              color: "#fcfcfc",
+             
+              color: colors.blueAccent[100],
             },
             "& .MuiDataGrid-virtualScroller": {
               backgroundColor: colors.primary[400],
             },
             "& .MuiDataGrid-footerContainer": {
               borderTop: "none",
-              color: colors.primary[500],
+              color: colors.blueAccent[100],
               backgroundColor: colors.blueAccent[700],
             },
             "& .MuiCheckbox-root": {
-              color: `${colors.greenAccent[200]} !important`,
+              color: colors.blueAccent[100],
             },
             "& .MuiDataGrid-iconSeparator": {
-              // color: colors.primary[100],
-              color: colors.primary[500],
+              
+              color: colors.blueAccent[100],
             },
             "& .MuiTablePagination-root": {
-              // color: colors.primary[100],
             
-              color: "#fcfcfc",
+            
+              color: colors.blueAccent[100],
             },
             "& .MuiButtonBase-root": {
-              // color: colors.primary[100],
-             
-              color: "#fcfcfc",
+              
+              color: colors.blueAccent[100],
             },
           }}
         >
           <DataGrid
             rows={filteredRows}
             columns={columns}
-            pageSize={pageSize}
-            page={page}
-            onPageChange={handlePageChange}
-            onPageSizeChange={handlePageSizeChange}
-            pagination
+            pageSize="10"
+            
+            pageSizeOptions={[5, 10, 25, { value: -1, label: 'All' }]}
           />
 
           

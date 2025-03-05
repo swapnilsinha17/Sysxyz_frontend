@@ -26,15 +26,15 @@ export default function SignIn() {
 
 
   const AccessToken = sessionStorage.getItem("auth_token");
-
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (AccessToken) {
-      navigate("/sa/dashboard");
+     navigate("/sa/dashboard");
     }
   }, [AccessToken]);
 
-  const navigate = useNavigate();
+  
 
   const validateForm = () => {
     const newErrors = { company_code: "", employee_code: "", password: "" };
@@ -58,7 +58,7 @@ export default function SignIn() {
 
   
 
-  const handleSubmit = async (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
 
     if (!validateForm()) return;
@@ -69,19 +69,19 @@ export default function SignIn() {
         employee_code,
         password,
       });
-console.log("response data of token",response?.data?.data?.token);
+  console.log("response data of token",response?.data?.data);
 
 
-      if (response.status === 201) {
-        sessionStorage.setItem(
-          "auth_token",
-
-          response?.data?.data?.token
-        );
+     
+      
+        if (response.status === 201) {
+          // Store the token into sessionStorage
+          sessionStorage.setItem("auth_token", response?.data?.data?.token);
        
+        
         // console.log("as", response?.data?.data?.token);
         toast.success(response?.data?.message || "Login successful");
-        window.location.href = "/sa/dashboard";
+      //  window.location.href = "/sa/dashboard";
       } else {
         toast.error(response?.data?.message || "Error while Login");
       }
@@ -114,7 +114,7 @@ console.log("response data of token",response?.data?.data?.token);
           </div>
 
           {/* Login Form */}
-          <form className="w-full space-y-12" onSubmit={handleSubmit}>
+          <form className="w-full space-y-12" onSubmit={handleLogin}>
             {/* Company Code */}
             <div className="w-full space-y-4">
               <div className="space-y-1">
@@ -192,7 +192,7 @@ console.log("response data of token",response?.data?.data?.token);
             {/* Login Button */}
             <button
               type="submit"
-              className=" w-full rounded-full bg-blue-600 py-3 font-medium text-white transition-colors hover:bg-blue-700"
+              className=" w-full cursor-pointer rounded-full bg-blue-600 py-3 font-medium text-white transition-colors hover:bg-blue-700"
             >
               LOGIN
             </button>

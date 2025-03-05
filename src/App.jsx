@@ -3,7 +3,7 @@ import { Box, CssBaseline, ThemeProvider } from "@mui/material";
 import { ColorModeContext, useMode } from "./theme";
 import { Navbar, SideBar } from "./scenes";
 import { Outlet } from "react-router-dom";
-
+import { ToastContainer } from 'react-toastify';
 export const ToggledContext = createContext(null);
 
 function App() {
@@ -12,7 +12,9 @@ function App() {
   const values = { toggled, setToggled };
   
   return (
-    <ColorModeContext.Provider value={colorMode}>
+  <>
+    <ToastContainer />
+     <ColorModeContext.Provider value={colorMode}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <ToggledContext.Provider value={values}>
@@ -36,6 +38,7 @@ function App() {
         </ToggledContext.Provider>
       </ThemeProvider>
     </ColorModeContext.Provider>
+    </>
   );
 }
 

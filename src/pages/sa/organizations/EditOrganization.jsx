@@ -1,4 +1,4 @@
-import { Box, Button, TextField, useMediaQuery } from "@mui/material";
+import { Box, Button, TextField, Typography, useMediaQuery, useTheme } from "@mui/material";
 import { Header } from "../../../components";
 import { useNavigate, useParams } from "react-router-dom";
 import { Formik } from "formik";
@@ -6,6 +6,7 @@ import * as Yup from "yup";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { apis } from "../../../utils/utills";
+import { tokens } from "../../../theme";
 
 // Validation Schema (same as Add)
 const validationSchema = Yup.object({
@@ -26,6 +27,9 @@ const validationSchema = Yup.object({
 });
 
 const EditOrganization = () => {
+
+  const theme = useTheme();
+  const colors = tokens(theme.palette.mode);
   const isNonMobile = useMediaQuery("(min-width:600px)");
   const navigate = useNavigate();
   const { id } = useParams(); // Get organization ID from URL
@@ -70,7 +74,7 @@ const EditOrganization = () => {
 
   return (
     <Box m="20px">
-      <Header title="EDIT ORGANIZATION" subtitle="Update organization details" />
+      <Header title="EDIT ORGANIZATION" subtitle="Edit and save the organization information here" />
 
       <Formik
         initialValues={initialValues}
@@ -83,7 +87,9 @@ const EditOrganization = () => {
             <fieldset style={{ border: "2px solid #ddd", borderRadius: "8px", padding: "20px", marginBottom: "20px" }}>
               <legend style={{ fontSize: "1.2rem", fontWeight: "bold", color: "#333", padding: "0 10px", marginBottom: "10px" }}>
             
-                <p style={{color:"gray"}}> Company Information</p>
+              <Typography sx={{ color: colors.primary[100] }}>
+      Company Information
+    </Typography>
               </legend>
 
               <Box display="grid" gap="30px" gridTemplateColumns="repeat(4, minmax(0, 1fr))" sx={{ "& > div": { gridColumn: isNonMobile ? undefined : "span 4" } }}>
@@ -116,7 +122,10 @@ const EditOrganization = () => {
             <fieldset style={{ border: "2px solid #ddd", borderRadius: "8px", padding: "20px", marginBottom: "20px" }}>
               <legend style={{ fontSize: "1.2rem", fontWeight: "bold", color: "#333", padding: "0 10px", marginBottom: "10px" }}>
               
-                <p style={{color:"gray"}}>  Point Of Contact</p>
+             
+                <Typography sx={{ color: colors.primary[100] }}>
+                Point Of Contact
+                </Typography>
               </legend>
 
               <Box display="grid" gap="30px" gridTemplateColumns="repeat(2, minmax(0, 1fr))">
@@ -155,7 +164,11 @@ const EditOrganization = () => {
             <fieldset style={{ border: "2px solid #ddd", borderRadius: "8px", padding: "20px", marginBottom: "20px" }}>
               <legend style={{ fontSize: "1.2rem", fontWeight: "bold", color: "#333", padding: "0 10px", marginBottom: "10px" }}>
        
-        <p style={{color:"gray"}}> Subscription</p>
+        
+        
+        <Typography sx={{ color: colors.primary[100] }}>
+        Subscription
+        </Typography>
         </legend>
               <Box display="grid" gap="30px" gridTemplateColumns="repeat(2, minmax(0, 1fr))">
                 <TextField fullWidth variant="filled" type="date" label="Start Date" name="access_start_date"
@@ -169,7 +182,7 @@ const EditOrganization = () => {
               </Box>
             </fieldset>
             <Box display="flex" justifyContent="end" gap="12px" mt="20px">
-              <Button onClick={() => navigate("/sa/organizations")} color="primary" variant="contained">
+              <Button onClick={() => navigate("/sa/organizations")} color="secondary" variant="contained">
                 Cancel
               </Button>
               <Button type="submit" color="secondary" variant="contained">
