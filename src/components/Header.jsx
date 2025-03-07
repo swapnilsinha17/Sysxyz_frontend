@@ -1,22 +1,20 @@
 /* eslint-disable react/prop-types */
 import { Box, Typography, useTheme } from "@mui/material";
-import { tokens } from "../theme";
+// import { tokens } from "../theme";
 const Header = ({ title, subtitle }) => {
-  const theme = useTheme();
-  const colors = tokens(theme.palette.mode);
+  // const theme = useTheme();
+  // const colors = tokens(theme.palette.mode);
   return (
-    <Box mb="30px">
+    <Box>
       <Typography
-        variant="h2"
+        variant="h1"
         fontWeight="bold"
-        color={colors.gray[100]}
-        mb="5px"
-        // backgroundColor="#fff"
+       
         padding="10px"
       >
         {title}
       </Typography>
-      <Typography variant="h5" color={colors.blueAccent[400]}>
+      <Typography variant="h5" ml={1} >
         {subtitle}
       </Typography>
     </Box>

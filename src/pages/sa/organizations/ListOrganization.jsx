@@ -14,6 +14,7 @@
   import { DataGrid } from "@mui/x-data-grid";
   import { toast , ToastContainer} from "react-toastify";
   import "react-toastify/dist/ReactToastify.css";
+  import { IoAddOutline } from "react-icons/io5";
   
   // toast.configure();
   //  import AccesssToken from "../../utils/utills";
@@ -28,6 +29,7 @@
   import AddOrganization from "./AddOrganization";
   import axios from "axios";
   import { apis } from "../../../utils/utills";
+import { formatCityName, formatDate } from "../../../utils/formatter";
   const ListOrganization = () => {
     const theme = useTheme();
 
@@ -129,6 +131,10 @@
         align: "left",
         type: "number",
         filterable: true,
+        valueFormatter: (params) => {
+          // No commas, just the number
+          return params.value;
+        },
       },
       {
         field: "access_end_date",
@@ -138,6 +144,9 @@
         align: "left",
         filterable: true,
         flex: 1,
+        valueFormatter: (params) => {
+          return formatDate(params.value); // Format the date before displaying
+        },
       },
       {
         field: "is_active",
@@ -152,12 +161,23 @@
           />
         ),
       },
-      { field: "city", headerName: "City", flex: 1, filterable: true },
+      {
+        field: "city",
+        headerName: "City",
+        flex: 1,
+        filterable: true,
+        valueFormatter: (params) => {
+          return formatCityName(params.value); // Apply the formatter to the city value
+        },
+      },
       {
         field: "state",
         headerName: "State",
         flex: 1,
         filterable: true,
+        valueFormatter: (params) => {
+          return formatCityName(params.value); // Apply the formatter to the city value
+        },
       },
      
     ];
@@ -234,70 +254,70 @@
     return (
 
 
-      <Box m="20px">
-         <ToastContainer position="top-right" autoClose={3000} />
+      <Box mx="20px">
+         <ToastContainer  autoClose={3000} />
    
-        <Header title="ORGANIZATION" />
+       
 
         {/* Search Box and New Button */}
         
         <Box
-          mb={2}
+          mb={2} mt={2}
           display="flex"
           justifyContent="space-between"
           alignItems="center"
          
         >
-          <TextField
+           <Header title="ORGANIZATION" />
+           <Box   display="flex"  gap={4}  alignItems="center">
+           <TextField
             label="Search"
-            // bgcolor={colors.primary[400]}
+         
             variant="outlined"
             fullWidth
+            
             color="secondary"
             value={searchTerm}
             onChange={handleSearchChange}
-            sx={{ maxWidth: "300px" }} // Limit the width of the search box
+            sx={{ maxWidth: "300px" ,
+             
+            }} 
           />
 
           {/* New Button */}
-
           <Button
-            variant="contained"
-            color="secondary"
-            // sx={{
-            //   bgcolor: colors.blueAccent[700],
-             
-            //   fontWeight: "bold",
-            //   p: "10px 20px",
-            //   mt: "18px",
-            //   transition: ".3s ease",
-            //   ":hover": {
-            //     bgcolor: colors.blueAccent[800],
-            //   },
-            // }}
-            onClick={() => {
-              // Handle the 'New' button action, e.g., open a modal or redirect
-              console.log("New Button Clicked");
-              navigate("add");
-            }}
-          >
-            Add New
-          </Button>
+  variant="contained"
+  sx={{
+    width:"130px",
+    bgcolor: colors.blueAccent[500],
+    color:colors.blueAccent[100],
+  display:"flex",
+    fontWeight: "bold",
+    p: "10px 20px",
+    mt: "18px",
+    transition: ".3s ease",
+    ":hover": {
+      bgcolor: colors.blueAccent[700], // Adjust the color for hover state if needed
+    },
+  }}
+  onClick={() => {
+    // Handle the 'New' button action, e.g., open a modal or redirect
+    console.log("New Button Clicked");
+    navigate("add");
+  }}
+>
+  add new
+
+</Button>
+           </Box>
+     
+
         </Box>
   <Box
-          mt="40px"
-          height="75vh"
+         
           flex={1}
           sx={{
-            "& .MuiDataGrid-root": {
-              border: "none",
-            },
-            "& .MuiDataGrid-cell": {
-              border: "none",
-            },
-            "& .name-column--cell": {
-              color: colors.greenAccent[300],
-            },
+           
 
             "& .MuiDataGrid-columnHeaders": {
               
@@ -315,13 +335,7 @@
               color: colors.blueAccent[100],
               backgroundColor: colors.blueAccent[700],
             },
-            "& .MuiCheckbox-root": {
-              color: colors.blueAccent[100],
-            },
-            "& .MuiDataGrid-iconSeparator": {
-              
-              color: colors.blueAccent[100],
-            },
+           
             "& .MuiTablePagination-root": {
             
             

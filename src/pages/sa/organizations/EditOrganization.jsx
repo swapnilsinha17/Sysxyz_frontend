@@ -85,9 +85,9 @@ const EditOrganization = () => {
         {({ values, errors, touched, handleBlur, handleChange, handleSubmit }) => (
           <form onSubmit={handleSubmit}>
             <fieldset style={{ border: "2px solid #ddd", borderRadius: "8px", padding: "20px", marginBottom: "20px" }}>
-              <legend style={{ fontSize: "1.2rem", fontWeight: "bold", color: "#333", padding: "0 10px", marginBottom: "10px" }}>
+              <legend style={{ fontSize: "1.2rem", padding: "0 10px", marginBottom: "10px" }}>
             
-              <Typography sx={{ color: colors.primary[100] }}>
+              <Typography >
       Company Information
     </Typography>
               </legend>
@@ -120,10 +120,10 @@ const EditOrganization = () => {
             </fieldset>
 
             <fieldset style={{ border: "2px solid #ddd", borderRadius: "8px", padding: "20px", marginBottom: "20px" }}>
-              <legend style={{ fontSize: "1.2rem", fontWeight: "bold", color: "#333", padding: "0 10px", marginBottom: "10px" }}>
+              <legend style={{ fontSize: "1.2rem",  padding: "0 10px", marginBottom: "10px" }}>
               
              
-                <Typography sx={{ color: colors.primary[100] }}>
+                <Typography>
                 Point Of Contact
                 </Typography>
               </legend>
@@ -162,11 +162,11 @@ const EditOrganization = () => {
               </Box>
             </fieldset>
             <fieldset style={{ border: "2px solid #ddd", borderRadius: "8px", padding: "20px", marginBottom: "20px" }}>
-              <legend style={{ fontSize: "1.2rem", fontWeight: "bold", color: "#333", padding: "0 10px", marginBottom: "10px" }}>
+              <legend style={{ fontSize: "1.2rem", padding: "0 10px", marginBottom: "10px" }}>
        
         
         
-        <Typography sx={{ color: colors.primary[100] }}>
+        <Typography>
         Subscription
         </Typography>
         </legend>

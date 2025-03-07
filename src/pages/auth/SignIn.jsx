@@ -1,10 +1,12 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import logoImg from "../../assets/images/logo/XYZ_OPS_Logo.png";
 import fullimg from "../../assets/images/logo/Data_security_01.jpg";
 // import { Eye, EyeOff, X } from "lucide-react";
 import { IoMdClose } from "react-icons/io";
 import { LiaEyeSlashSolid } from "react-icons/lia";
 import { LiaEyeSolid } from "react-icons/lia";
+
+import { useUser } from '../../contextApi/UserContext';
 
 import { useNavigate } from "react-router-dom";
 
@@ -18,13 +20,16 @@ export default function SignIn() {
   const [employee_code, setemployee_code] = useState("");
   const [password, setPassword] = useState("");
 
+
+  const { setUser } =useUser();
+  
   const [errors, setErrors] = useState({
     company_code: "",
     employee_code: "",
     password: "",
   });
 
-
+ 
   const AccessToken = sessionStorage.getItem("auth_token");
   const navigate = useNavigate();
 
@@ -77,7 +82,7 @@ export default function SignIn() {
         if (response.status === 201) {
           // Store the token into sessionStorage
           sessionStorage.setItem("auth_token", response?.data?.data?.token);
-       
+        setUser(response?.data?.data?.full_name);
         
         // console.log("as", response?.data?.data?.token);
         toast.success(response?.data?.message || "Login successful");

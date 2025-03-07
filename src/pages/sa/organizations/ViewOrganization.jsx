@@ -1,12 +1,15 @@
-import { Box, Button, TextField, useMediaQuery,Typography, CircularProgress } from "@mui/material";
+import { Box, Button, TextField, useMediaQuery,Typography, CircularProgress, useTheme } from "@mui/material";
 import { Header } from "../../../components";
 import { useNavigate, useParams } from "react-router-dom";
 import { Formik } from "formik";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { apis } from "../../../utils/utills";
+import { tokens } from "../../../theme";
 
 const ViewOrganization = () => {
+  const theme = useTheme();
+   const colors = tokens(theme.palette.mode);
   const isNonMobile = useMediaQuery("(min-width:600px)");
   const navigate = useNavigate();
   const { id } = useParams(); // Assuming you're getting the organization ID from URL params
@@ -46,42 +49,49 @@ const ViewOrganization = () => {
 
   return (
     <Box m="20px">
-    <Header title="VIEW ORGANIZATION" subtitle="Organization details" />
+    <Header title="Organization details" subtitle=" View the organization information here" />
   
     <Formik initialValues={initialValues} enableReinitialize>
       {({ values }) => (
         <form>
           {/* Fieldset Wrapper */}
           <fieldset style={fieldsetStyle}>
-            <legend style={{ ...legendStyle, color: "gray" }}>Company Information</legend>
+          
+            <legend style={{ ...legendStyle }}>
+            <Typography> Company Information</Typography>
+             </legend>
   
             <Box display="grid" gap="20px" gridTemplateColumns="repeat(4, minmax(0, 1fr))" sx={gridStyle(isNonMobile)}>
-              {renderTextField("Company Name", values.org_name, 2, { color: "gray" })}
-              {renderTextField("Website", values.website, 2, { color: "gray" })}
-              {renderTextField("PAN", values.PAN, 1, { color: "gray" })}
-              {renderTextField("GST No.", values.GST_No, 1, { color: "gray" })}
-              {renderTextField("State", values.state, 1, { color: "gray" })}
-              {renderTextField("City", values.city, 1, { color: "gray" })}
+              {renderTextField("Company Name", values.org_name, 2, )}
+              {renderTextField("Website", values.website, 2,)}
+              {renderTextField("PAN", values.PAN, 1, )}
+              {renderTextField("GST No.", values.GST_No, 1, )}
+              {renderTextField("State", values.state, 1,)}
+              {renderTextField("City", values.city, 1, )}
             </Box>
           </fieldset>
   
           <fieldset style={fieldsetStyle}>
-            <legend style={{ ...legendStyle, color: "gray" }}>Point Of Contact :: Administrator</legend>
+            <legend style={{ ...legendStyle,  }}>
+              <Typography>Point Of Contact :: Administrator</Typography>
+              </legend>
   
             <Box display="grid" gap="20px" gridTemplateColumns="repeat(2, minmax(0, 1fr))" sx={gridStyle(isNonMobile)}>
-              {renderTextField("Name", values.primary_contact_person, 1, { color: "gray" })}
-              {renderTextField("Phone", values.primary_contact_number, 1, { color: "gray" })}
-              {renderTextField("Email", values.primary_contact_email, 1, { color: "gray" })}
-              {renderTextField("Employee Code", values.employee_code, 1, { backgroundColor: "red" })}
+              {renderTextField("Name", values.primary_contact_person, 1, )}
+              {renderTextField("Phone", values.primary_contact_number, 1, )}
+              {renderTextField("Email", values.primary_contact_email, 1, )}
+              {renderTextField("Employee Code", values.employee_code, 1, )}
             </Box>
           </fieldset>
   
           <fieldset style={fieldsetStyle}>
-            <legend style={{ ...legendStyle, color: "gray" }}>Subscription</legend>
+            <legend style={{ ...legendStyle,  }}>
+              <Typography>  Subscription</Typography>
+            </legend>
   
             <Box display="grid" gap="20px" gridTemplateColumns="repeat(2, minmax(0, 1fr))" sx={gridStyle(isNonMobile)}>
-              {renderTextField("Start Date", values.access_start_date, 1, { color: "gray" })}
-              {renderTextField("End Date", values.access_end_date, 1, { color: "gray" })}
+              {renderTextField("Start Date", values.access_start_date, 1, )}
+              {renderTextField("End Date", values.access_end_date, 1, )}
             </Box>
           </fieldset>
   
@@ -102,7 +112,7 @@ const ViewOrganization = () => {
 };
 const renderTextField = (label, value, span) => (
   <Box sx={{ gridColumn: `span ${span}` }}>
-    <Typography variant="body1" sx={{ fontWeight: "bold", marginBottom: "5px", color: "#333" }}>
+    <Typography variant="body1" sx={{ fontWeight: "bold", marginBottom: "5px", }}>
       {label}
     </Typography>
     <TextField value={value} variant="filled" fullWidth disabled sx={inputStyle} />
@@ -118,8 +128,8 @@ const fieldsetStyle = {
 
 const legendStyle = {
   fontSize: "1.2rem",
-  fontWeight: "bold",
-  color: "#333",
+  // fontWeight: "bold",
+  // color: "#333",
   padding: "0 10px",
   marginBottom: "10px",
 };
@@ -133,7 +143,7 @@ const gridStyle = (isNonMobile) => ({
 const inputStyle = (span) => ({
   gridColumn: `span ${span}`,
   // backgroundColor: "#F2F0F0",
-  border: "1px solid #ddd",
+  // border: "1px solid #ddd",
   borderRadius: "4px",
   "& .MuiFilledInput-root": {
     // backgroundColor: "#F2F0F0",

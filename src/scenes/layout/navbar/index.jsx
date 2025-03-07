@@ -1,7 +1,10 @@
 
+import { useUser } from '../../../contextApi/UserContext';
+
 import {
   Box,
   IconButton,
+  Typography,
   useMediaQuery,
   useTheme,
 } from "@mui/material";
@@ -24,7 +27,12 @@ import { ToggledContext } from "../../../App";
 import { useNavigate } from "react-router-dom";
 
 const Navbar = () => {
+  
+  const { user } = useUser();
+
+  console.log("grtrtrtrttrrrrrrr",user)
   const theme = useTheme();
+  const savedFullName = sessionStorage.getItem('fullName');
   const colorMode = useContext(ColorModeContext);
   const { toggled, setToggled } = useContext(ToggledContext);
   const isMdDevices = useMediaQuery("(max-width:768px)");
@@ -48,8 +56,6 @@ const Navbar = () => {
     // Remove the token from sessionStorage
     sessionStorage.removeItem("auth_token");
 
-    // Optional: Clear other session storage items if necessary
-    // sessionStorage.clear();
 
     console.log("after logout", sessionStorage.getItem("auth_token"));
 
@@ -71,35 +77,17 @@ const Navbar = () => {
         >
           <MenuOutlined />
         </IconButton>
-        <Box
-          display="flex"
-          alignItems="center"
-          bgcolor={colors.primary[400]}
-          borderRadius="3px"
-          sx={{ display: `${isXsDevices ? "none" : "flex"}` }}
-        >
-
-          
-        </Box>
+      
       </Box>
 
-      <Box>
-        <IconButton onClick={colorMode.toggleColorMode}>
-          {theme.palette.mode === "dark" ? (
-            <LightModeOutlined />
-          ) : (
-            <DarkModeOutlined />
-          )}
-        </IconButton>
+      
 
-        {/* <IconButton>
-          <NotificationsOutlined />
-        </IconButton> */}
 
-        <IconButton>
-          <SettingsOutlined />
-        </IconButton>
-        <IconButton>
+      <Box mr={2}>
+        
+      {user ? `Welcome, ${user}` : 'Welcome, Guest'}
+     
+        <IconButton >
           <div>
             <PersonOutlined
               id="fade-button"
@@ -118,6 +106,13 @@ const Navbar = () => {
             >
               <MenuItem onClick={handleClose}>Change Password</MenuItem>
               <MenuItem onClick={handleLogout}>Logout</MenuItem>
+              <IconButton onClick={colorMode.toggleColorMode}>
+          {theme.palette.mode === "dark" ? (
+            <LightModeOutlined />
+          ) : (
+            <DarkModeOutlined />
+          )}
+        </IconButton>
             </Menu>
           </div>
         </IconButton>

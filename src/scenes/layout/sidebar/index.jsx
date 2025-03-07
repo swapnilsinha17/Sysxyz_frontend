@@ -1,12 +1,12 @@
 /* eslint-disable react/prop-types */
 import { Avatar, Box, IconButton,  useTheme } from "@mui/material";
-import { IoGlobeOutline } from "react-icons/io5";
+
 import { useContext, useState } from "react";
 import { tokens } from "../../../theme";
 import { Menu, MenuItem, Sidebar } from "react-pro-sidebar";
-import { ImTable } from "react-icons/im";
-import { LuUserRound } from "react-icons/lu";
-
+import { AiOutlineInsertRowBelow } from "react-icons/ai";
+import { AiOutlineUser } from "react-icons/ai";
+import { AiOutlineGlobal } from "react-icons/ai";
 
 import { AiOutlineDashboard } from "react-icons/ai";
 import {
@@ -42,7 +42,7 @@ const SideBar = () => {
         <MenuItem
           rootStyles={{
             margin: "10px 0 20px 0",
-            color: colors.gray[100],
+            // color: colors.gray[100],
           }}
         >
           <Box
@@ -60,7 +60,7 @@ const SideBar = () => {
                 sx={{ transition: ".3s ease" }}
               >
                 <img
-                  style={{ width: "100px", height: "100px", marginTop:"50px", marginLeft:"30px", borderRadius: "8px", background:"white"  }}
+                  style={{ width: "100px", height: "100px", marginTop:"80px", marginLeft:"30px", borderRadius: "8px", background:"white"  }}
                   src={avatar}
                   alt="Argon"
                 />
@@ -97,58 +97,25 @@ const SideBar = () => {
             title="Organizations"
             path="/sa/organizations"
             colors={colors}
-            icon={< IoGlobeOutline style={{height:"25px",width:"25px"}}/>}
+            icon={< AiOutlineGlobal style={{height:"25px",width:"25px"}}/>}
           />
             <Item
             title="Departments"
             path="/sa/departments"
             colors={colors}
-            icon={< ImTable style={{height:"20px",width:"20px"}}/>}
+            icon={< AiOutlineInsertRowBelow style={{height:"25px",width:"25px"}}/>}
           />
             <Item
             title="Users"
             path="/sa/users"
             colors={colors}
-            icon={<LuUserRound  style={{height:"25px",width:"25px"}} />}
+            icon={< AiOutlineUser  style={{height:"25px",width:"25px"}} />}
           />
         </Menu>
       
       </Box> 
       
-      {/* <Box mb={5} mt={8} pl={collapsed ? undefined : "5%"}>
-        <Menu
-          menuItemStyles={{
-            button: {
-              ":hover": {
-                color: "#868dfb",
-                background: "transparent",
-                transition: ".4s ease",
-              },
-            },
-          }}
-        >
-          <Item
-            title="Dashboard"
-            path="/a/dashboard"
-            colors={colors}
-            icon={<AiOutlineDashboard style={{height:"25px",width:"25px"}}/>}
-          />
-          
-            <Item
-            title="Departments"
-            path="/a/departments"
-            colors={colors}
-            icon={< ImTable style={{height:"20px",width:"20px"}}/>}
-          />
-            <Item
-            title="Users"
-            path="/sa/users"
-            colors={colors}
-            icon={<LuUserRound  style={{height:"25px",width:"25px"}} />}
-          />
-        </Menu>
-      
-      </Box> */}
+
     </Sidebar>
   );
 };

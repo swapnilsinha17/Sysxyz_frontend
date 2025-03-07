@@ -142,7 +142,7 @@ const handleSubmit = async (values, actions) => {
                 }}
              
               >
-                <Typography sx={{ color: colors.primary[100] }}>
+                <Typography>
       Company Information
     </Typography>
               </legend>
@@ -274,7 +274,7 @@ const handleSubmit = async (values, actions) => {
                 }}
               >
              
-                <Typography sx={{ color: colors.primary[100] }}>
+                <Typography>
                 Point Of Contact :: Administrator
                 </Typography>
               
@@ -400,7 +400,7 @@ const handleSubmit = async (values, actions) => {
                 }}
               >
               
-                <Typography sx={{ color: colors.primary[100] }}>
+                <Typography>
                 Subscription
                 </Typography>
                
