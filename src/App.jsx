@@ -10,7 +10,9 @@ function App() {
   const [theme, colorMode] = useMode();
   const [toggled, setToggled] = useState(false);
   const values = { toggled, setToggled };
-  
+  const user = JSON.parse(sessionStorage.getItem("user")); // Or any global state you use to store user data
+
+  const userRole = user?.role;
   return (
   <>
     <ToastContainer />
@@ -19,7 +21,7 @@ function App() {
         <CssBaseline />
         <ToggledContext.Provider value={values}>
           <Box sx={{ display: "flex", height: "100vh", maxWidth: "100%" }}>
-            <SideBar />
+            <SideBar userRole={userRole}  />
             <Box
               sx={{
                 flexGrow: 1,

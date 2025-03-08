@@ -30,14 +30,18 @@ export default function SignIn() {
   });
 
  
-  const AccessToken = sessionStorage.getItem("auth_token");
+  // const AccessToken = sessionStorage.getItem("user")?.token;
   const navigate = useNavigate();
 
+  const AccessToken = sessionStorage.getItem("user")?.token;
   useEffect(() => {
+  
     if (AccessToken) {
-     navigate("/sa/dashboard");
+      // Navigate only if token is available
+      navigate("/sa/dashboard");
     }
-  }, [AccessToken]);
+  }, [AccessToken, navigate]);  // Trigger effect when AccessToken changes
+  
 
   
 
@@ -76,20 +80,47 @@ export default function SignIn() {
       });
   console.log("response data of token",response?.data?.data);
 
-
+  if (response.status === 201) {
+    const userData = response?.data?.data;
+  
+    if (userData?.token) {
+      sessionStorage.setItem("user", JSON.stringify(userData));
+      sessionStorage.setItem("auth_token", userData?.token);
+      setUser(userData?.full_name); // Set user data for context if needed
+      
+      toast.success(response?.data?.message || "Login successful");
+  
+      // Navigate to respective dashboard
+      if (userData?.role === "sa") {
+        navigate("/sa/dashboard");
+      } else {
+        navigate("/admin/dashboard");
+      }
+    } else {
+      toast.error("Failed to retrieve token.");
+    }
+  } else {
+    toast.error(response?.data?.message || "Error while Login");
+  }
+  
      
       
-        if (response.status === 201) {
-          // Store the token into sessionStorage
-          sessionStorage.setItem("auth_token", response?.data?.data?.token);
-        setUser(response?.data?.data?.full_name);
+      //   if (response.status === 201) {
+      //     // Store the token into sessionStorage
+      //     sessionStorage.setItem("user", JSON.stringify(response?.data?.data));
+      //   setUser(response?.data?.data?.full_name);
         
-        // console.log("as", response?.data?.data?.token);
-        toast.success(response?.data?.message || "Login successful");
-      //  window.location.href = "/sa/dashboard";
-      } else {
-        toast.error(response?.data?.message || "Error while Login");
-      }
+      //   // console.log("as", response?.data?.data?.token);
+      //   toast.success(response?.data?.message || "Login successful");
+      //   if(response?.data?.data?.role =='sa'){
+
+      //     navigate("/sa/dashboard");
+      //   }else{
+      //     navigate("/admin/dashboard");
+      //   }
+      // } else {
+      //   toast.error(response?.data?.message || "Error while Login");
+      // }
     } catch (error) {
       const errorMessage =
         error.response?.data?.message || "An unknown error occurred.";

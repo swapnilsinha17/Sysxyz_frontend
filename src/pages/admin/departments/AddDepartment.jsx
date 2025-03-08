@@ -64,7 +64,7 @@ const AddDepartment = () => {
         values: initialValues,
       });
 
-      navigate("/departments");
+      navigate("/admin/departments");
     } catch (error) {
       console.error("Error adding department:", error);
     }

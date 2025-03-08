@@ -8,37 +8,36 @@ import {
   FormControl,
   InputLabel,
   IconButton,
-  // Edit,
-  // Delete,
   Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
 } from "@mui/material";
 import { DeleteOutline } from '@mui/icons-material';
-
 import { Header } from "../../../components";
 import { DataGrid } from "@mui/x-data-grid";
-
-//  import AccesssToken from "../../utils/utills";
-import { tokens } from "../../../theme";
-import {
-  AdminPanelSettingsOutlined,
-  LockOpenOutlined,
-  SecurityOutlined,
-} from "@mui/icons-material";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-// import AddOrganization from "./AddOrganization";
 import axios from "axios";
 import { apis } from "../../../utils/utills";
+import { tokens } from "../../../theme";
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
 const ListDepartment = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const navigate = useNavigate();
-  const [pageSize, setPageSize] = useState(10); // Track the current page size
-  const [page, setPage] = useState(0); // Track the current page number
-  const [searchTerm, setSearchTerm] = useState(""); // Track the search term
+  const [pageSize, setPageSize] = useState(10);
+  const [page, setPage] = useState(0);
+  const [searchTerm, setSearchTerm] = useState("");
   const [organizations, setOrganizations] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  // Delete Confirmation Dialog States
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+  const [selectedDeptId, setSelectedDeptId] = useState(null); // Track the department to delete
 
   const columns = [
     { field: "id", headerName: "SN", filterable: true },
@@ -46,7 +45,6 @@ const ListDepartment = () => {
       field: "org_name",
       headerName: "Company",
       flex: 1,
-      cellClassName: "company-column--cell",
       filterable: true,
     },
     {
@@ -61,13 +59,11 @@ const ListDepartment = () => {
     {
       field: "department_name",
       headerName: "Department Name",
-      // type: "date",
       headerAlign: "left",
       align: "left",
       filterable: true,
       flex: 1,
     },
-   
     {
       field: "action",
       headerName: "Action",
@@ -75,101 +71,70 @@ const ListDepartment = () => {
       filterable: true,
       renderCell: (params) => (
         <Box display="flex" justifyContent="center" alignItems="center">
-          {/* Edit Button with Text */}
+          {/* Edit Button */}
+          
           <Button
-      onClick={() => navigate(`/sa/departments/edit/${params.row.dept_id}`)}
-      sx={{
-        color: colors.blueAccent[100],
-        backgroundColor: '#fff', // Make background color visible
-        marginRight: 2,
-        textTransform: 'none',
-        '&:hover': {
-          color: colors.blueAccent[800],
-        },
-      }}
-          >
-            Edit
-          </Button>
-    
-          {/* Delete Button with Text */}
-          <Button
-            onClick={() => handleDelete(params.row.id)} // Assuming you have handleDelete logic
+            onClick={() => navigate(`/sa/departments/edit/${params.row.dept_id}`)}
             sx={{
-              color: colors.redAccent[700],
-              textTransform: "none", // To avoid uppercase conversion
+              backgroundColor: colors.blueAccent[700],
+              marginRight: 2,
+              textTransform: 'none',
               '&:hover': {
-                color: colors.redAccent[800], // Darker red on hover
+                backgroundColor: colors.blueAccent[700],
               },
             }}
           >
-            Delete
+           < EditIcon/>
+          </Button>
+
+          {/* Delete Button */}
+          <Button
+            onClick={() => handleOpenDeleteDialog(params.row.dept_id)}
+            sx={{
+              backgroundColor: colors.blueAccent[700],
+              textTransform: "none",
+              '&:hover': {
+                backgroundColor: colors.blueAccent[700],
+              },
+            }}
+          >
+            < DeleteIcon/>
           </Button>
         </Box>
       ),
     }
-    
   ];
 
-  // Handle page change
-  const handlePageChange = (newPage) => {
-    setPage(newPage);
-  };
+  const handlePageChange = (newPage) => setPage(newPage);
+  const handlePageSizeChange = (event) => setPageSize(event.target.value);
+  const handleSearchChange = (e) => setSearchTerm(e.target.value);
 
-  // Handle page size change
-  const handlePageSizeChange = (event) => {
-    setPageSize(event.target.value);
-    setPage(0); // Reset page to 0 when page size changes
-  };
+  const filteredRows = organizations.filter((row) =>
+    Object.values(row).some((val) =>
+      val && val.toString().toLowerCase().includes(searchTerm.toLowerCase())
+    )
+  );
 
-  // Handle search term change
-  const handleSearchChange = (e) => {
-    setSearchTerm(e.target.value);
-  };
-
-  // Filter the rows based on search term
-  const filteredRows = organizations.filter((row) => {
-    return Object.values(row).some(
-      (val) =>
-        val && val.toString().toLowerCase().includes(searchTerm.toLowerCase())
-    );
-  });
-
-  // Total and filtered row counts
-  const totalRows = organizations.length;
-  const filteredRowsCount = filteredRows.length;
-  useEffect(() => {
-    console.log("Updated departments:", organizations);
-  }, [organizations]); 
   const fetchDepartments = async () => {
-    console.log("Xz")
     try {
       const response = await axios.get(
         `${apis.baseUrl}/sa/getDepartmentList`,
         {
           headers: {
-            Authorization: sessionStorage.getItem("auth_token"), // `${AccesssToken}`,  // Basic authentication header
+            Authorization: sessionStorage.getItem("auth_token"),
           },
         }
       );
-    console.log(response.data.org.departments,"res")
       const orgData = response?.data?.org?.departments;
-    
       if (orgData && orgData.length > 0) {
-        console.log(organizations)
         const updatedData = orgData.map((org, index) => ({
           ...org,
-          id: index+1, // Assuming 'org_id' is unique
-          department_name:org.department_name
+          id: index + 1,
         }));
-        
         setOrganizations(updatedData);
-        // setOrganizations(orgData);
-        console.log(organizations)
-        console.log("response data of department", organizations);
       } else {
         console.error("No departments found in response");
       }
-
       setLoading(false);
     } catch (err) {
       setError("Failed to fetch department");
@@ -177,62 +142,69 @@ const ListDepartment = () => {
     }
   };
 
+  const handleOpenDeleteDialog = (deptId) => {
+    setSelectedDeptId(deptId);
+    setOpenDeleteDialog(true);
+  };
+
+  const handleCloseDeleteDialog = () => {
+    setOpenDeleteDialog(false);
+    setSelectedDeptId(null);
+  };
+
+  const handleDelete = async () => {
+    try {
+      await axios.post(`${apis.baseUrl}/sa/deleteDepartment`,{dept_id: selectedDeptId}, {
+        headers: {
+          Authorization: sessionStorage.getItem("auth_token"),
+        },
+      });
+      // Remove the department from the state
+      setOrganizations((prevState) => prevState.filter((dept) => dept.dept_id !== selectedDeptId));
+      handleCloseDeleteDialog();
+      fetchDepartments()
+    } catch (err) {
+      console.error("Error deleting department", err);
+      setError("Failed to delete department");
+    }
+  };
+
   useEffect(() => {
     fetchDepartments();
   }, []);
+
   return (
     <Box m="20px">
       <Header title="DEPARTMENT" />
-
-      {/* Search Box and New Button */}
-      <Box
-        mb={2}
-        display="flex"
-        justifyContent="space-between"
-        alignItems="center"
-      >
+      <Box mb={2} display="flex" justifyContent="space-between" alignItems="center">
         <TextField
           label="Search"
           variant="outlined"
           fullWidth
+            color="secondary"
           value={searchTerm}
           onChange={handleSearchChange}
-          sx={{ maxWidth: "300px" }} // Limit the width of the search box
+          sx={{ maxWidth: "300px",
+         
+           }}
         />
-
-        {/* New Button */}
-
         <Button
           variant="contained"
           sx={{
             bgcolor: colors.blueAccent[700],
             color: "#fcfcfc",
-            // fontSize: isMdDevices ? "14px" : "10px",
             fontWeight: "bold",
             p: "10px 20px",
             mt: "18px",
-            transition: ".3s ease",
-            ":hover": {
-              bgcolor: colors.blueAccent[800],
-            },
+            ":hover": { bgcolor: colors.blueAccent[800] },
           }}
-          onClick={() => {
-            // Handle the 'New' button action, e.g., open a modal or redirect
-            console.log("New Button Clicked");
-            navigate("add");
-          }}
+          onClick={() => navigate("add")}
         >
           Add New
         </Button>
       </Box>
 
-      {/* Per Page Dropdown */}
-      <Box
-        mb={2}
-        display="flex"
-        justifyContent="space-between"
-        alignItems="center"
-      >
+      {/* <Box mb={2} display="flex" justifyContent="space-between" alignItems="center">
         <Typography>Rows per page:</Typography>
         <FormControl sx={{ minWidth: 100 }}>
           <InputLabel>Per Page</InputLabel>
@@ -248,79 +220,73 @@ const ListDepartment = () => {
             ))}
           </Select>
         </FormControl>
-      </Box>
+      </Box> */}
 
-      <Box
-        mt="40px"
-        height="75vh"
-        flex={1}
-        sx={{
-          "& .MuiDataGrid-root": {
-            border: "none",
-          },
-          "& .MuiDataGrid-cell": {
-            border: "none",
-          },
-          "& .name-column--cell": {
-            color: colors.greenAccent[300],
-          },
-
-          "& .MuiDataGrid-columnHeaders": {
-            backgroundColor: colors.blueAccent[700],
-            borderBottom: "none",
-            color: colors.primary[500],
-          },
-          "& .MuiDataGrid-virtualScroller": {
-            backgroundColor: colors.primary[400],
-          },
-          "& .MuiDataGrid-footerContainer": {
-            borderTop: "none",
-            color: colors.primary[500],
-            backgroundColor: colors.blueAccent[700],
-          },
-          "& .MuiCheckbox-root": {
-            color: `${colors.greenAccent[200]} !important`,
-          },
-          "& .MuiDataGrid-iconSeparator": {
-            // color: colors.primary[100],
-            color: colors.primary[500],
-          },
-          "& .MuiTablePagination-root": {
-            // color: colors.primary[100],
-            color: colors.primary[500],
-          },
-          "& .MuiButtonBase-root": {
-            // color: colors.primary[100],
-            color: colors.primary[500],
-          },
-         
-        }}
-      >
+      <Box mt="40px" height="75vh" flex={1}>
         <DataGrid
           rows={filteredRows}
           columns={columns}
-          pageSize={pageSize}
-          page={page}
-          onPageChange={handlePageChange}
-          onPageSizeChange={handlePageSizeChange}
-          pagination
-        />
+          // pageSize={pageSize}
+          // page={page}
+          // onPageChange={handlePageChange}
+          // onPageSizeChange={handlePageSizeChange}
+          // pagination
+          pageSize="10"
+          
+          pageSizeOptions={[5, 10, 25, { value: -1, label: 'All' }]}
 
-        {/* Custom Pagination Info */}
-        <Box display="flex" justifyContent="flex-end" mt={2}>
+          sx={{ "& .MuiDataGrid-columnHeaders": {
+            // backgroundColor: '#fafafa',
+            
+            backgroundColor: colors.blueAccent[700],
+            borderBottom: "none",
+            color: "#fcfcfc",
+          },
+          "& .MuiButtonBase-root": {
+            color: "#fcfcfc",
+          },
+          "& .MuiDataGrid-footerContainer": {
+            backgroundColor: colors.blueAccent[700],
+            borderBottom: "none",
+            color: "#fcfcfc",
+          },
+          "& .css-7ms3qr-MuiTablePagination-displayedRows": {
+            color: "#fcfcfc",
+          },
+          "& .css-1hgjne-MuiButtonBase-root-MuiIconButton-root.Mui-disabled": {
+            color: "#fcfcfc",
+          },
+          "& .css-jtezpp-MuiDataGrid-root .MuiButtonBase-root": {
+            color: "#fcfcfc",
+         
+          }
+        }}
+        />
+       
+        {/* <Box display="flex" justifyContent="flex-end" mt={2}>
           <Typography>
             {searchTerm
-              ? `Showing ${page * pageSize + 1} to ${Math.min(
-                  (page + 1) * pageSize,
-                  filteredRowsCount
-                )} of ${filteredRowsCount} entries (filtered from ${totalRows} total entries)`
-              : `Showing ${page * pageSize + 1} to ${Math.min(
-                  (page + 1) * pageSize,
-                  totalRows
-                )} of ${totalRows} entries`}
+              ? `Showing ${page * pageSize + 1} to ${Math.min((page + 1) * pageSize, filteredRows.length)} of ${filteredRows.length} entries (filtered from ${organizations.length} total entries)`
+              : `Showing ${page * pageSize + 1} to ${Math.min((page + 1) * pageSize, organizations.length)} of ${organizations.length} entries`}
           </Typography>
-        </Box>
+        </Box> */}
       </Box>
+
+      {/* Delete Confirmation Dialog */}
+      <Dialog open={openDeleteDialog} onClose={handleCloseDeleteDialog}>
+        <DialogTitle>Confirm Deletion</DialogTitle>
+        <DialogContent>
+          <Typography>Are you sure you want to delete this department?</Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDeleteDialog} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={handleDelete} color="secondary">
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 };
