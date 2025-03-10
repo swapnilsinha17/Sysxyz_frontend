@@ -87,7 +87,7 @@ const AddTask = () => {
       );   console.log("Task created successfully:", response.data);
 
       actions.resetForm({ values: initialValues });
-      navigate("/tasks"); // Redirect to tasks page
+      navigate("/admin/tasks"); // Redirect to tasks page
     } catch (error) {
       console.error("Error creating task:", error);
     }
