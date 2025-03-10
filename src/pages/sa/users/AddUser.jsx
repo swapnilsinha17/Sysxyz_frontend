@@ -145,9 +145,11 @@ const AddUser = () => {
                   marginBottom: "10px",
                 }}
               >
+
            
                 <Typography>Company Information</Typography>
               
+
               </legend>
 
               <Box
@@ -227,7 +229,9 @@ const AddUser = () => {
                   helperText={touched.employee_code && errors.employee_code}
                   sx={{
                     gridColumn: "span 2",
+
                  
+
                   }}
                 />
               </Box>
@@ -251,9 +255,10 @@ const AddUser = () => {
                   marginBottom: "10px",
                 }}
               >
-             
+
                 <Typography> User Information</Typography>
              
+
               </legend>
 
               <Box
@@ -279,12 +284,12 @@ const AddUser = () => {
                   helperText={touched.full_name && errors.full_name}
                   sx={{
                     gridColumn: "span 2",
-                    // backgroundColor: "#F2F0F0",
-                    // border: "1px solid #ddd",
-                    // borderRadius: "4px",
-                    // "& .MuiFilledInput-root": {
-                    //   backgroundColor: "#F2F0F0",
-                    // },
+                    backgroundColor: "#F2F0F0",
+                    border: "1px solid #ddd",
+                    borderRadius: "4px",
+                    "& .MuiFilledInput-root": {
+                      backgroundColor: "#F2F0F0",
+                    },
                   }}
                 />
 
@@ -301,7 +306,9 @@ const AddUser = () => {
                   helperText={touched.phone && errors.phone}
                   sx={{
                     gridColumn: "span 2",
+
                    
+
                   }}
                 />
 
@@ -318,7 +325,9 @@ const AddUser = () => {
                   helperText={touched.email && errors.email}
                   sx={{
                     gridColumn: "span 2",
+
                    
+
                   }}
                 />
               </Box>
@@ -342,9 +351,10 @@ const AddUser = () => {
                   marginBottom: "10px",
                 }}
               >
-                
+  
              
               <Typography>Role Information</Typography>
+
               </legend>
 
               <Box>
@@ -380,12 +390,14 @@ const AddUser = () => {
 
             <div className="flex gap-4 justify-end">
               {/* Cancel Button */}
+
               <Box display="flex" alignItems="center" justifyContent="end" gap={4}>
                 
                 <CancelLink Hyperbtntext="Cancel" hyperLinkText="/sa/users"/>
              
                 <AddButton btn=" Submit"/>
                 
+
               </Box>
             </div>
           </form>

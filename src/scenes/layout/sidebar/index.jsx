@@ -147,6 +147,14 @@ const SideBar = ({ userRole }) => {  // Assuming userRole is passed as a prop or
               icon={<AiOutlineUser style={{ height: "25px", width: "25px" }} />}
             />
           ) : null}
+              {userRole === "Doer" ? (
+            <Item
+              title="Tasks"
+              path="/doer/tasks"
+              colors={colors}
+              icon={<AiOutlineUser style={{ height: "25px", width: "25px" }} />}
+            />
+          ) : null}
         </Menu>
       </Box>
     </Sidebar>

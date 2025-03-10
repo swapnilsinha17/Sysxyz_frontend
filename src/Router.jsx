@@ -25,6 +25,9 @@ import AdminAddUser from "./pages/admin/users/AddUser";
 import AdminViewUser from "./pages/admin/users/ViewUser";
 import AdminEditUser from "./pages/admin/users/EditUser";
 import ListTask from "./pages/admin/tasks/ListTask";
+import AddTask from "./pages/admin/tasks/AddTask";
+import ListDoerTask from "./pages/doer/tasks/ListDoerTask";
+// import AddTask from "./pages/admin/tasks/AddTaask";
 
 const AppRouter = () => {
   return (
@@ -68,9 +71,18 @@ const AppRouter = () => {
           </Route>
           <Route path="admin/tasks">
             <Route index element={<PrivateRoute requiredRole="Admin"><ListTask /></PrivateRoute>} />
-            <Route path="add" element={<PrivateRoute requiredRole="Admin"><AdminAddUser /></PrivateRoute>} />
+            <Route path="add" element={<PrivateRoute requiredRole="Admin"><AddTask /></PrivateRoute>} />
             <Route path="view/:id" element={<PrivateRoute requiredRole="Admin"><AdminViewUser /></PrivateRoute>} />
             <Route path="edit/:id" element={<PrivateRoute requiredRole="Admin"><AdminEditUser /></PrivateRoute>} />
+          </Route>
+{/* </Route> */}
+          <Route path="doer/dashboard" element={<PrivateRoute requiredRole="Doer"><Dashboard /></PrivateRoute>} />
+         
+          <Route path="doer/tasks">
+            <Route index element={<PrivateRoute requiredRole="Doer"><ListDoerTask /></PrivateRoute>} />
+            <Route path="add" element={<PrivateRoute requiredRole="Doer"><AddTask /></PrivateRoute>} />
+            <Route path="view/:id" element={<PrivateRoute requiredRole="Doer"><AdminViewUser /></PrivateRoute>} />
+            <Route path="edit/:id" element={<PrivateRoute requiredRole="Doer"><AdminEditUser /></PrivateRoute>} />
           </Route>
           
         </Route>

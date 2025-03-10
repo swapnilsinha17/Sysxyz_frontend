@@ -26,7 +26,7 @@ import {
 } from "@mui/icons-material";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import AddOrganization from "./AddOrganization";
+import AddOrganization from "./AddTask";
 import axios from "axios";
 import { apis } from "../../../utils/utills";
 import { formatCityName, formatDate } from "../../../utils/formatter";
@@ -104,8 +104,8 @@ try {
       filterable: true,
    
     },{
-      field: "org_name",
-      headerName: "Company",
+      field: "title",
+      headerName: "Task",
       flex: 1,
       cellClassName: "company-column--cell",
       filterable: true,
@@ -117,15 +117,15 @@ try {
             cursor: "pointer",
             "&:hover": colors.blueAccent[800],
           }}
-          onClick={() => navigate(`/sa/organizations/view/${params.row.org_id}`)}
+          onClick={() => navigate(`/admin/tasks/view/${params.row.org_id}`)}
         >
           {params.value}
         </Typography>
       ),
     },
     {
-      field: "org_id",
-      headerName: "Code",
+      field: "type",
+      headerName: "Type",
       flex: 1,
       headerAlign: "left",
       align: "left",
@@ -137,8 +137,26 @@ try {
       },
     },
     {
-      field: "access_end_date",
-      headerName: "Access Ends On",
+      field: "assign_to",
+      headerName: "Assign To",
+      flex: 1,
+      filterable: true,
+      // valueFormatter: (params) => {
+        // return formatCityName(params.value); // Apply the formatter to the city value
+      // },
+    },
+    {
+      field: "department_name",
+      headerName: "Department",
+      flex: 1,
+      filterable: true,
+      // valueFormatter: (params) => {
+      //   return formatCityName(params.value); // Apply the formatter to the city value
+      // },
+    },
+    {
+      field: "due_date",
+      headerName: "Due Date",
       // type: "date",
       headerAlign: "left",
       align: "left",
@@ -148,37 +166,48 @@ try {
         return formatDate(params.value); // Format the date before displaying
       },
     },
+   
+    
     {
-      field: "is_active",
-      headerName: "Status",
+      field: "action",
+      headerName: "Action",
       flex: 1,
       filterable: true,
       renderCell: (params) => (
-        <Switch
-          checked={params.value == 1}
-          onChange={() => handleStatusToggle(params.row.org_id, params.value)}
-         
-        />
+        <Box display="flex" justifyContent="center" alignItems="center">
+          {/* Edit Button */}
+          
+          <Button
+            onClick={() => navigate(`/admin/tasks/edit/${params.row.dept_id}`)}
+            sx={{
+              backgroundColor: colors.blueAccent[700],
+              marginRight: 2,
+              textTransform: 'none',
+              '&:hover': {
+                backgroundColor: colors.blueAccent[700],
+              },
+            }}
+          >
+            edit
+           {/* < EditIcon/> */}
+          </Button>
+
+          {/* Delete Button */}
+          <Button
+            onClick={() => handleOpenDeleteDialog(params.row.dept_id)}
+            sx={{
+              backgroundColor: colors.blueAccent[700],
+              textTransform: "none",
+              '&:hover': {
+                backgroundColor: colors.blueAccent[700],
+              },
+            }}
+          >Del
+            {/* < DeleteIcon/> */}
+          </Button>
+        </Box>
       ),
-    },
-    {
-      field: "city",
-      headerName: "City",
-      flex: 1,
-      filterable: true,
-      valueFormatter: (params) => {
-        return formatCityName(params.value); // Apply the formatter to the city value
-      },
-    },
-    {
-      field: "state",
-      headerName: "State",
-      flex: 1,
-      filterable: true,
-      valueFormatter: (params) => {
-        return formatCityName(params.value); // Apply the formatter to the city value
-      },
-    },
+    }
    
   ];
 
@@ -216,18 +245,18 @@ try {
     console.log("Xz")
     try {
       const response = await axios.get(
-        `${apis.baseUrl}/sa/getTaskList`,
+        `${apis.baseUrl}/tasks/getTaskList`,
         {
           headers: {
             Authorization: sessionStorage.getItem("auth_token"), // `${AccesssToken}`,  // Basic authentication header
           },
         }
       );
-    console.log(response.data.org.organizations,"res")
-      const orgData = response?.data?.org?.organizations;
+    console.log(response.data,"res")
+      const orgData = response?.data?.data;
     
       if (orgData && orgData.length > 0) {
-        console.log(organizations)
+        // console.log(organizations)
         const updatedData = orgData.map((org, index) => ({
           ...org,
           id: index +1, // Assuming 'org_id' is unique
@@ -235,7 +264,7 @@ try {
         
         setOrganizations(updatedData);
         // setOrganizations(orgData);
-        console.log(organizations)
+        // console.log(organizations)
         console.log("response data of organizationssss", organizations);
       } else {
         console.error("No organizations found in response");
