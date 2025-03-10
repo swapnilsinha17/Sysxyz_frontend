@@ -93,6 +93,8 @@ export default function SignIn() {
       // Navigate to respective dashboard
       if (userData?.role === "sa") {
         navigate("/sa/dashboard");
+      }else if (userData?.role === "Doer") {
+        navigate("/doer/tasks");
       } else {
         navigate("/admin/dashboard");
       }
