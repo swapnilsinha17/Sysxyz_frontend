@@ -1,6 +1,3 @@
-
-import { useUser } from '../../../contextApi/UserContext';
-
 import {
   Box,
   IconButton,
@@ -8,11 +5,11 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import * as React from 'react';
-import Button from '@mui/material/Button';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
-import Fade from '@mui/material/Fade';
+import * as React from "react";
+import Button from "@mui/material/Button";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import Fade from "@mui/material/Fade";
 import { tokens, ColorModeContext } from "../../../theme";
 import { useContext } from "react";
 
@@ -24,15 +21,13 @@ import {
   SettingsOutlined,
 } from "@mui/icons-material";
 import { ToggledContext } from "../../../App";
+import { MdOutlineChangeCircle } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
+import { IoMdLogOut } from "react-icons/io";
 
 const Navbar = () => {
-  
-  const { user } = useUser();
-
-  console.log("grtrtrtrttrrrrrrr",user)
   const theme = useTheme();
-  const savedFullName = sessionStorage.getItem('fullName');
+  const savedFullName = sessionStorage.getItem("fullName");
   const colorMode = useContext(ColorModeContext);
   const { toggled, setToggled } = useContext(ToggledContext);
   const isMdDevices = useMediaQuery("(max-width:768px)");
@@ -56,7 +51,6 @@ const Navbar = () => {
     // Remove the token from sessionStorage
     sessionStorage.removeItem("auth_token");
 
-
     console.log("after logout", sessionStorage.getItem("auth_token"));
 
     // Redirect to the login page after logout
@@ -77,46 +71,59 @@ const Navbar = () => {
         >
           <MenuOutlined />
         </IconButton>
-      
       </Box>
 
-      
-
-
-      <Box mr={2}>
-        
-      {user ? `Welcome, ${user}` : 'Welcome, Guest'}
-     
-        <IconButton >
-          <div>
-            <PersonOutlined
-              id="fade-button"
-              aria-controls={open ? 'fade-menu' : undefined}
-              aria-haspopup="true"
-              aria-expanded={open ? 'true' : undefined}
-              onClick={handleClick}
-            />
-            <Menu
-              id="fade-menu"
-              MenuListProps={{ 'aria-labelledby': 'fade-button' }}
-              anchorEl={anchorEl}
-              open={open}
-              onClose={handleClose}
-              TransitionComponent={Fade}
-            >
-              <MenuItem onClick={handleClose}>Change Password</MenuItem>
-              <MenuItem onClick={handleLogout}>Logout</MenuItem>
-              <IconButton onClick={colorMode.toggleColorMode}>
+      <Box display="flex" alignItems="center"  gap={1}>
+  <Typography variant="h6" noWrap>
+    {`Welcome ${savedFullName}`}
+  </Typography>
+  <IconButton>
+    <div>
+      <PersonOutlined
+        id="fade-button"
+        aria-controls={open ? "fade-menu" : undefined}
+        aria-haspopup="true"
+        aria-expanded={open ? "true" : undefined}
+        onClick={handleClick}
+        style={{fontSize:"30"}}
+      />
+      <Menu
+        id="fade-menu"
+        MenuListProps={{ "aria-labelledby": "fade-button" }}
+        anchorEl={anchorEl}
+        open={open}
+        onClose={handleClose}
+        TransitionComponent={Fade}
+      >
+        <MenuItem onClick={colorMode.toggleColorMode}>
           {theme.palette.mode === "dark" ? (
             <LightModeOutlined />
           ) : (
             <DarkModeOutlined />
           )}
-        </IconButton>
-            </Menu>
-          </div>
-        </IconButton>
-      </Box>
+           <span>Theme</span>
+        </MenuItem>
+       
+        <MenuItem onClick={handleClose}>
+          {" "}
+          <span>
+            <MdOutlineChangeCircle
+              style={{ fontSize: "19", }}
+            />
+          </span>
+          <Typography>Change Password</Typography>
+        </MenuItem>
+        <MenuItem onClick={handleLogout}>
+          <span>
+            <IoMdLogOut style={{ fontSize: "19", }} />
+          </span>
+          Logout
+        </MenuItem>
+      </Menu>
+    </div>
+  </IconButton>
+</Box>
+
     </Box>
   );
 };

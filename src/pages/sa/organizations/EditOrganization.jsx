@@ -7,6 +7,8 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { apis } from "../../../utils/utills";
 import { tokens } from "../../../theme";
+import CancelLink from "../../../components/btn/HyperLinkBtn";
+import AddButton from "../../../components/btn/AddButton";
 
 // Validation Schema (same as Add)
 const validationSchema = Yup.object({
@@ -74,9 +76,9 @@ const EditOrganization = () => {
 
   return (
     <Box m="20px">
-      <Header title="EDIT ORGANIZATION" subtitle="Edit and save the organization information here" />
-
-      <Formik
+      <Header title="Edit Organization" subtitle="Edit and save the organization information here" />
+<div style={{ marginTop: "30px" }}>
+<Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
         onSubmit={handleSubmit}
@@ -181,17 +183,18 @@ const EditOrganization = () => {
                   helperText={touched.access_end_date && errors.access_end_date} />
               </Box>
             </fieldset>
-            <Box display="flex" justifyContent="end" gap="12px" mt="20px">
-              <Button onClick={() => navigate("/sa/organizations")} color="secondary" variant="contained">
-                Cancel
-              </Button>
-              <Button type="submit" color="secondary" variant="contained">
-                Update
-              </Button>
+            <Box display="flex" justifyContent="end"  gap={4}
+                 alignItems="center">
+             
+              <CancelLink Hyperbtntext=" Cancel" hyperLinkText="/sa/organizations"/>
+             
+              <AddButton btn="Update"/>
             </Box>
           </form>
         )}
       </Formik>
+</div>
+      
     </Box>
   );
 };

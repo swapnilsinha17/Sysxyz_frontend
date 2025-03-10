@@ -1,4 +1,4 @@
-import { Box, Button, TextField, useMediaQuery,Typography, CircularProgress, useTheme } from "@mui/material";
+import { Box, Button, TextField, useMediaQuery,Typography, CircularProgress, useTheme, colors } from "@mui/material";
 import { Header } from "../../../components";
 import { useNavigate, useParams } from "react-router-dom";
 import { Formik } from "formik";
@@ -6,6 +6,8 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { apis } from "../../../utils/utills";
 import { tokens } from "../../../theme";
+import CancelLink from "../../../components/btn/HyperLinkBtn";
+import AddButton from "../../../components/btn/AddButton";
 
 const ViewOrganization = () => {
   const theme = useTheme();
@@ -15,7 +17,7 @@ const ViewOrganization = () => {
   const { id } = useParams(); // Assuming you're getting the organization ID from URL params
   const [initialValues, setInitialValues] = useState(null);
   const [loading, setLoading] = useState(true);
-
+  const redirectUrl = `/sa/organizations/edit/${id}`;
   // Fetch organization data from API
   useEffect(() => {
     const fetchData = async () => {
@@ -49,8 +51,8 @@ const ViewOrganization = () => {
 
   return (
     <Box m="20px">
-    <Header title="Organization details" subtitle=" View the organization information here" />
-  
+    <Header title="Organization Details" subtitle=" View the organization information here" />
+    <div style={{ marginTop: "30px" }}>
     <Formik initialValues={initialValues} enableReinitialize>
       {({ values }) => (
         <form>
@@ -95,17 +97,17 @@ const ViewOrganization = () => {
             </Box>
           </fieldset>
   
-          <Box display="flex" justifyContent="end" mt="20px" gap="12px">
-            <Button onClick={() => navigate("/sa/organizations")} type="button" color="secondary" variant="contained">
-              Back
-            </Button>
-            <Button onClick={() => navigate(`/sa/organizations/edit/${id}`)} type="button" color="secondary" variant="contained">
-              Edit
-            </Button>
+          <Box display="flex" justifyContent="end"  gap={4}
+                 alignItems="center">
+           
+            <CancelLink Hyperbtntext="Back" hyperLinkText="/sa/organizations"/>
+           
+            <AddButton btn=" Edit" Redirect={redirectUrl}/>
           </Box>
         </form>
       )}
     </Formik>
+    </div>
   </Box>
   
   );
@@ -142,8 +144,7 @@ const gridStyle = (isNonMobile) => ({
 
 const inputStyle = (span) => ({
   gridColumn: `span ${span}`,
-  // backgroundColor: "#F2F0F0",
-  // border: "1px solid #ddd",
+ color:"red",
   borderRadius: "4px",
   "& .MuiFilledInput-root": {
     // backgroundColor: "#F2F0F0",

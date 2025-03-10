@@ -11,25 +11,23 @@
     Button,
   } from "@mui/material";
   import { Header } from "../../../components";
+ 
   import { DataGrid } from "@mui/x-data-grid";
   import { toast , ToastContainer} from "react-toastify";
   import "react-toastify/dist/ReactToastify.css";
-  import { IoAddOutline } from "react-icons/io5";
+ 
   
-  // toast.configure();
-  //  import AccesssToken from "../../utils/utills";
+  
   import { tokens } from "../../../theme";
-  import {
-    AdminPanelSettingsOutlined,
-    LockOpenOutlined,
-    SecurityOutlined,
-  } from "@mui/icons-material";
+  
   import { useState, useEffect } from "react";
   import { useNavigate } from "react-router-dom";
-  import AddOrganization from "./AddOrganization";
+  // import AddOrganization from "./AddOrganization";
   import axios from "axios";
   import { apis } from "../../../utils/utills";
 import { formatCityName, formatDate } from "../../../utils/formatter";
+
+import AddButton from "../../../components/btn/AddButton";
   const ListOrganization = () => {
     const theme = useTheme();
 
@@ -132,7 +130,7 @@ import { formatCityName, formatDate } from "../../../utils/formatter";
         type: "number",
         filterable: true,
         valueFormatter: (params) => {
-          // No commas, just the number
+         
           return params.value;
         },
       },
@@ -155,6 +153,7 @@ import { formatCityName, formatDate } from "../../../utils/formatter";
         filterable: true,
         renderCell: (params) => (
           <Switch
+          color="secondary"
             checked={params.value == 1}
             onChange={() => handleStatusToggle(params.row.org_id, params.value)}
            
@@ -262,15 +261,17 @@ import { formatCityName, formatDate } from "../../../utils/formatter";
         {/* Search Box and New Button */}
         
         <Box
-          mb={2} mt={2}
+          // mb={2} mt={2}
           display="flex"
           justifyContent="space-between"
           alignItems="center"
          
         >
-           <Header title="ORGANIZATION" />
+           <Header title="Organizations" />
            <Box   display="flex"  gap={4}  alignItems="center">
            <TextField
+
+           className="css-ty8hyp-MuiInputBase-root-MuiOutlinedInput-root"
             label="Search"
          
             variant="outlined"
@@ -280,42 +281,20 @@ import { formatCityName, formatDate } from "../../../utils/formatter";
             value={searchTerm}
             onChange={handleSearchChange}
             sx={{ maxWidth: "300px" ,
+          
              
             }} 
           />
 
           {/* New Button */}
-          <Button
-  variant="contained"
-  sx={{
-    width:"130px",
-    bgcolor: colors.blueAccent[500],
-    color:colors.blueAccent[100],
-  display:"flex",
-    fontWeight: "bold",
-    p: "10px 20px",
-    mt: "18px",
-    transition: ".3s ease",
-    ":hover": {
-      bgcolor: colors.blueAccent[700], // Adjust the color for hover state if needed
-    },
-  }}
-  onClick={() => {
-    // Handle the 'New' button action, e.g., open a modal or redirect
-    console.log("New Button Clicked");
-    navigate("add");
-  }}
->
-  add new
-
-</Button>
+     <AddButton btn="ADD NEW" Redirect="add" />
            </Box>
      
 
         </Box>
   <Box
-         
-          flex={1}
+           height="85vh"
+           flex={1}
           sx={{
            
 

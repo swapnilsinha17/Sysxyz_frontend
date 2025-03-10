@@ -24,6 +24,7 @@ import { apis } from "../../../utils/utills";
 import { tokens } from "../../../theme";
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import AddButton from "../../../components/btn/AddButton";
 const ListDepartment = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
@@ -55,6 +56,10 @@ const ListDepartment = () => {
       align: "left",
       type: "number",
       filterable: true,
+      valueFormatter: (params) => {
+         
+        return params.value;
+      },
     },
     {
       field: "department_name",
@@ -70,36 +75,25 @@ const ListDepartment = () => {
       flex: 1,
       filterable: true,
       renderCell: (params) => (
-        <Box display="flex" justifyContent="center" alignItems="center">
+        <Box display="flex" justifyContent="center" gap={6} alignItems="center" >
           {/* Edit Button */}
+
           
-          <Button
-            onClick={() => navigate(`/sa/departments/edit/${params.row.dept_id}`)}
-            sx={{
-              backgroundColor: colors.blueAccent[700],
-              marginRight: 2,
-              textTransform: 'none',
-              '&:hover': {
-                backgroundColor: colors.blueAccent[700],
-              },
-            }}
-          >
-           < EditIcon/>
-          </Button>
+           < EditIcon
+           
+           color="secondary"
+              onClick={() => navigate(`/sa/departments/edit/${params.row.dept_id}`)}
+            
+            />
+         
 
           {/* Delete Button */}
-          <Button
-            onClick={() => handleOpenDeleteDialog(params.row.dept_id)}
-            sx={{
-              backgroundColor: colors.blueAccent[700],
-              textTransform: "none",
-              '&:hover': {
-                backgroundColor: colors.blueAccent[700],
-              },
-            }}
-          >
-            < DeleteIcon/>
-          </Button>
+          
+            < DeleteIcon
+              color="secondary"
+              onClick={() => handleOpenDeleteDialog(params.row.dept_id)}
+              />
+       
         </Box>
       ),
     }
@@ -174,9 +168,16 @@ const ListDepartment = () => {
   }, []);
 
   return (
-    <Box m="20px">
-      <Header title="DEPARTMENT" />
-      <Box mb={2} display="flex" justifyContent="space-between" alignItems="center">
+    <Box mx="20px">
+      {/* <ToastContainer  autoClose={3000} /> */}
+      <Box   
+          display="flex"
+          justifyContent="space-between"
+          alignItems="center">
+ <Header title="Departments" />
+     
+     
+    <Box  display="flex" justifyContent="space-between" gap={4}  alignItems="center">
         <TextField
           label="Search"
           variant="outlined"
@@ -188,49 +189,18 @@ const ListDepartment = () => {
          
            }}
         />
-        <Button
-          variant="contained"
-          sx={{
-            bgcolor: colors.blueAccent[700],
-            color: "#fcfcfc",
-            fontWeight: "bold",
-            p: "10px 20px",
-            mt: "18px",
-            ":hover": { bgcolor: colors.blueAccent[800] },
-          }}
-          onClick={() => navigate("add")}
-        >
-          Add New
-        </Button>
-      </Box>
+      
+        <AddButton btn=" Add New" Redirect="add" />
+      
+</Box>
+</Box>
+    
 
-      {/* <Box mb={2} display="flex" justifyContent="space-between" alignItems="center">
-        <Typography>Rows per page:</Typography>
-        <FormControl sx={{ minWidth: 100 }}>
-          <InputLabel>Per Page</InputLabel>
-          <Select
-            value={pageSize}
-            onChange={handlePageSizeChange}
-            label="Rows per page"
-          >
-            {[10, 20, 50, 100].map((size) => (
-              <MenuItem key={size} value={size}>
-                {size}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-      </Box> */}
-
-      <Box mt="40px" height="75vh" flex={1}>
+      <Box height="85vh" flex={1}>
         <DataGrid
           rows={filteredRows}
           columns={columns}
-          // pageSize={pageSize}
-          // page={page}
-          // onPageChange={handlePageChange}
-          // onPageSizeChange={handlePageSizeChange}
-          // pagination
+          
           pageSize="10"
           
           pageSizeOptions={[5, 10, 25, { value: -1, label: 'All' }]}
@@ -263,13 +233,7 @@ const ListDepartment = () => {
         }}
         />
        
-        {/* <Box display="flex" justifyContent="flex-end" mt={2}>
-          <Typography>
-            {searchTerm
-              ? `Showing ${page * pageSize + 1} to ${Math.min((page + 1) * pageSize, filteredRows.length)} of ${filteredRows.length} entries (filtered from ${organizations.length} total entries)`
-              : `Showing ${page * pageSize + 1} to ${Math.min((page + 1) * pageSize, organizations.length)} of ${organizations.length} entries`}
-          </Typography>
-        </Box> */}
+    
       </Box>
 
       {/* Delete Confirmation Dialog */}

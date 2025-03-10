@@ -24,6 +24,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { apis } from "../../../utils/utills";
+import AddButton from "../../../components/btn/AddButton";
 
 const ListUsers = () => {
   const theme = useTheme();
@@ -67,7 +68,7 @@ const ListUsers = () => {
           <Switch
             checked={params.row.is_active}
             onChange={() => handleStatusToggle(params.row.id, params.row.is_active)}
-            color="primary"
+            color="secondary"
           />
         </Box>
       ),
@@ -89,7 +90,7 @@ const ListUsers = () => {
 
           {/* Reset Password Button */}
           <IconButton
-            sx={{ color: 'orange' }}
+           color="secondary"
             onClick={() => handleOpenResetDialog(params.row.id)}
           >
             <LockResetOutlined />
@@ -189,58 +190,40 @@ const ListUsers = () => {
   }, []);
 
   return (
-    <Box m="20px">
-      <Header title="USER LIST" />
+    <Box m="20px"
+   >
+     <Box sx={{ 
+  display: "flex", 
+  justifyContent: "space-between", 
+  alignItems: "center"
+}} >
+  {/* Title Section (Header) on the Left */}
 
-      {/* Search Box and New Button */}
-      <Box mb={2} display="flex" justifyContent="space-between" alignItems="center">
-        <TextField
-          label="Search"
-          variant="outlined"
-          fullWidth
-          value={searchTerm}
-            color="secondary"
-          onChange={handleSearchChange}
-          sx={{ maxWidth: "300px",
-           
-           }}
-        />
+    <Header title="Users" />
+ 
 
-        {/* New Button */}
-        <Button
-          variant="contained"
-          sx={{
-            bgcolor: colors.blueAccent[700],
-            color: "#fcfcfc",
-            fontWeight: "bold",
-            p: "10px 20px",
-            mt: "18px",
-            transition: ".3s ease",
-            ":hover": { bgcolor: colors.blueAccent[800] },
-          }}
-          onClick={() => navigate("add")}
-        >
-          Add New User
-        </Button>
-      </Box>
+  {/* Search Box and New Button Section on the Right */}
+  <Box mb={2} display="flex" gap={4} alignItems="center">
+    <TextField
+      label="Search"
+      variant="outlined"
+      fullWidth
+      value={searchTerm}
+      color="secondary"
+      onChange={handleSearchChange}
+      sx={{ maxWidth: "300px" }}
+    />
 
-      {/* Per Page Dropdown */}
-      {/* <Box mb={2} display="flex" justifyContent="space-between" alignItems="center">
-        <Typography>Rows per page:</Typography>
-        <FormControl sx={{ minWidth: 100 }}>
-          <InputLabel>Per Page</InputLabel>
-          <Select value={pageSize} onChange={handlePageSizeChange} label="">
-            {[10, 20, 50, 100].map((size) => (
-              <MenuItem key={size} value={size}>
-                {size}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-      </Box> */}
+    {/* New Button */}
+    <AddButton btn="Add New User" Redirect="add" />
+  </Box>
+</Box>
+
+     
+   
 
       {/* DataGrid */}
-      <Box mt="40px" height="75vh" flex={1} sx={{
+      <Box  height="75vh" flex={1} sx={{
         "& .MuiDataGrid-root": { border: "none" },
         "& .MuiDataGrid-cell": { border: "none" },
         "& .MuiDataGrid-columnHeaders": {
@@ -266,31 +249,14 @@ const ListUsers = () => {
         <DataGrid
           rows={users}
           columns={columns}
-          // pageSize={pageSize}
-          // page={page}
-          // onPageChange={handlePageChange}
-          // onPageSizeChange={handlePageSizeChange}
-          // pagination
-          // loading={loading}
-
-          // rows={filteredRows}
-          // columns={columns}
+         
           pageSize="10"
           
           pageSizeOptions={[5, 10, 25, { value: -1, label: 'All' }]}
         />
       </Box>
 
-      {/* Pagination Info */}
-      {/* <Box display="flex" justifyContent="flex-end" mt={2}>
-        <Typography>
-          {searchTerm
-            ? `Showing ${page * pageSize + 1} to ${Math.min((page + 1) * pageSize, users.length)} of ${users.length} entries (filtered)`
-            : `Showing ${page * pageSize + 1} to ${Math.min((page + 1) * pageSize, users.length)} of ${users.length} entries`}
-        </Typography>
-      </Box> */}
-
-      {/* Reset Password Dialog */}
+   
       <Dialog open={openResetDialog} onClose={handleCloseResetDialog}>
         <DialogTitle>Reset Password</DialogTitle>
         <DialogContent>

@@ -1,4 +1,4 @@
-import { Box, Button, TextField, MenuItem, Select, InputLabel, FormControl, useMediaQuery } from "@mui/material";
+import { Box, Button, TextField, MenuItem, Select, InputLabel, FormControl, useMediaQuery,Typography } from "@mui/material";
 import { Header } from "../../../components";
 import { useNavigate } from "react-router-dom";
 import { Formik } from "formik";
@@ -6,6 +6,8 @@ import * as Yup from "yup";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { apis } from "../../../utils/utills";
+import CancelLink from './../../../components/btn/HyperLinkBtn';
+import AddButton from './../../../components/btn/AddButton';
 
 // Initial values for Formik
 const initialValues = {
@@ -73,11 +75,11 @@ const AddDepartment = () => {
   return (
     <Box m="20px">
       <Header
-        title="CREATE DEPARTMENT"
+        title="Create Department"
         subtitle="Add new department on the platform by filling the following details"
       />
-
-      <Formik
+<div style={{ marginTop: "30px" }}>
+<Formik
         onSubmit={handleSubmit}
         initialValues={initialValues}
         validationSchema={checkoutSchema}
@@ -110,7 +112,7 @@ const AddDepartment = () => {
                 }}
               >
               
-                <p style={{color:"gray"}}>  Department Information</p>
+                 <Typography> Department Information</Typography>
               </legend>
 
               <Box
@@ -166,40 +168,30 @@ const AddDepartment = () => {
                   helperText={touched.department_name && errors.department_name}
                   sx={{
                     gridColumn: "span 2",
-                    // backgroundColor: "#F2F0F0", // Set background color to white
-                    // border: "1px solid #ddd", // Set border color
-                    // borderRadius: "4px", // Rounded corners for the input box
-                    // "& .MuiFilledInput-root": {
-                    //   backgroundColor: "#F2F0F0", // Ensure the background color is white
-                    // },
+                  
                   }}
                 />
               </Box>
             </fieldset>
 
-            <div className="flex gap-4 justify-end">
+           
               {/* Cancel Button */}
-              <Box display="flex" alignItems="center" justifyContent="end" mt="20px">
-                <Button
-                  onClick={() => navigate("/sa/departments")}
-                  type="button"
-                  color="primary"
-                  variant="contained"
-                >
-                  Cancel
-                </Button>
-              </Box>
+              <Box gap={4} display="flex" alignItems="center" justifyContent="end" >
+              
+                <CancelLink  Hyperbtntext=" Cancel" hyperLinkText="/sa/departments"/>
+             
 
               {/* Submit Button */}
-              <Box display="flex" alignItems="center" justifyContent="end" mt="20px">
-                <Button type="submit" color="primary" variant="contained">
-                  Submit
-                </Button>
+            
+               
+                <AddButton btn=" Submit"/>
               </Box>
-            </div>
+           
           </form>
         )}
       </Formik>
+</div>
+      
     </Box>
   );
 };

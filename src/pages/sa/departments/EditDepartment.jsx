@@ -1,4 +1,4 @@
-import { Box, Button, TextField, MenuItem, Select, InputLabel, FormControl, useMediaQuery } from "@mui/material";
+import { Box, Button, TextField, MenuItem, Select, InputLabel, FormControl, useMediaQuery, Typography } from "@mui/material";
 import { Header } from "../../../components";
 import { useNavigate, useParams } from "react-router-dom";
 import { Formik } from "formik";
@@ -6,6 +6,8 @@ import * as Yup from "yup";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { apis } from "../../../utils/utills";
+import CancelLink from "../../../components/btn/HyperLinkBtn";
+import AddButton from "../../../components/btn/AddButton";
 
 // Initial values for Formik
 const initialValues = {
@@ -93,11 +95,11 @@ const EditDepartment = () => {
   return (
     <Box m="20px">
       <Header
-        title="EDIT DEPARTMENT"
+        title=" Edit Department"
         subtitle="Update the department details on the platform by modifying the following information"
       />
-
-      <Formik
+     <div  style={{ marginTop: "30px" }}>
+     <Formik
         onSubmit={handleSubmit}
         initialValues={{
           org_id: department.org_id || "",
@@ -132,7 +134,8 @@ const EditDepartment = () => {
                   marginBottom: "10px",
                 }}
               >
-                Department Information
+                <Typography> Department Information</Typography>
+               
               </legend>
 
               <Box
@@ -196,27 +199,23 @@ const EditDepartment = () => {
 
             <div className="flex gap-4 justify-end">
               {/* Cancel Button */}
-              <Box display="flex" alignItems="center" justifyContent="end" mt="20px">
-                <Button
-                  onClick={() => navigate("/sa/departments")}
-                  type="button"
-                  color="primary"
-                  variant="contained"
-                >
-                  Cancel
-                </Button>
-              </Box>
+              <Box display="flex" alignItems="center" justifyContent="end" gap={4}>
+               
+                <CancelLink  Hyperbtntext="Cancel" hyperLinkText="/sa/departments"/>
+            
 
               {/* Submit Button */}
-              <Box display="flex" alignItems="center" justifyContent="end" mt="20px">
-                <Button type="submit" color="secondary" variant="contained">
-                  Submit
-                </Button>
+            
+               
+                <AddButton btn=" Submit"/>
               </Box>
             </div>
           </form>
         )}
       </Formik>
+     </div>
+
+    
     </Box>
   );
 };

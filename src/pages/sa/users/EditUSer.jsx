@@ -1,4 +1,4 @@
-import { Box, Button, TextField, MenuItem, Select, InputLabel, FormControl, RadioGroup, FormControlLabel, Radio, useMediaQuery } from "@mui/material";
+import { Box, Button, TextField, MenuItem, Select, InputLabel, FormControl, RadioGroup, FormControlLabel, Radio, useMediaQuery, Typography } from "@mui/material";
 import { Header } from "../../../components";
 import { useNavigate, useParams } from "react-router-dom";
 import { Formik } from "formik";
@@ -6,6 +6,8 @@ import * as Yup from "yup";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { apis } from "../../../utils/utills";
+import CancelLink from "../../../components/btn/HyperLinkBtn";
+import AddButton from "../../../components/btn/AddButton";
 
 // Initial values for Formik
 const initialValues = {
@@ -121,11 +123,11 @@ const EditUser = () => {
   return (
     <Box m="20px">
       <Header
-        title="EDIT USER"
+        title="Edit User"
         subtitle="Edit user details by filling the form below"
       />
-
-      <Formik
+<div  style={{ marginTop: "30px" }}>
+<Formik
         onSubmit={handleSubmit}
         initialValues={user} // Use the fetched user data as the initial values
         validationSchema={checkoutSchema}
@@ -153,13 +155,14 @@ const EditUser = () => {
                 style={{
                   fontSize: "1.2rem",
                   fontWeight: "bold",
-                  color: "#333",
+                 
                   padding: "0 10px",
                   marginBottom: "10px",
                 }}
               >
               
-                <p style={{color:"gray"}}>  Company Information</p>
+               
+                <Typography>Company Information</Typography>
               </legend>
 
               <Box
@@ -258,13 +261,14 @@ const EditUser = () => {
                 style={{
                   fontSize: "1.2rem",
                   fontWeight: "bold",
-                  color: "#333",
+                 
                   padding: "0 10px",
                   marginBottom: "10px",
                 }}
               >
                 
-                <p style={{color:"gray"}}>  User Information</p>
+                
+                <Typography>  User Information</Typography>
               </legend>
 
               <Box
@@ -358,12 +362,12 @@ const EditUser = () => {
                 style={{
                   fontSize: "1.2rem",
                   fontWeight: "bold",
-                  color: "#333",
+               
                   padding: "0 10px",
                   marginBottom: "10px",
                 }}
               >
-                Role Information
+               <Typography>Role Information</Typography> 
               </legend>
 
               <Box>
@@ -399,27 +403,18 @@ const EditUser = () => {
 
             <div className="flex gap-4 justify-end">
               {/* Cancel Button */}
-              <Box display="flex" alignItems="center" justifyContent="end" mt="20px">
-                <Button
-                  onClick={() => navigate("/sa/users")}
-                  type="button"
-                  color="primary"
-                  variant="contained"
-                >
-                  Cancel
-                </Button>
-              </Box>
-
-              {/* Submit Button */}
-              <Box display="flex" alignItems="center" justifyContent="end" mt="20px">
-                <Button type="submit" color="primary" variant="contained">
-                  Submit
-                </Button>
+              <Box display="flex" alignItems="center" justifyContent="end" gap={4}>
+                
+                <CancelLink  Hyperbtntext="Cancel" hyperLinkText="/sa/users"/>
+              
+                <AddButton btn=" Submit"/>
               </Box>
             </div>
           </form>
         )}
       </Formik>
+</div>
+      
     </Box>
   );
 };

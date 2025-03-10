@@ -35,5 +35,10 @@ body,
   background: linear-gradient(to bottom, #a5add1, #5a62fa);
 
 }
-
+.css-ty8hyp-MuiInputBase-root-MuiOutlinedInput-root {
+  height: 41px;
+}
+.css-1n72e7z-MuiInputBase-root-MuiOutlinedInput-root{
+  height: 41px;
+}
 

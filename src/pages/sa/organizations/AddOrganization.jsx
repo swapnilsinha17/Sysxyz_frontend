@@ -2,6 +2,7 @@ import { Box, Button, TextField, useMediaQuery } from "@mui/material";
 import { Header } from "../../../components";
 import { useNavigate } from "react-router-dom";
 import { Formik } from "formik";
+import { Link } from 'react-router-dom';
 import * as Yup from "yup";
 import { Typography, useTheme } from '@mui/material';
 const initialValues ={
@@ -57,6 +58,8 @@ const checkoutSchema = Yup.object({
 
 import { apis } from "../../../utils/utills";
 import { tokens } from "../../../theme";
+import CancelLink from "../../../components/btn/HyperLinkBtn";
+import AddButton from "../../../components/btn/AddButton";
 // import { useTheme } from "@emotion/react";
 const AddOrganization = () => {
   const theme= useTheme();
@@ -102,16 +105,17 @@ const handleSubmit = async (values, actions) => {
 
   //  })
   return (
-    <Box m="20px">
+    <Box m="20px" >
       <Header
-        title="CREATE ORGANIZATION"
+        title="Create Organization"
         subtitle="Add new organization on the platform by filling the following details"
       />
-
+<div style={{ marginTop: "30px" }}>
       <Formik
         onSubmit={handleSubmit}
         initialValues={initialValues}
         validationSchema={checkoutSchema}
+       style={{mt:"50px"}}
       >
         {({
           values,
@@ -453,44 +457,27 @@ const handleSubmit = async (values, actions) => {
               </Box>
             </fieldset>
 
-            <div className="flex gap-4 justify-end">
-              {/* cancel Button */}
+          
               <Box
                 display="flex"
-                alignItems="center"
+               
                 justifyContent="end"
-                mt="20px"
+              
+                gap={4}
+                 alignItems="center"
               >
-                <Button
-                  onClick={() => {
-                    // Handle the 'New' button action, e.g., open a modal or redirect
-
-                    navigate("/sa/organizations");
-                  }}
-                  type="button"
-                 color="secondary"
-                  variant="contained"
-                >
-                  Cancel
-                </Button>
+     <CancelLink Hyperbtntext="cancel" hyperLinkText="/sa/organizations"/>
                 
-              </Box>
+             
 
               {/* Submit Button */}
-              <Box
-                display="flex"
-                alignItems="center"
-                justifyContent="end"
-                mt="20px"
-              >
-                <Button type="submit" color="secondary" variant="contained">
-                  Submit
-                </Button>
-              </Box>
-            </div>
+             <AddButton btn="Submit"/>
+             </Box>
+          
           </form>
         )}
       </Formik>
+      </div>
     </Box>
   );
 };

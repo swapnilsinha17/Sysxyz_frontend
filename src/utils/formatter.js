@@ -1,6 +1,6 @@
 
 export function formatDate(dateString) {
-  const options = { year: 'numeric', month: 'long', day: 'numeric' };
+  const options = { year: 'numeric', month: 'short', day: 'numeric' };
   const date = new Date(dateString);
 
   return date.toLocaleDateString('en-GB', options);
@@ -18,3 +18,12 @@ export function formatCityName(city) {
     })
     .join(' ');  // Join them back together with spaces
 }
+export const formatEmployeeCode = (value) => {
+  // Remove any non-alphanumeric characters (A-Z, a-z, 0-9)
+  let formattedValue = value.replace(/[^A-Za-z0-9]/g, "");
+
+  // Capitalize the string (convert to uppercase)
+  formattedValue = formattedValue.toUpperCase();
+
+  return formattedValue;
+};

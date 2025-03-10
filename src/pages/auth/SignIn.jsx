@@ -1,250 +1,264 @@
-import { useContext, useEffect, useState } from "react";
-import logoImg from "../../assets/images/logo/XYZ_OPS_Logo.png";
-import fullimg from "../../assets/images/logo/Data_security_01.jpg";
-// import { Eye, EyeOff, X } from "lucide-react";
+import { useEffect, useState } from "react";
+import {
+  TextField,
+  Button,
+  IconButton,
+  InputAdornment,
+  Container,
+  Card,
+  CardContent,
+  Typography,
+  Box,
+} from "@mui/material";
+import { formatEmployeeCode } from "../../utils/formatter";
 import { IoMdClose } from "react-icons/io";
-import { LiaEyeSlashSolid } from "react-icons/lia";
-import { LiaEyeSolid } from "react-icons/lia";
-
-import { useUser } from '../../contextApi/UserContext';
-
+import { LiaEyeSlashSolid, LiaEyeSolid } from "react-icons/lia";
 import { useNavigate } from "react-router-dom";
-
-import toast from "react-hot-toast";
+import { toast } from "react-toastify";
 import { apis } from "../../utils/utills";
 import axios from "axios";
+import logoImg from "../../assets/images/logo/XYZ_OPS_Logo.png";
+import fullimg from "../../assets/images/logo/Data_security_01.jpg";
 
 export default function SignIn() {
   const [showPassword, setShowPassword] = useState(false);
-  const [company_code, setcompany_code] = useState("");
-  const [employee_code, setemployee_code] = useState("");
+  const [company_code, setCompanyCode] = useState("");
+
+  const [employee_code, setEmployeeCode] = useState("");
   const [password, setPassword] = useState("");
-
-
-  const { setUser } =useUser();
-  
   const [errors, setErrors] = useState({
     company_code: "",
     employee_code: "",
     password: "",
   });
 
- 
-  // const AccessToken = sessionStorage.getItem("user")?.token;
   const navigate = useNavigate();
-
   const AccessToken = sessionStorage.getItem("user")?.token;
+
   useEffect(() => {
-  
     if (AccessToken) {
-      // Navigate only if token is available
       navigate("/sa/dashboard");
     }
-  }, [AccessToken, navigate]);  // Trigger effect when AccessToken changes
-  
-
-  
+  }, [AccessToken, navigate]);
 
   const validateForm = () => {
     const newErrors = { company_code: "", employee_code: "", password: "" };
 
-    if (!company_code) {
-      newErrors.company_code = "Company Code is required.";
-    }
-
-    if (!employee_code) {
-      newErrors.employee_code = "Employee Code is required.";
-    }
-
-    if (!password) {
-      newErrors.password = "Password is required.";
-    }
+    if (!company_code) newErrors.company_code = "Company Code is required.";
+    if (!employee_code) newErrors.employee_code = "Employee Code is required.";
+    if (!password) newErrors.password = "Password is required.";
 
     setErrors(newErrors);
-
     return !Object.values(newErrors).some((error) => error);
   };
 
-  
-
   const handleLogin = async (e) => {
     e.preventDefault();
-
-    if (!validateForm()) return;
+    if (!validateForm()) {
+      console.log("Form validation failed.");
+      return;
+    }
 
     try {
+      console.log("Sending login request...");
       const response = await axios.post(`${apis.baseUrl}/register/login`, {
         company_code,
         employee_code,
         password,
       });
-  console.log("response data of token",response?.data?.data);
 
-  if (response.status === 201) {
-    const userData = response?.data?.data;
-  
-    if (userData?.token) {
-      sessionStorage.setItem("user", JSON.stringify(userData));
-      sessionStorage.setItem("auth_token", userData?.token);
-      setUser(userData?.full_name); // Set user data for context if needed
-      
-      toast.success(response?.data?.message || "Login successful");
-  
-      // Navigate to respective dashboard
-      if (userData?.role === "sa") {
-        navigate("/sa/dashboard");
+
+      if (response.status === 201) {
+        const userData = response.data.data;
+        console.log("ddata", userData);
+        if (userData?.token) {
+          sessionStorage.setItem("user", JSON.stringify(userData));
+          sessionStorage.setItem("auth_token", userData.token);
+          sessionStorage.setItem("fullName", userData.full_name);
+          //   toast.success(response.data.message || "Login successful");
+          navigate(
+            userData.role === "sa" ? "/sa/dashboard" : "/admin/dashboard"
+          );
+        } else {
+          toast.error("Failed to retrieve token.");
+        }
       } else {
-        navigate("/admin/dashboard");
+        toast.error(response?.data?.message);
       }
-    } else {
-      toast.error("Failed to retrieve token.");
-    }
-  } else {
-    toast.error(response?.data?.message || "Error while Login");
-  }
-  
-     
-      
-      //   if (response.status === 201) {
-      //     // Store the token into sessionStorage
-      //     sessionStorage.setItem("user", JSON.stringify(response?.data?.data));
-      //   setUser(response?.data?.data?.full_name);
-        
-      //   // console.log("as", response?.data?.data?.token);
-      //   toast.success(response?.data?.message || "Login successful");
-      //   if(response?.data?.data?.role =='sa'){
-
-      //     navigate("/sa/dashboard");
-      //   }else{
-      //     navigate("/admin/dashboard");
-      //   }
-      // } else {
-      //   toast.error(response?.data?.message || "Error while Login");
-      // }
     } catch (error) {
-      const errorMessage =
-        error.response?.data?.message || "An unknown error occurred.";
-      toast.error(errorMessage);
+      toast.error(
+        error?.response?.data?.message || "An unexpected error occurred",
+        {
+          position: "top-center",
+          autoClose: 3000,
+        }
+      );
     }
   };
-
+  const handleEmployeeCodeChange = (e) => {
+    const formattedCode = formatEmployeeCode(e.target.value);
+    setEmployeeCode(formattedCode);
+  };
   return (
-    <div className="gradient-bg flex min-h-screen w-full items-center justify-center bg-[#E5E7EB] p-4">
-      <div className="flex w-full max-w-4xl overflow-hidden rounded-3xl bg-white shadow-lg">
-
-         {/* Login Form Section */}
-         <div className="flex w-full flex-1 flex-col justify-center p-3 sm:p-8">
-          {/* Logo */}
-          <div className="mb-6 flex justify-center">
-            <img src={logoImg} alt="XYZOPS Logo" className="h-24" />
-          </div>
-
-          {/* Sign In Text */}
-          <div className="mb-4 text-center">
-            <h1 className="mb-1 text-2xl font-semibold text-[#1F2937]">
-              Sign In
-            </h1>
-            <p className="text-sm text-[#4B5563]">
-              Fill out the form below to proceed
-            </p>
-          </div>
-
-          {/* Login Form */}
-          <form className="w-full space-y-12" onSubmit={handleLogin}>
-            {/* Company Code */}
-            <div className="w-full space-y-4">
-              <div className="space-y-1">
-                <label className="text-sm text-[#4B5563]">Company Code</label>
-                <div className="relative">
-                  <input
-                    type="text"
-                    name="company_code"
-                    value={company_code}
-                    onChange={(e) => setcompany_code(e.target.value)}
-                    className="w-full rounded-lg border border-gray-300 py-3 pl-3 pr-10 outline-none transition-all focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
-                    placeholder="Enter your company code"
-                  />
-                  {company_code && (
-                    <button
-                      type="button"
-                      onClick={() => setcompany_code("")}
-                      className="absolute inset-y-0 right-3 flex items-center"
-                    >
-                      <IoMdClose className="h-5 w-5 text-gray-500 hover:text-gray-700" />
-                    </button>
-                  )}
-                </div>
-                {errors.company_code && (
-                  <p className="text-sm text-red-500">{errors.company_code}</p>
-                )}
-              </div>
-
-              {/* Employee Code */}
-              <div className="space-y-1">
-                <label className="text-sm text-[#4B5563]">Employee Code</label>
-                <input
-                  type="text"
-                  name="employee_code"
-                  value={employee_code}
-                  onChange={(e) => setemployee_code(e.target.value)}
-                  className="w-full rounded-lg border border-gray-300 py-3 pl-3 outline-none transition-all focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
-                  placeholder="Enter your employee code"
-                />
-                {errors.employee_code && (
-                  <p className="text-sm text-red-500">{errors.employee_code}</p>
-                )}
-              </div>
-
-              {/* Password */}
-              <div className="space-y-1">
-                <label className="text-sm text-[#4B5563]">Password</label>
-                <div className="relative">
-                  <input
-                    type={showPassword ? "text" : "password"}
-                    name="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    className="w-full rounded-lg border border-gray-300 py-3 pl-3 pr-10 outline-none transition-all focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
-                    placeholder="Enter your password"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute inset-y-0 right-3 flex items-center"
-                  >
-                    {showPassword ? (
-                      <LiaEyeSlashSolid className="h-5 w-5 text-gray-500 hover:text-gray-700" />
-                    ) : (
-                      <LiaEyeSolid className="h-5 w-5 text-gray-500 hover:text-gray-700" />
-                    )}
-                  </button>
-                </div>
-                {errors.password && (
-                  <p className="text-sm text-red-500">{errors.password}</p>
-                )}
-              </div>
-            </div>
-
-            {/* Login Button */}
-            <button
-              type="submit"
-              className=" w-full cursor-pointer rounded-full bg-blue-600 py-3 font-medium text-white transition-colors hover:bg-blue-700"
+    <div className="gradient-bg">
+      <Container
+        maxWidth="md"
+        sx={{
+          display: "flex",
+          minHeight: "100vh",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <Card
+          sx={{
+            display: "flex",
+            width: "100%",
+            maxWidth: 800,
+            borderRadius: 3,
+            boxShadow: 3,
+          }}
+        >
+          <CardContent
+            sx={{
+              flex: 1,
+              p: 4,
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+            }}
+          >
+            <Box display="flex" justifyContent="center" mb={2}>
+              <img src={logoImg} alt="XYZOPS Logo" style={{ height: 96 }} />
+            </Box>
+            <Typography
+              variant="h5"
+              fontWeight="bold"
+              textAlign="center"
+              gutterBottom
             >
-              LOGIN
-            </button>
-          </form>
-        </div>
-        {/* Left Image Section (Hidden on Small Screens) */}
-        <div className="hidden flex-1 sm:flex">
-          <img
-            src={fullimg}
-            alt="Authentication"
-            className="h-full w-full object-cover"
-          />
-        </div>
+              Sign In
+            </Typography>
+            <Typography
+              variant="body2"
+              color="textSecondary"
+              textAlign="center"
+              mb={3}
+            >
+              Fill out the form below to proceed
+            </Typography>
+            <form onSubmit={handleLogin}>
+              <Box mb={2}>
+                <TextField
+                  fullWidth
+                  label="Company Code"
+                  value={company_code}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    // Allow only numeric input and restrict to max length of 5 digits
+                    if (/^\d{0,5}$/.test(value)) {
+                      setCompanyCode(value);
+                    }
+                  }}
+                  error={!!errors.company_code}
+                  helperText={errors.company_code}
+                  InputProps={{
+                    endAdornment: company_code && (
+                      <InputAdornment position="end">
+                        <IconButton
+                          onClick={() => setCompanyCode("")}
+                          tabIndex={-1} // Make this non-focusable with Tab
+                        >
+                          <IoMdClose />
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
+                  margin="normal"
+                  tabIndex={0} // Ensure this is the first field in tab order
+                  inputProps={{
+                    maxLength: 5, // Limit input length to 5
+                    pattern: "[0-9]*", // Allow only digits
+                    min: 10000,
+                    max: 99999,
+                  }}
+                />
+              </Box>
 
-       
-      </div>
+              <Box mb={2}>
+                <TextField
+                  fullWidth
+                  label="Employee Code"
+                  value={employee_code}
+                  onChange={handleEmployeeCodeChange}
+                  error={!!errors.employee_code}
+                  helperText={errors.employee_code}
+                  margin="normal"
+                  tabIndex={1} // This will be the next input field
+                  InputProps={{
+                    endAdornment: employee_code && (
+                      <InputAdornment position="end">
+                        <IconButton
+                          onClick={() => setEmployeeCode("")}
+                          tabIndex={-1} // Make this non-focusable with Tab
+                        >
+                          <IoMdClose />
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              </Box>
+              <Box mb={2}>
+                <TextField
+                  fullWidth
+                  label="Password"
+                  type={showPassword ? "text" : "password"}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  error={!!errors.password}
+                  helperText={errors.password}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          onClick={() => setShowPassword(!showPassword)}
+                          tabIndex={-1} // Make this non-focusable with Tab
+                        >
+                          {showPassword ? (
+                            <LiaEyeSlashSolid />
+                          ) : (
+                            <LiaEyeSolid />
+                          )}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
+                  margin="normal"
+                  tabIndex={2} // This will be the next input field
+                />
+              </Box>
+              <Button
+                fullWidth
+                variant="contained"
+                color="primary"
+                type="submit"
+                sx={{ mt: 4, borderRadius: 1 }}
+                tabIndex={3} // Submit button will be last in tab order
+              >
+                LOGIN
+              </Button>
+            </form>
+          </CardContent>
+          <Box sx={{ display: { xs: "none", sm: "block" }, flex: 1 }}>
+            <img
+              src={fullimg}
+              alt="Authentication"
+              style={{ width: "100%", height: "100%", objectFit: "cover" }}
+            />
+          </Box>
+        </Card>
+      </Container>
     </div>
   );
 }
