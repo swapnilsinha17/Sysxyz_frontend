@@ -11,8 +11,8 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import Fade from "@mui/material/Fade";
 import { tokens, ColorModeContext } from "../../../theme";
-import { useContext } from "react";
-
+import { useContext,useState } from "react";
+import { MdLockOpen } from "react-icons/md";
 import {
   DarkModeOutlined,
   LightModeOutlined,
@@ -22,18 +22,22 @@ import {
 } from "@mui/icons-material";
 import { ToggledContext } from "../../../App";
 import { MdOutlineChangeCircle } from "react-icons/md";
-import { useNavigate } from "react-router-dom";
+import { useNavigate} from "react-router-dom";
+
 import { IoMdLogOut } from "react-icons/io";
+import ChangePasswordPopup from './../../../components/ChangePasswordPopup';
 
 const Navbar = () => {
   const theme = useTheme();
   const savedFullName = sessionStorage.getItem("fullName");
+    const [modalOpen, setModalOpen] = useState(false);
   const colorMode = useContext(ColorModeContext);
   const { toggled, setToggled } = useContext(ToggledContext);
   const isMdDevices = useMediaQuery("(max-width:768px)");
   const isXsDevices = useMediaQuery("(max-width:466px)");
   const colors = tokens(theme.palette.mode);
   const [anchorEl, setAnchorEl] = React.useState(null);
+
   const open = Boolean(anchorEl);
   const navigate = useNavigate();
 
@@ -56,6 +60,10 @@ const Navbar = () => {
     // Redirect to the login page after logout
     navigate("/"); // Change the path to your login page
   };
+  
+  // const handleClickOpen = () => {
+  //   setOpen(true);
+  // };
 
   return (
     <Box
@@ -78,52 +86,51 @@ const Navbar = () => {
     {`Welcome ${savedFullName}`}
   </Typography>
   <IconButton>
-    <div>
-      <PersonOutlined
-        id="fade-button"
-        aria-controls={open ? "fade-menu" : undefined}
-        aria-haspopup="true"
-        aria-expanded={open ? "true" : undefined}
-        onClick={handleClick}
-        style={{fontSize:"30"}}
-      />
-      <Menu
-        id="fade-menu"
-        MenuListProps={{ "aria-labelledby": "fade-button" }}
-        anchorEl={anchorEl}
-        open={open}
-        onClose={handleClose}
-        TransitionComponent={Fade}
-      >
-        <MenuItem onClick={colorMode.toggleColorMode}>
-          {theme.palette.mode === "dark" ? (
-            <LightModeOutlined />
-          ) : (
-            <DarkModeOutlined />
-          )}
-           <span>Theme</span>
-        </MenuItem>
-       
-        <MenuItem onClick={handleClose}>
-          {" "}
-          <span>
-            <MdOutlineChangeCircle
-              style={{ fontSize: "19", }}
-            />
-          </span>
-          <Typography>Change Password</Typography>
-        </MenuItem>
-        <MenuItem onClick={handleLogout}>
-          <span>
-            <IoMdLogOut style={{ fontSize: "19", }} />
-          </span>
-          Logout
-        </MenuItem>
-      </Menu>
-    </div>
+  <div>
+  <PersonOutlined
+    id="fade-button"
+    aria-controls={open ? "fade-menu" : undefined}
+    aria-haspopup="true"
+    aria-expanded={open ? "true" : undefined}
+    onClick={handleClick}
+    style={{ fontSize: "27" }}
+  />
+  <Menu
+    id="fade-menu"
+    MenuListProps={{ "aria-labelledby": "fade-button" }}
+    anchorEl={anchorEl}
+    open={open}
+    onClose={handleClose}
+    TransitionComponent={Fade}
+  >
+    <MenuItem onClick={colorMode.toggleColorMode}>
+      {theme.palette.mode === "dark" ? (
+        <LightModeOutlined style={{ marginRight: "8px" }} />
+      ) : (
+        <DarkModeOutlined style={{ marginRight: "8px" }} />
+      )}
+      <span>Change Theme</span>
+    </MenuItem>
+    <MenuItem onClick={() => setModalOpen(true)}>
+                <span>
+                  <MdLockOpen style={{ fontSize: "19", marginRight: "8px" }} />
+                </span>
+                <Typography>Change Password</Typography>
+              </MenuItem>
+
+    <MenuItem onClick={handleLogout}>
+      <span>
+        <IoMdLogOut style={{ fontSize: "19", marginRight: "8px" }} />
+      </span>
+      Logout
+    </MenuItem>
+  </Menu>
+</div>
+
   </IconButton>
 </Box>
-
+{/* Change Password Modal */}
+<ChangePasswordPopup open={modalOpen} onClose={() => setModalOpen(false)} />
     </Box>
   );
 };

@@ -14,7 +14,8 @@ const AddButton = ({btn,Redirect}) => {
              type='submit'
   variant="contained"
   sx={{
-    width:"130px",
+    // width:"130px",
+ 
     bgcolor: colors.blueAccent[500],
     color:colors.blueAccent[100],
   display:"flex",
@@ -34,9 +35,9 @@ const AddButton = ({btn,Redirect}) => {
    
   }}
 >
- <Typography>
-    {btn}
- </Typography>
+<Typography sx={{ display: "flex", whiteSpace: "nowrap" }}>
+  {btn}
+</Typography>
 
 </Button>
     </div>
