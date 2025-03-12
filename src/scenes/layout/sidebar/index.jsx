@@ -155,6 +155,42 @@ const SideBar = ({ userRole }) => {  // Assuming userRole is passed as a prop or
               icon={<AiOutlineUser style={{ height: "25px", width: "25px" }} />}
             />
           ) : null}
+
+{userRole === "Manager" ? (
+            <Item
+              title="Tasks Management"
+              path="/manager/tasks"
+              colors={colors}
+              icon={<AiOutlineUser style={{ height: "25px", width: "25px" }} />}
+            />
+          ) : null}
+
+{userRole === "Manager" ? (
+            <Item
+              title="Team Management"
+              path="/manager/team"
+              colors={colors}
+              icon={<AiOutlineUser style={{ height: "25px", width: "25px" }} />}
+            />
+          ) : null}
+
+{userRole === "Auditor" ? (
+            <Item
+              title="Team Management"
+              path="/auditor/team"
+              colors={colors}
+              icon={<AiOutlineUser style={{ height: "25px", width: "25px" }} />}
+            />
+          ) : null}
+
+{userRole === "Auditor" ? (
+            <Item
+              title="Task Management"
+              path="/auditor/tasks"
+              colors={colors}
+              icon={<AiOutlineUser style={{ height: "25px", width: "25px" }} />}
+            />
+          ) : null}
         </Menu>
       </Box>
     </Sidebar>
