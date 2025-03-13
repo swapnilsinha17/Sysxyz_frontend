@@ -1,12 +1,12 @@
-import { Box, Button, TextField, MenuItem, Select, InputLabel, FormControl, useMediaQuery } from "@mui/material";
+import { Box, Button, TextField, MenuItem, Select, InputLabel, FormControl, IconButton, useMediaQuery } from "@mui/material";
 import { Header } from "../../../components";
 import { useNavigate } from "react-router-dom";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import { useState, useEffect } from "react";
 import axios from "axios";
-
 import { apis } from "../../../utils/utills";
+import { Add, Remove } from "@mui/icons-material"; // Import icons for add/remove buttons
 
 // Initial form values
 const initialValues = {
@@ -16,6 +16,8 @@ const initialValues = {
   dept_id: "",
   assign_to: "",
   due_date: "",
+  extra_fields: [{ key: "", value: "" }], // Start with one extra field
+  checklist: [{ label: "", checked: false }], // Start with one checklist item
 };
 
 // Validation schema
@@ -45,9 +47,7 @@ const AddTask = () => {
             Authorization: sessionStorage.getItem("auth_token"),
           },
         });
-        console.log(response.data)
-        setDepartments(response?.data?.org.departments); 
-         
+        setDepartments(response?.data?.org.departments);
       } catch (error) {
         console.error("Error fetching departments", error);
       }
@@ -56,14 +56,14 @@ const AddTask = () => {
     const fetchAssignees = async () => {
       try {
         const response = await axios.get(
-          `${apis.baseUrl}/register/getUserList`, 
+          `${apis.baseUrl}/register/getUserList`,
           {
             headers: {
               Authorization: sessionStorage.getItem("auth_token"),
             },
           }
         );
-           setAssignees(response.data.data);
+        setAssignees(response.data.data);
       } catch (error) {
         console.error("Error fetching assignees", error);
       }
@@ -73,24 +73,57 @@ const AddTask = () => {
     fetchAssignees();
   }, []);
 
+  // Handle the submission of the form
   const handleSubmit = async (values, actions) => {
     try {
-      values.extra_fields = [{"no-field":"no-filed"}]
       const response = await axios.post(
-        `${apis.baseUrl}/tasks/addTask`, 
+        `${apis.baseUrl}/tasks/addTask`,
         values,
         {
           headers: {
             Authorization: sessionStorage.getItem("auth_token"),
           },
         }
-      );   console.log("Task created successfully:", response.data);
+      );
+      console.log("Task created successfully:", response.data);
 
       actions.resetForm({ values: initialValues });
       navigate("/admin/tasks"); // Redirect to tasks page
     } catch (error) {
       console.error("Error creating task:", error);
     }
+  };
+
+  // Handle adding new extra field
+  const handleAddField = (setFieldValue) => {
+    setFieldValue("extra_fields", [
+      ...initialValues.extra_fields,
+      { key: "", value: "" },
+    ]);
+  };
+
+  // Handle removing an extra field
+  const handleRemoveField = (index, setFieldValue) => {
+    const newExtraFields = initialValues.extra_fields.filter(
+      (field, i) => i !== index
+    );
+    setFieldValue("extra_fields", newExtraFields);
+  };
+
+  // Handle adding a new checklist item
+  const handleAddChecklist = (setFieldValue) => {
+    setFieldValue("checklist", [
+      ...initialValues.checklist,
+      { label: "", checked: false },
+    ]);
+  };
+
+  // Handle removing a checklist item
+  const handleRemoveChecklist = (index, setFieldValue) => {
+    const newChecklist = initialValues.checklist.filter(
+      (item, i) => i !== index
+    );
+    setFieldValue("checklist", newChecklist);
   };
 
   return (
@@ -109,6 +142,7 @@ const AddTask = () => {
           handleBlur,
           handleChange,
           handleSubmit,
+          setFieldValue,
         }) => (
           <form onSubmit={handleSubmit}>
             <fieldset
@@ -154,6 +188,7 @@ const AddTask = () => {
                   >
                     <MenuItem value="Add Hoc">Add Hoc</MenuItem>
                     <MenuItem value="Recurring">Recurring</MenuItem>
+                    <MenuItem value="Checklist">Checklist</MenuItem> {/* Added checklist option */}
                   </Select>
                 </FormControl>
 
@@ -203,6 +238,142 @@ const AddTask = () => {
               </Box>
             </fieldset>
 
+            {/* Extra Fields */}
+            <fieldset
+              style={{
+                border: "2px solid #ddd",
+                borderRadius: "8px",
+                padding: "20px",
+                marginBottom: "20px",
+              }}
+            >
+              <legend
+                style={{
+                  fontSize: "1.2rem",
+                  fontWeight: "bold",
+                  color: "#333",
+                  padding: "0 10px",
+                  marginBottom: "10px",
+                }}
+              >
+                Extra Fields
+              </legend>
+
+              {/* Render Extra Fields */}
+              <Box display="grid" gap="30px">
+                {values.extra_fields.map((field, index) => (
+                  <Box key={index} display="flex" gap="10px">
+                    <TextField
+                      fullWidth
+                      variant="filled"
+                      label="Key"
+                      name={`extra_fields[${index}].key`}
+                      value={field.key}
+                      onChange={handleChange}
+                      error={
+                        touched.extra_fields?.[index]?.key && Boolean(errors.extra_fields?.[index]?.key)
+                      }
+                      helperText={touched.extra_fields?.[index]?.key && errors.extra_fields?.[index]?.key}
+                    />
+                    <TextField
+                      fullWidth
+                      variant="filled"
+                      label="Value"
+                      name={`extra_fields[${index}].value`}
+                      value={field.value}
+                      onChange={handleChange}
+                      error={
+                        touched.extra_fields?.[index]?.value && Boolean(errors.extra_fields?.[index]?.value)
+                      }
+                      helperText={touched.extra_fields?.[index]?.value && errors.extra_fields?.[index]?.value}
+                    />
+                    {/* Remove Button */}
+                    <IconButton
+                      onClick={() => handleRemoveField(index, setFieldValue)}
+                      color="error"
+                      sx={{ alignSelf: "center" }}
+                    >
+                      <Remove />
+                    </IconButton>
+                  </Box>
+                ))}
+                {/* Add Button */}
+                <Box display="flex" justifyContent="start">
+                  <IconButton onClick={() => handleAddField(setFieldValue)} color="primary">
+                    <Add />
+                  </IconButton>
+                </Box>
+              </Box>
+            </fieldset>
+
+            {/* Checklist Section */}
+            {values.type === "Checklist" && (
+              <fieldset
+                style={{
+                  border: "2px solid #ddd",
+                  borderRadius: "8px",
+                  padding: "20px",
+                  marginBottom: "20px",
+                }}
+              >
+                <legend
+                  style={{
+                    fontSize: "1.2rem",
+                    fontWeight: "bold",
+                    color: "#333",
+                    padding: "0 10px",
+                    marginBottom: "10px",
+                  }}
+                >
+                  Checklist Items
+                </legend>
+
+                <Box display="grid" gap="30px">
+                  {values.checklist.map((item, index) => (
+                    <Box key={index} display="flex" gap="10px">
+                      <TextField
+                        fullWidth
+                        variant="filled"
+                        label="Label"
+                        name={`checklist[${index}].label`}
+                        value={item.label}
+                        onChange={handleChange}
+                        error={
+                          touched.checklist?.[index]?.label && Boolean(errors.checklist?.[index]?.label)
+                        }
+                        helperText={touched.checklist?.[index]?.label && errors.checklist?.[index]?.label}
+                      />
+                      <input
+                        type="checkbox"
+                        name={`checklist[${index}].checked`}
+                        checked={item.checked}
+                        onChange={(e) => {
+                          setFieldValue(`checklist[${index}].checked`, e.target.checked);
+                        }}
+                        style={{ marginTop: "22px", marginLeft: "10px" }}
+                        hidden
+                      />
+                      {/* Remove Button */}
+                      <IconButton
+                        onClick={() => handleRemoveChecklist(index, setFieldValue)}
+                        color="error"
+                        sx={{ alignSelf: "center" }}
+                      >
+                        <Remove />
+                      </IconButton>
+                    </Box>
+                  ))}
+                  {/* Add Button */}
+                  <Box display="flex" justifyContent="start">
+                    <IconButton onClick={() => handleAddChecklist(setFieldValue)} color="primary">
+                      <Add />
+                    </IconButton>
+                  </Box>
+                </Box>
+              </fieldset>
+            )}
+
+            {/* Task Allocation */}
             <fieldset
               style={{
                 border: "2px solid #ddd",
