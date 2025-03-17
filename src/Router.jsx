@@ -31,6 +31,10 @@ import ManagerTeamList from "./pages/manager/team/managerTeamList";
 import ManagerTaskList from "./pages/manager/tasks/managerTaskList";
 import AuditorTaskList from "./pages/auditor/tasks/auditorTaskList";
 import AuditorTeamList from "./pages/auditor/teams/auditorTeamList";
+import TaskView from "./pages/doer/tasks/ViewTask";
+import ViewTeamTask from "./pages/manager/team/viewTeamTask";
+import ManagerTaskView from "./pages/manager/tasks/ViewTask";
+import ViewAuditorTask from "./pages/auditor/teams/viewAuditorTask";
 // import AddTask from "./pages/admin/tasks/AddTaask";
 
 const AppRouter = () => {
@@ -85,34 +89,34 @@ const AppRouter = () => {
           <Route path="doer/tasks">
             <Route index element={<PrivateRoute requiredRole="Doer"><ListDoerTask /></PrivateRoute>} />
             <Route path="add" element={<PrivateRoute requiredRole="Doer"><AddTask /></PrivateRoute>} />
-            <Route path="view/:id" element={<PrivateRoute requiredRole="Doer"><AdminViewUser /></PrivateRoute>} />
+            <Route path="view/:id" element={<PrivateRoute requiredRole="Doer"><TaskView /></PrivateRoute>} />
             <Route path="edit/:id" element={<PrivateRoute requiredRole="Doer"><AdminEditUser /></PrivateRoute>} />
           </Route>
 
           <Route path="manager/tasks">
             <Route index element={<PrivateRoute requiredRole="Manager"><ManagerTaskList /></PrivateRoute>} />
             {/* <Route path="add" element={<PrivateRoute requiredRole="Doer"><AddTask /></PrivateRoute>} /> */}
-            {/* <Route path="view/:id" element={<PrivateRoute requiredRole="Doer"><AdminViewUser /></PrivateRoute>} /> */}
+            <Route path="view/:id" element={<PrivateRoute requiredRole="Manager"><ManagerTaskView /></PrivateRoute>} />
             {/* <Route path="edit/:id" element={<PrivateRoute requiredRole="Doer"><AdminEditUser /></PrivateRoute>} /> */}
           </Route>
 
           <Route path="manager/team">
             <Route index element={<PrivateRoute requiredRole="Manager"><ManagerTeamList /></PrivateRoute>} />
             {/* <Route path="add" element={<PrivateRoute requiredRole="Doer"><AddTask /></PrivateRoute>} /> */}
-            {/* <Route path="view/:id" element={<PrivateRoute requiredRole="Doer"><AdminViewUser /></PrivateRoute>} /> */}
+            <Route path="view/:id" element={<PrivateRoute requiredRole="Manager"><ViewTeamTask /></PrivateRoute>} />
             {/* <Route path="edit/:id" element={<PrivateRoute requiredRole="Doer"><AdminEditUser /></PrivateRoute>} /> */}
           </Route>
           <Route path="auditor/tasks">
             <Route index element={<PrivateRoute requiredRole="Auditor"><AuditorTaskList /></PrivateRoute>} />
             {/* <Route path="add" element={<PrivateRoute requiredRole="Doer"><AddTask /></PrivateRoute>} /> */}
-            {/* <Route path="view/:id" element={<PrivateRoute requiredRole="Doer"><AdminViewUser /></PrivateRoute>} /> */}
+            <Route path="view/:id" element={<PrivateRoute requiredRole="Doer"><TaskView /></PrivateRoute>} />
             {/* <Route path="edit/:id" element={<PrivateRoute requiredRole="Doer"><AdminEditUser /></PrivateRoute>} /> */}
           </Route>
 
           <Route path="auditor/team">
             <Route index element={<PrivateRoute requiredRole="Auditor"><AuditorTeamList /></PrivateRoute>} />
             {/* <Route path="add" element={<PrivateRoute requiredRole="Doer"><AddTask /></PrivateRoute>} /> */}
-            {/* <Route path="view/:id" element={<PrivateRoute requiredRole="Doer"><AdminViewUser /></PrivateRoute>} /> */}
+            <Route path="view/:id" element={<PrivateRoute requiredRole="Auditor"><ViewAuditorTask /></PrivateRoute>} />
             {/* <Route path="edit/:id" element={<PrivateRoute requiredRole="Doer"><AdminEditUser /></PrivateRoute>} /> */}
           </Route>
           

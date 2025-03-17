@@ -156,14 +156,14 @@ const SideBar = ({ userRole }) => {  // Assuming userRole is passed as a prop or
             />
           ) : null}
 
-{userRole === "Manager" ? (
+{/* {userRole === "Manager" ? (
             <Item
               title="Tasks Management"
               path="/manager/tasks"
               colors={colors}
               icon={<AiOutlineUser style={{ height: "25px", width: "25px" }} />}
             />
-          ) : null}
+          ) : null} */}
 
 {userRole === "Manager" ? (
             <Item

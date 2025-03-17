@@ -20,7 +20,7 @@ const PrivateRoute = ({ children, requiredRole }) => {
       }else    if(userRole == 'Doer'){
         return <Navigate to="/doer/tasks" />
       }else    if(userRole == 'Auditor'){
-        return <Navigate to="/auditor/tasks" />
+        return <Navigate to="/auditor/team" />
       }else    if(userRole == 'Manager'){
         return <Navigate to="/manager/tasks" />
       }else{

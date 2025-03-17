@@ -1,354 +1,326 @@
 import {
-    Box,
-    Typography,
-    useTheme,
-    TextField,
-    MenuItem,
-    Select,
-    FormControl,
-    Switch,
-    InputLabel,
-    Button,
-  } from "@mui/material";
-  import { Header } from "../../../components";
-  import { DataGrid } from "@mui/x-data-grid";
-  import { toast , ToastContainer} from "react-toastify";
-  import "react-toastify/dist/ReactToastify.css";
-  import { IoAddOutline } from "react-icons/io5";
-  
-  // toast.configure();
-  //  import AccesssToken from "../../utils/utills";
-  import { tokens } from "../../../theme";
-  import {
-    AdminPanelSettingsOutlined,
-    LockOpenOutlined,
-    SecurityOutlined,
-  } from "@mui/icons-material";
-  import { useState, useEffect } from "react";
-  import { useNavigate } from "react-router-dom";
-//   import AddOrganization from "./AddTask";
-  import axios from "axios";
-  import { apis } from "../../../utils/utills";
-  import { formatCityName, formatDate } from "../../../utils/formatter";
-  const ManagerTeamList = () => {
-    const theme = useTheme();
-  
-    const colors = tokens(theme.palette.mode);
-    console.log("tata color",colors);
-    const navigate = useNavigate();
-    const [pageSize, setPageSize] = useState(10); // Track the current page size
-    const [page, setPage] = useState(0); // Track the current page number
-    const [searchTerm, setSearchTerm] = useState(""); // Track the search term
-    const [organizations, setOrganizations] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-  
-   const handleStatusToggle = async (id, currentStatus) => {
-  try {
-    // Determine new status based on current status
-    const newStatus = currentStatus === 1 ? 0 : 1;  // Toggling between 1 (Active) and 0 (Inactive)
-  
-    // Optimistically update the UI before the API call
-    setOrganizations((prevOrgs) =>
-      prevOrgs.map((org) =>
-        org.org_id === id ? { ...org, status: newStatus } : org
-      )
-    );
-  
-    // Send the update request to the server
-    const response = await axios.post(
-      `${apis.baseUrl}/sa/updateOrganizationStatus`,
-      { org_id: id, status: newStatus },
-      {
+  Box,
+  Typography,
+  useTheme,
+  TextField,
+  MenuItem,
+  Select,
+  FormControl,
+  InputLabel,
+  IconButton,
+  Button,
+  Switch, // Import Switch for the toggle
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  DialogContentText,
+} from "@mui/material";
+import Header from "../../../components/Header";
+import { DataGrid, gridTabIndexStateSelector } from "@mui/x-data-grid";
+import { tokens } from "../../../theme";
+import { EditOutlined, LockResetOutlined } from "@mui/icons-material";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { apis } from "../../../utils/utills";
+import AddButton from "../../../components/btn/AddButton";
+
+const ManageTeamList = () => {
+  const theme = useTheme();
+  const colors = tokens(theme.palette.mode);
+  const navigate = useNavigate();
+
+  // State variables
+  const [pageSize, setPageSize] = useState(10); // Tracks the page size
+  const [page, setPage] = useState(0); // Tracks the current page
+  const [searchTerm, setSearchTerm] = useState(""); // Tracks the search term
+  const [users, setUsers] = useState([]); // Stores the user data
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  // Dialog state for password reset
+  const [openResetDialog, setOpenResetDialog] = useState(false);
+  const [selectedUserId, setSelectedUserId] = useState(null);
+
+  // Password fields for the dialog
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+
+  // Columns for the DataGrid
+  const columns = [
+    { field: "index", headerName: "SN", filterable: true },
+    { field: "name", headerName: "Name", flex: 1, filterable: true },
+    // { field: "department_name", headerName: "Department", flex: 1, filterable: true },
+    // { field: "email", headerName: "Email", flex: 1, filterable: true },
+    { field: "role", headerName: "Company", flex: 1, filterable: true },
+    // { field: "employee_code", headerName: "Employee Code", flex: 1, filterable: true },
+      // {
+      //   field: "is_active",
+      //   headerName: "Status",
+      //   flex: 1,
+      //   filterable: true,
+      //   renderCell: (params) => (
+      //     <Box display="flex" justifyContent="center" alignItems="center">
+      //       {/* Toggle Button */}
+      //       <Switch
+      //         checked={params.row.is_active}
+      //         onChange={() => handleStatusToggle(params.row.id, params.row.is_active)}
+      //         color="secondary"
+      //       />
+      //     </Box>
+      //   ),
+      // },
+    {
+      field: "action",
+      headerName: "Action",
+      flex: 1,
+      renderCell: (params) => (
+        <Box display="flex" justifyContent="center">
+          {/* Edit Button */}
+          <Button
+           sx={{
+            backgroundColor: colors.blueAccent[700],
+            textTransform: "none",
+            '&:hover': {
+              backgroundColor: colors.blueAccent[700],
+            },
+          }}
+            onClick={() => navigate(`/manager/team/view/${params.row.id}`)}
+        
+          >
+            View Task
+            {/* <EditOutlined /> */}
+          </Button>
+
+          {/* Reset Password Button */}
+          {/* <IconButton
+           color="secondary"
+            onClick={() => handleOpenResetDialog(params.row.id)}
+          >
+            <LockResetOutlined />
+          </IconButton> */}
+        </Box>
+      ),
+    },
+  ];
+
+  // Handle pagination changes
+  const handlePageChange = (newPage) => {
+    setPage(newPage);
+  };
+
+  // Handle page size changes
+  const handlePageSizeChange = (event) => {
+    setPageSize(event.target.value);
+    setPage(0); // Reset page when page size changes
+  };
+
+  // Handle search term changes
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
+  };
+
+  // Fetch users from the server
+  const fetchUsers = async () => {
+    setLoading(true);
+    try {
+      const response = await axios.get(`${apis.baseUrl}/register/getUserList`, {
         headers: {
           Authorization: sessionStorage.getItem("auth_token"),
         },
+      });
+      const { data } = response.data;
+
+      if (data) {
+        const updatedData = data.map((org, index) => ({
+          ...org,
+          index: index + 1, // Assuming 'org_id' is unique
+        }));
+        setUsers(updatedData); // Update the state with the fetched users
+        setLoading(false);
       }
-    );
-  
-    // Display a success toast notification
-    const statusText = newStatus === 1 ? "Active" : "Inactive";
-    toast.success(`Status updated to ${statusText}`, {
-      position: "top-right",
-      autoClose: 3000, // Closes after 3 seconds
-    });
-  
-    // Optionally log the server response
-    console.log("Status updated successfully:", response.data);
-  
-    // Re-fetch organizations to ensure data consistency if needed
-    fetchOrganizations();
-  } catch (error) {
-    // Log the error if the API call fails
-    console.error("Error updating status:", error);
-  
-    // Revert the UI change if the API call fails
-    setOrganizations((prevOrgs) =>
-      prevOrgs.map((org) =>
-        org.org_id === id ? { ...org, status: currentStatus } : org
-      )
-    );
-  
-    // Optionally, show an error toast
-    toast.error("Failed to update status. Please try again later.", {
-      position: "top-right",
-      autoClose: 3000, // Closes after 3 seconds
-    });
-  }
+    } catch (err) {
+      setError("Failed to fetch users");
+      setLoading(false);
+    }
   };
-  
-    const columns = [
-      {
-        field: "id",
-        headerName: "SN",
-        filterable: true,
-     
-      },{
-        field: "title",
-        headerName: "Task",
-        flex: 1,
-        cellClassName: "company-column--cell",
-        filterable: true,
-        renderCell: (params) => (
-          <Typography
-            sx={{
-              color: colors.blueAccent[500],
-              textDecoration: "underline",
-              cursor: "pointer",
-              "&:hover": colors.blueAccent[800],
-            }}
-            onClick={() => navigate(`/admin/tasks/view/${params.row.org_id}`)}
-          >
-            {params.value}
-          </Typography>
-        ),
-      },
-      {
-        field: "type",
-        headerName: "Type",
-        flex: 1,
-        headerAlign: "left",
-        align: "left",
-        type: "number",
-        filterable: true,
-        valueFormatter: (params) => {
-          // No commas, just the number
-          return params.value;
-        },
-      },
-      {
-        field: "assign_to",
-        headerName: "Assign To",
-        flex: 1,
-        filterable: true,
-        // valueFormatter: (params) => {
-          // return formatCityName(params.value); // Apply the formatter to the city value
-        // },
-      },
-      {
-        field: "department_name",
-        headerName: "Department",
-        flex: 1,
-        filterable: true,
-        // valueFormatter: (params) => {
-        //   return formatCityName(params.value); // Apply the formatter to the city value
-        // },
-      },
-      {
-        field: "due_date",
-        headerName: "Due Date",
-        // type: "date",
-        headerAlign: "left",
-        align: "left",
-        filterable: true,
-        flex: 1,
-        valueFormatter: (params) => {
-          return formatDate(params.value); // Format the date before displaying
-        },
-      },
-     
-      
-      {
-        field: "action",
-        headerName: "Action",
-        flex: 1,
-        filterable: true,
-        renderCell: (params) => (
-          <Box display="flex" justifyContent="center" alignItems="center">
-  
-            {/* Delete Button */}
-            <Button
-              onClick={() => handleOpenDeleteDialog(params.row._id)}
-              sx={{
-                backgroundColor: colors.blueAccent[700],
-                textTransform: "none",
-                '&:hover': {
-                  backgroundColor: colors.blueAccent[700],
-                },
-              }}
-            >Mark As Complete
-              {/* < DeleteIcon/> */}
-            </Button>
-          </Box>
-        ),
-      }
-     
-    ];
-  
-    // Handle page change
-    const handlePageChange = (newPage) => {
-      setPage(newPage);
-    };
-  
-    // Handle page size change
-    const handlePageSizeChange = (event) => {
-      setPageSize(event.target.value);
-      setPage(0); // Reset page to 0 when page size changes
-    };
-  
-    // Handle search term change
-    const handleSearchChange = (e) => {
-      setSearchTerm(e.target.value);
-    };
-  
-    // Filter the rows based on search term
-    const filteredRows = organizations.filter((row) => {
-      return Object.values(row).some(
-        (val) =>
-          val && val.toString().toLowerCase().includes(searchTerm.toLowerCase())
-      );
-    });
-  
-    // Total and filtered row counts
-    const totalRows = organizations.length;
-    const filteredRowsCount = filteredRows.length;
-    useEffect(() => {
-      console.log("Updated Organizations:", organizations);
-    }, [organizations]); 
-    const fetchOrganizations = async () => {
-      console.log("Xz")
-      try {
-        const response = await axios.get(
-          `${apis.baseUrl}/tasks/getTaskList`,
-          {
-            headers: {
-              Authorization: sessionStorage.getItem("auth_token"), // `${AccesssToken}`,  // Basic authentication header
-            },
-          }
-        );
-      console.log(response.data,"res")
-        const orgData = response?.data?.data;
-      
-        if (orgData && orgData.length > 0) {
-          // console.log(organizations)
-          const updatedData = orgData.map((org, index) => ({
-            ...org,
-            id: index +1, // Assuming 'org_id' is unique
-          }));
-          
-          setOrganizations(updatedData);
-          // setOrganizations(orgData);
-          // console.log(organizations)
-          console.log("response data of organizationssss", organizations);
-        } else {
-          console.error("No organizations found in response");
-        }
-  
-        setLoading(false);
-      } catch (err) {
-        setError("Failed to fetch organizations");
-        setLoading(false);
-      }
-    };
-  
-    useEffect(() => {
-      fetchOrganizations();
-    }, []);
-    return (
-  
-  
-      <Box mx="20px">
-         <ToastContainer  autoClose={3000} />
-   
-       
-  
-        {/* Search Box and New Button */}
-        
-        <Box
-          mb={2} mt={2}
-          display="flex"
-          justifyContent="space-between"
-          alignItems="center"
-         
-        >
-           <Header title="TASK" />
-           <Box   display="flex"  gap={4}  alignItems="center">
-           <TextField
-            label="Search"
-         
-            variant="outlined"
-            fullWidth
-            
-            color="secondary"
-            value={searchTerm}
-            onChange={handleSearchChange}
-            sx={{ maxWidth: "300px" ,
-             
-            }} 
-          />
-  
+
+  // Open the reset password dialog
+  const handleOpenResetDialog = (userId) => {
+    setSelectedUserId(userId); // Set the selected user ID for the reset
+    setOpenResetDialog(true); // Open the dialog
+  };
+
+  // Close the reset password dialog
+  const handleCloseResetDialog = () => {
+    setOpenResetDialog(false);
+    setSelectedUserId(null); // Clear selected user ID
+    setCurrentPassword("");
+    setNewPassword("");
+    setConfirmPassword("");
+    setPasswordError("");
+  };
+
+  // Reset password for a user
+  const handleResetPassword = async () => {
+    if (newPassword !== confirmPassword) {
+      setPasswordError("New password and confirm password do not match.");
+      return;
+    }
     
-           </Box>
-     
-  
-        </Box>
-  <Box
-         
-          flex={1}
-          sx={{
-           
-  
-            "& .MuiDataGrid-columnHeaders": {
-              
-              
-              backgroundColor: colors.blueAccent[700],
-              borderBottom: "none",
-             
-              color: colors.blueAccent[100],
-            },
-            "& .MuiDataGrid-virtualScroller": {
-              backgroundColor: colors.primary[400],
-            },
-            "& .MuiDataGrid-footerContainer": {
-              borderTop: "none",
-              color: colors.blueAccent[100],
-              backgroundColor: colors.blueAccent[700],
-            },
-           
-            "& .MuiTablePagination-root": {
-            
-            
-              color: colors.blueAccent[100],
-            },
-            "& .MuiButtonBase-root": {
-              
-              color: colors.blueAccent[100],
-            },
-          }}
-        >
-          <DataGrid
-            rows={filteredRows}
-            columns={columns}
-            pageSize="10"
-            
-            pageSizeOptions={[5, 10, 25, { value: -1, label: 'All' }]}
-          />
-  
-          
-        </Box>
-      </Box>
-    );
+    try {
+      const response = await axios.post(
+        `${apis.baseUrl}/register/resetPassword`,
+        { 
+          user_id: selectedUserId,
+          current_password: currentPassword,
+          new_password: newPassword 
+        },
+        {
+          headers: {
+            Authorization: sessionStorage.getItem("auth_token"),
+          },
+        }
+      );
+      if (response.status === 200) {
+        alert("Password reset successfully");
+        fetchUsers(); // Refresh the user list
+        handleCloseResetDialog(); // Close the dialog
+      }
+    } catch (err) {
+      alert("Failed to reset password");
+    }
   };
-  
-  export default ManagerTeamList;
-  
+
+  // Fetch users on page change, page size change, or search term change
+  useEffect(() => {
+    fetchUsers();
+  }, []);
+
+  return (
+    <Box m="20px"
+   >
+     <Box sx={{ 
+  display: "flex", 
+  justifyContent: "space-between", 
+  alignItems: "center"
+}} >
+  {/* Title Section (Header) on the Left */}
+
+    <Header title="Teams" />
+ 
+
+  {/* Search Box and New Button Section on the Right */}
+  <Box mb={2} display="flex" gap={4} alignItems="center">
+    <TextField
+      label="Search"
+      variant="outlined"
+      fullWidth
+      value={searchTerm}
+      color="secondary"
+      onChange={handleSearchChange}
+      sx={{ maxWidth: "300px" }}
+    />
+
+    {/* New Button */}
+    {/* <AddButton btn="Add New User" Redirect="add" /> */}
+  </Box>
+</Box>
+
+     
+   
+
+      {/* DataGrid */}
+      <Box  height="75vh" flex={1} sx={{
+        "& .MuiDataGrid-root": { border: "none" },
+        "& .MuiDataGrid-cell": { border: "none" },
+        "& .MuiDataGrid-columnHeaders": {
+          backgroundColor: colors.blueAccent[700],
+          borderBottom: "none",
+          color: "white",
+        },
+
+        "& .MuiDataGrid-virtualScroller": { backgroundColor: colors.primary[400] },
+        "& .MuiDataGrid-footerContainer": {
+          borderTop: "none",
+          color: "white",
+          backgroundColor: colors.blueAccent[700],
+        },
+        "& .css-7ms3qr-MuiTablePagination-displayedRows": { 
+          color: "#fcfcfc",
+        },
+        "& .css-1hgjne-MuiButtonBase-root-MuiIconButton-root.Mui-disabled": {
+          color:"#fcfcfc",
+        },
+       
+      }}>
+        <DataGrid
+          rows={users}
+          columns={columns}
+         
+          pageSize="10"
+          
+          pageSizeOptions={[5, 10, 25, { value: -1, label: 'All' }]}
+        />
+      </Box>
+
+   
+      <Dialog open={openResetDialog} onClose={handleCloseResetDialog}>
+        <DialogTitle>Reset Password</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Please enter the current password, new password, and confirm the new password to reset.
+          </DialogContentText>
+
+          {/* Current Password Field */}
+          <TextField
+            label="Current Password"
+            variant="outlined"
+            type="password"
+            fullWidth
+            value={currentPassword}
+            onChange={(e) => setCurrentPassword(e.target.value)}
+            sx={{ marginBottom: 2 }}
+          />
+
+          {/* New Password Field */}
+          <TextField
+            label="New Password"
+            variant="outlined"
+            type="password"
+            fullWidth
+            value={newPassword}
+            onChange={(e) => setNewPassword(e.target.value)}
+            sx={{ marginBottom: 2 }}
+          />
+
+          {/* Confirm Password Field */}
+          <TextField
+            label="Confirm Password"
+            variant="outlined"
+            type="password"
+            fullWidth
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            sx={{ marginBottom: 2 }}
+            error={!!passwordError}
+            helperText={passwordError}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseResetDialog} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={handleResetPassword} color="secondary">
+            Reset Password
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </Box>
+  );
+};
+
+export default ManageTeamList;

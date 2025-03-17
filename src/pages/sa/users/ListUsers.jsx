@@ -128,7 +128,11 @@ const ListUsers = () => {
       const { data } = response.data;
 
       if (data) {
-        setUsers(data); // Update the state with the fetched users
+        const updatedData = data.map((org, index) => ({
+          ...org,
+          id: index + 1, // Assuming 'org_id' is unique
+        }));
+        setUsers(updatedData); // Update the state with the fetched users
         setLoading(false);
       }
     } catch (err) {

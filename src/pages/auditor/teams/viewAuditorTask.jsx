@@ -25,12 +25,12 @@ import {
     SecurityOutlined,
   } from "@mui/icons-material";
   import { useState, useEffect } from "react";
-  import { useNavigate } from "react-router-dom";
+  import { useNavigate, useParams } from "react-router-dom";
 //   import AddOrganization from "./AddTask";
   import axios from "axios";
   import { apis } from "../../../utils/utills";
   import { formatCityName, formatDate } from "../../../utils/formatter";
-  const ListDoerTask = () => {
+  const ViewAuditorTask = () => {
     const theme = useTheme();
   
     const colors = tokens(theme.palette.mode);
@@ -117,7 +117,7 @@ import {
               cursor: "pointer",
               "&:hover": colors.blueAccent[800],
             }}
-            onClick={() => navigate(`/doer/tasks/view/${params.row.task_id}`)}
+            onClick={() => navigate(`/manager/tasks/view/${params.row.task_id}`)}
           >
             {params.value}
           </Typography>
@@ -168,30 +168,30 @@ import {
       },
      
       
-      {
-        field: "action",
-        headerName: "Action",
-        flex: 1,
-        filterable: true,
-        renderCell: (params) => (
-          <Box display="flex" justifyContent="center" alignItems="center">
+      // {
+      //   field: "action",
+      //   headerName: "Action",
+      //   flex: 1,
+      //   filterable: true,
+      //   renderCell: (params) => (
+      //     <Box display="flex" justifyContent="center" alignItems="center">
   
-            {/* Delete Button */}
-            <Button
-              onClick={() => handleOpenDeleteDialog(params.row._id)}
-              sx={{
-                backgroundColor: colors.blueAccent[700],
-                textTransform: "none",
-                '&:hover': {
-                  backgroundColor: colors.blueAccent[700],
-                },
-              }}
-            >Mark As Complete
-              {/* < DeleteIcon/> */}
-            </Button>
-          </Box>
-        ),
-      }
+      //       {/* Delete Button */}
+      //       <Button
+      //         onClick={() => handleOpenDeleteDialog(params.row._id)}
+      //         sx={{
+      //           backgroundColor: colors.blueAccent[700],
+      //           textTransform: "none",
+      //           '&:hover': {
+      //             backgroundColor: colors.blueAccent[700],
+      //           },
+      //         }}
+      //       >Mark As Complete
+      //         {/* < DeleteIcon/> */}
+      //       </Button>
+      //     </Box>
+      //   ),
+      // }
      
     ];
   
@@ -218,7 +218,7 @@ import {
           val && val.toString().toLowerCase().includes(searchTerm.toLowerCase())
       );
     });
-  
+  const { id } = useParams(); 
     // Total and filtered row counts
     const totalRows = organizations.length;
     const filteredRowsCount = filteredRows.length;
@@ -228,14 +228,11 @@ import {
     const fetchOrganizations = async () => {
       console.log("Xz")
       try {
-        const response = await axios.get(
-          `${apis.baseUrl}/tasks/getTaskList`,
-          {
-            headers: {
-              Authorization: sessionStorage.getItem("auth_token"), // `${AccesssToken}`,  // Basic authentication header
-            },
-          }
-        );
+        const response = await axios.post(`${apis.baseUrl}/tasks/getTaskListByUserId`,{user_id : id}, {
+          headers: {
+            Authorization: sessionStorage.getItem("auth_token"),
+          },
+        });
       console.log(response.data,"res")
         const orgData = response?.data?.data;
       
@@ -243,7 +240,6 @@ import {
           // console.log(organizations)
           const updatedData = orgData.map((org, index) => ({
             ...org,
-            // task_id : id,
             id: index +1, // Assuming 'org_id' is unique
           }));
           
@@ -264,7 +260,7 @@ import {
   
     useEffect(() => {
       fetchOrganizations();
-    }, []);
+    }, [id]);
     return (
   
   
@@ -351,5 +347,5 @@ import {
     );
   };
   
-  export default ListDoerTask;
+  export default ViewAuditorTask;
   
