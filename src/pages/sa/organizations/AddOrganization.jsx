@@ -108,7 +108,7 @@ const handleSubmit = async (values, actions) => {
     <Box m="20px" >
       <Header
         title="Create Organization"
-        subtitle="Add new organization on the platform by filling the following details"
+        subtitle="Add a new organization on the platform by filling the following details"
       />
 <div style={{ marginTop: "30px" }}>
       <Formik

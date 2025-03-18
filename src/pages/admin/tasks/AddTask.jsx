@@ -18,6 +18,8 @@ const initialValues = {
   due_date: "",
   extra_fields: [{ key: "", value: "" }], // Start with one extra field
   checklist: [{ label: "", checked: false }], // Start with one checklist item
+  // Adding fields for Workflow
+  workflow_fields: [{ name: "", assign_to: "", assign_date: "", tot: "" }], // Start with one workflow field
 };
 
 // Validation schema
@@ -126,6 +128,22 @@ const AddTask = () => {
     setFieldValue("checklist", newChecklist);
   };
 
+  // Handle adding a new workflow field
+  const handleAddWorkflowField = (setFieldValue) => {
+    setFieldValue("workflow_fields", [
+      ...initialValues.workflow_fields,
+      { name: "", assign_to: "", assign_date: "", tot: "" },
+    ]);
+  };
+
+  // Handle removing a workflow field
+  const handleRemoveWorkflowField = (index, setFieldValue) => {
+    const newWorkflowFields = initialValues.workflow_fields.filter(
+      (field, i) => i !== index
+    );
+    setFieldValue("workflow_fields", newWorkflowFields);
+  };
+
   return (
     <Box m="20px">
       <Header title="CREATE TASK" subtitle="Add a new task to the platform by filling out the details" />
@@ -145,6 +163,7 @@ const AddTask = () => {
           setFieldValue,
         }) => (
           <form onSubmit={handleSubmit}>
+            {/* Task Information Section */}
             <fieldset
               style={{
                 border: "2px solid #ddd",
@@ -188,7 +207,8 @@ const AddTask = () => {
                   >
                     <MenuItem value="Add Hoc">Add Hoc</MenuItem>
                     <MenuItem value="Recurring">Recurring</MenuItem>
-                    <MenuItem value="Checklist">Checklist</MenuItem> {/* Added checklist option */}
+                    <MenuItem value="Checklist">Checklist</MenuItem>
+                    <MenuItem value="Workflow">Workflow</MenuItem> {/* Added Workflow option */}
                   </Select>
                 </FormControl>
 
@@ -238,7 +258,7 @@ const AddTask = () => {
               </Box>
             </fieldset>
 
-            {/* Extra Fields */}
+            {/* Extra Fields Section */}
             <fieldset
               style={{
                 border: "2px solid #ddd",
@@ -306,8 +326,105 @@ const AddTask = () => {
               </Box>
             </fieldset>
 
-            {/* Checklist Section */}
-            {values.type === "Checklist" && (
+            {/* Workflow Section */}
+            {values.type === "Workflow" && (
+              <fieldset
+                style={{
+                  border: "2px solid #ddd",
+                  borderRadius: "8px",
+                  padding: "20px",
+                  marginBottom: "20px",
+                }}
+              >
+                <legend
+                  style={{
+                    fontSize: "1.2rem",
+                    fontWeight: "bold",
+                    color: "#333",
+                    padding: "0 10px",
+                    marginBottom: "10px",
+                  }}
+                >
+                  Workflow Fields
+                </legend>
+
+                <Box display="grid" gap="30px">
+                  {values.workflow_fields.map((field, index) => (
+                    <Box key={index} display="flex" gap="10px">
+                      <TextField
+                        fullWidth
+                        variant="filled"
+                        label="Name"
+                        name={`workflow_fields[${index}].name`}
+                        value={field.name}
+                        onChange={handleChange}
+                        error={
+                          touched.workflow_fields?.[index]?.name && Boolean(errors.workflow_fields?.[index]?.name)
+                        }
+                        helperText={touched.workflow_fields?.[index]?.name && errors.workflow_fields?.[index]?.name}
+                      />
+                      <FormControl fullWidth variant="filled">
+                        <InputLabel>Assign To</InputLabel>
+                        <Select
+                          label="Assign To"
+                          name={`workflow_fields[${index}].assign_to`}
+                          value={field.assign_to}
+                          onChange={handleChange}
+                          error={touched.workflow_fields?.[index]?.assign_to && Boolean(errors.workflow_fields?.[index]?.assign_to)}
+                        >
+                          {assignees.map((assignee) => (
+                            <MenuItem key={assignee.id} value={assignee.id}>
+                              {assignee.name}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      </FormControl>
+                      <TextField
+                        fullWidth
+                        variant="filled"
+                        type="date"
+                        label="Assign Date"
+                        name={`workflow_fields[${index}].assign_date`}
+                        value={field.assign_date}
+                        onChange={handleChange}
+                        error={
+                          touched.workflow_fields?.[index]?.assign_date && Boolean(errors.workflow_fields?.[index]?.assign_date)
+                        }
+                        helperText={touched.workflow_fields?.[index]?.assign_date && errors.workflow_fields?.[index]?.assign_date}
+                      />
+                      <TextField
+                        fullWidth
+                        variant="filled"
+                        label="TOT"
+                        name={`workflow_fields[${index}].tot`}
+                        value={field.tot}
+                        onChange={handleChange}
+                        error={
+                          touched.workflow_fields?.[index]?.tot && Boolean(errors.workflow_fields?.[index]?.tot)
+                        }
+                        helperText={touched.workflow_fields?.[index]?.tot && errors.workflow_fields?.[index]?.tot}
+                      />
+                      {/* Remove Button */}
+                      <IconButton
+                        onClick={() => handleRemoveWorkflowField(index, setFieldValue)}
+                        color="error"
+                        sx={{ alignSelf: "center" }}
+                      >
+                        <Remove />
+                      </IconButton>
+                    </Box>
+                  ))}
+                  {/* Add Button */}
+                  <Box display="flex" justifyContent="start">
+                    <IconButton onClick={() => handleAddWorkflowField(setFieldValue)} color="primary">
+                      <Add />
+                    </IconButton>
+                  </Box>
+                </Box>
+              </fieldset>
+            )}
+
+{values.type === "Checklist" && (
               <fieldset
                 style={{
                   border: "2px solid #ddd",
@@ -372,6 +489,8 @@ const AddTask = () => {
                 </Box>
               </fieldset>
             )}
+
+
 
             {/* Task Allocation */}
             <fieldset
