@@ -159,6 +159,7 @@ const EditDepartment = () => {
                     onBlur={handleBlur}
                     onChange={handleChange}
                     error={touched.org_id && Boolean(errors.org_id)}
+                    inputProps={{ readOnly: true }} 
                   >
                     {companies.map((company) => (
                       <MenuItem key={company.org_id} value={company.org_id}>

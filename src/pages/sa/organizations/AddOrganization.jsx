@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { Formik } from "formik";
 import { Link } from 'react-router-dom';
 import * as Yup from "yup";
+
+import { toast , ToastContainer} from "react-toastify";
 import { Typography, useTheme } from '@mui/material';
 const initialValues ={
   org_name: "",
@@ -35,6 +37,7 @@ const checkoutSchema = Yup.object({
     .min(15, "GST No. must be at least 15 characters"),
   state: Yup.string().required("State is required"),
   city: Yup.string().required("City is required"),
+  employee_code: Yup.string().required("Employee code is required"),
 
   // Point Of Contact Information
   primary_contact_person: Yup.string()
@@ -423,7 +426,7 @@ const handleSubmit = async (values, actions) => {
                 <TextField
                   fullWidth
                   variant="filled"
-                  type="text"
+                  type="date"
                   label="Start Date"
                   onBlur={handleBlur}
                   onChange={handleChange}
@@ -441,7 +444,7 @@ const handleSubmit = async (values, actions) => {
                 <TextField
                   fullWidth
                   variant="filled"
-                  type="text"
+                  type="date"
                   label="End Date"
                   onBlur={handleBlur}
                   onChange={handleChange}

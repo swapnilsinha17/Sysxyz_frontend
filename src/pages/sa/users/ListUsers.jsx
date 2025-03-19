@@ -26,6 +26,7 @@ import axios from "axios";
 import { apis } from "../../../utils/utills";
 import AddButton from "../../../components/btn/AddButton";
 
+import { toast , ToastContainer} from "react-toastify";
 const ListUsers = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
@@ -51,7 +52,7 @@ const ListUsers = () => {
 
   // Columns for the DataGrid
   const columns = [
-    { field: "id", headerName: "SN", filterable: true },
+    { field: "sr_no", headerName: "SN", filterable: true },
     { field: "name", headerName: "Name", flex: 1, filterable: true },
     { field: "department_name", headerName: "Department", flex: 1, filterable: true },
     { field: "email", headerName: "Email", flex: 1, filterable: true },
@@ -117,6 +118,22 @@ const ListUsers = () => {
   };
 
   // Fetch users from the server
+  const handleStatusToggle  = async (id, status) => {
+    setLoading(true);
+    try {
+      const response = await axios.post(`${apis.baseUrl}/register/toggleUserStatus`,{user_id:id,is_active:!status}, {
+        headers: {
+          Authorization: sessionStorage.getItem("auth_token"),
+        },
+      });
+      setLoading(false);
+      toast.success(response.data.message);
+      fetchUsers()
+    } catch (err) {
+      setError("Failed to fetch users");
+      setLoading(false);
+    }
+  }
   const fetchUsers = async () => {
     setLoading(true);
     try {
@@ -130,7 +147,7 @@ const ListUsers = () => {
       if (data) {
         const updatedData = data.map((org, index) => ({
           ...org,
-          id: index + 1, // Assuming 'org_id' is unique
+          sr_no: index + 1, // Assuming 'org_id' is unique
         }));
         setUsers(updatedData); // Update the state with the fetched users
         setLoading(false);
