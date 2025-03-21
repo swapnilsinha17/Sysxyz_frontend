@@ -3,13 +3,9 @@ import {
   Typography,
   useTheme,
   TextField,
-  MenuItem,
-  Select,
-  FormControl,
-  InputLabel,
   IconButton,
   Button,
-  Switch, // Import Switch for the toggle
+  Switch,
   Dialog,
   DialogActions,
   DialogContent,
@@ -25,18 +21,18 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { apis } from "../../../utils/utills";
 import AddButton from "../../../components/btn/AddButton";
+import { toast } from "react-toastify";
 
-import { toast , ToastContainer} from "react-toastify";
 const ListUsers = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const navigate = useNavigate();
 
   // State variables
-  const [pageSize, setPageSize] = useState(10); // Tracks the page size
-  const [page, setPage] = useState(0); // Tracks the current page
-  const [searchTerm, setSearchTerm] = useState(""); // Tracks the search term
-  const [users, setUsers] = useState([]); // Stores the user data
+  const [pageSize, setPageSize] = useState(10);
+  const [page, setPage] = useState(0);
+  const [searchTerm, setSearchTerm] = useState(""); 
+  const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -49,6 +45,8 @@ const ListUsers = () => {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [passwordError, setPasswordError] = useState("");
+  const [currentPasswordError, setCurrentPasswordError] = useState("");
+  const [newPasswordError, setNewPasswordError] = useState("");
 
   // Columns for the DataGrid
   const columns = [
@@ -65,7 +63,6 @@ const ListUsers = () => {
       filterable: true,
       renderCell: (params) => (
         <Box display="flex" justifyContent="center" alignItems="center">
-          {/* Toggle Button */}
           <Switch
             checked={params.row.is_active}
             onChange={() => handleStatusToggle(params.row.id, params.row.is_active)}
@@ -80,18 +77,15 @@ const ListUsers = () => {
       flex: 1,
       renderCell: (params) => (
         <Box display="flex" justifyContent="center">
-          {/* Edit Button */}
           <IconButton
             sx={{ color: 'blue', marginRight: 1 }}
             onClick={() => navigate(`/sa/users/edit/${params.row.id}`)}
-        
           >
             <EditOutlined />
           </IconButton>
 
-          {/* Reset Password Button */}
           <IconButton
-           color="secondary"
+            color="secondary"
             onClick={() => handleOpenResetDialog(params.row.id)}
           >
             <LockResetOutlined />
@@ -101,39 +95,7 @@ const ListUsers = () => {
     },
   ];
 
-  // Handle pagination changes
-  const handlePageChange = (newPage) => {
-    setPage(newPage);
-  };
-
-  // Handle page size changes
-  const handlePageSizeChange = (event) => {
-    setPageSize(event.target.value);
-    setPage(0); // Reset page when page size changes
-  };
-
-  // Handle search term changes
-  const handleSearchChange = (e) => {
-    setSearchTerm(e.target.value);
-  };
-
   // Fetch users from the server
-  const handleStatusToggle  = async (id, status) => {
-    setLoading(true);
-    try {
-      const response = await axios.post(`${apis.baseUrl}/register/toggleUserStatus`,{user_id:id,is_active:!status}, {
-        headers: {
-          Authorization: sessionStorage.getItem("auth_token"),
-        },
-      });
-      setLoading(false);
-      toast.success(response.data.message);
-      fetchUsers()
-    } catch (err) {
-      setError("Failed to fetch users");
-      setLoading(false);
-    }
-  }
   const fetchUsers = async () => {
     setLoading(true);
     try {
@@ -143,13 +105,12 @@ const ListUsers = () => {
         },
       });
       const { data } = response.data;
-
       if (data) {
         const updatedData = data.map((org, index) => ({
           ...org,
-          sr_no: index + 1, // Assuming 'org_id' is unique
+          sr_no: index + 1,
         }));
-        setUsers(updatedData); // Update the state with the fetched users
+        setUsers(updatedData);
         setLoading(false);
       }
     } catch (err) {
@@ -158,36 +119,95 @@ const ListUsers = () => {
     }
   };
 
+  // Filter rows based on the search term
+  const filteredRows = users.filter((row) => {
+    return Object.values(row).some(
+      (val) =>
+        val && val.toString().toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  });
+
+  // Handle pagination changes
+  const handlePageChange = (newPage) => {
+    setPage(newPage);
+  };
+
+  // Handle page size changes
+  const handlePageSizeChange = (event) => {
+    setPageSize(event.target.value);
+    setPage(0);
+  };
+
+  // Handle search term changes
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
+  };
+
+  // Handle status toggle (activate/deactivate user)
+  const handleStatusToggle = async (id, status) => {
+    setLoading(true);
+    try {
+      const response = await axios.post(`${apis.baseUrl}/register/toggleUserStatus`, { user_id: id, is_active: !status }, {
+        headers: {
+          Authorization: sessionStorage.getItem("auth_token"),
+        },
+      });
+      setLoading(false);
+      toast.success(response.data.message);
+      fetchUsers(); 
+    } catch (err) {
+      setError("Failed to update status");
+      setLoading(false);
+    }
+  };
+
   // Open the reset password dialog
   const handleOpenResetDialog = (userId) => {
-    setSelectedUserId(userId); // Set the selected user ID for the reset
-    setOpenResetDialog(true); // Open the dialog
+    setSelectedUserId(userId);
+    setOpenResetDialog(true);
   };
 
   // Close the reset password dialog
   const handleCloseResetDialog = () => {
     setOpenResetDialog(false);
-    setSelectedUserId(null); // Clear selected user ID
+    setSelectedUserId(null);
     setCurrentPassword("");
     setNewPassword("");
     setConfirmPassword("");
     setPasswordError("");
+    setCurrentPasswordError("");
+    setNewPasswordError("");
   };
 
   // Reset password for a user
   const handleResetPassword = async () => {
+    setCurrentPasswordError("");
+    setNewPasswordError("");
+    setPasswordError("");
+
+    if (!currentPassword) {
+      setCurrentPasswordError("Current password is required.");
+      return;
+    }
+
+    if (newPassword.length < 6) {
+      setNewPasswordError("New password must be at least 6 characters.");
+      return;
+    }
+
     if (newPassword !== confirmPassword) {
       setPasswordError("New password and confirm password do not match.");
       return;
     }
-    
+
     try {
       const response = await axios.post(
         `${apis.baseUrl}/register/resetPassword`,
         { 
           user_id: selectedUserId,
           current_password: currentPassword,
-          new_password: newPassword 
+          change_password: newPassword ,
+          confirm_password: newPassword 
         },
         {
           headers: {
@@ -195,56 +215,40 @@ const ListUsers = () => {
           },
         }
       );
-      if (response.status === 200) {
-        alert("Password reset successfully");
-        fetchUsers(); // Refresh the user list
-        handleCloseResetDialog(); // Close the dialog
+      if (response.status === 201) {
+        toast.success("Password reset successfully");
+        fetchUsers();
+        handleCloseResetDialog();
       }
     } catch (err) {
-      alert("Failed to reset password");
+      toast.error("Failed to reset password");
     }
   };
 
-  // Fetch users on page change, page size change, or search term change
+  // Fetch users when the component mounts and whenever users or searchTerm changes
   useEffect(() => {
     fetchUsers();
-  }, []);
+  }, [searchTerm]); // Fetch users when search term changes
 
   return (
-    <Box m="20px"
-   >
-     <Box sx={{ 
-  display: "flex", 
-  justifyContent: "space-between", 
-  alignItems: "center"
-}} >
-  {/* Title Section (Header) on the Left */}
+    <Box m="20px">
+      <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <Header title="Users" />
+        <Box mb={2} display="flex" gap={4} alignItems="center">
+          <TextField
+            label="Search"
+            variant="outlined"
+            fullWidth
+            value={searchTerm}
+            color="secondary"
+            onChange={handleSearchChange}
+            sx={{ maxWidth: "300px" }}
+          />
+          <AddButton btn="Add New User" Redirect="add" />
+        </Box>
+      </Box>
 
-    <Header title="Users" />
- 
-
-  {/* Search Box and New Button Section on the Right */}
-  <Box mb={2} display="flex" gap={4} alignItems="center">
-    <TextField
-      label="Search"
-      variant="outlined"
-      fullWidth
-      value={searchTerm}
-      color="secondary"
-      onChange={handleSearchChange}
-      sx={{ maxWidth: "300px" }}
-    />
-
-    {/* New Button */}
-    <AddButton btn="Add New User" Redirect="add" />
-  </Box>
-</Box>
-
-     
-   
-
-      {/* DataGrid */}
-      <Box  height="75vh" flex={1} sx={{
+      <Box height="75vh" flex={1} sx={{
         "& .MuiDataGrid-root": { border: "none" },
         "& .MuiDataGrid-cell": { border: "none" },
         "& .MuiDataGrid-columnHeaders": {
@@ -252,40 +256,30 @@ const ListUsers = () => {
           borderBottom: "none",
           color: "white",
         },
-
         "& .MuiDataGrid-virtualScroller": { backgroundColor: colors.primary[400] },
         "& .MuiDataGrid-footerContainer": {
           borderTop: "none",
           color: "white",
           backgroundColor: colors.blueAccent[700],
         },
-        "& .css-7ms3qr-MuiTablePagination-displayedRows": { 
-          color: "#fcfcfc",
-        },
-        "& .css-1hgjne-MuiButtonBase-root-MuiIconButton-root.Mui-disabled": {
-          color:"#fcfcfc",
-        },
-       
       }}>
         <DataGrid
-          rows={users}
+          rows={filteredRows} // Use filtered rows instead of all users
           columns={columns}
-         
-          pageSize="10"
-          
+          pageSize={pageSize}
           pageSizeOptions={[5, 10, 25, { value: -1, label: 'All' }]}
+          onPageSizeChange={handlePageSizeChange}
+          page={page}
+          onPageChange={handlePageChange}
         />
       </Box>
 
-   
       <Dialog open={openResetDialog} onClose={handleCloseResetDialog}>
         <DialogTitle>Reset Password</DialogTitle>
         <DialogContent>
           <DialogContentText>
             Please enter the current password, new password, and confirm the new password to reset.
           </DialogContentText>
-
-          {/* Current Password Field */}
           <TextField
             label="Current Password"
             variant="outlined"
@@ -294,9 +288,9 @@ const ListUsers = () => {
             value={currentPassword}
             onChange={(e) => setCurrentPassword(e.target.value)}
             sx={{ marginBottom: 2 }}
+            error={!!currentPasswordError}
+            helperText={currentPasswordError}
           />
-
-          {/* New Password Field */}
           <TextField
             label="New Password"
             variant="outlined"
@@ -305,9 +299,9 @@ const ListUsers = () => {
             value={newPassword}
             onChange={(e) => setNewPassword(e.target.value)}
             sx={{ marginBottom: 2 }}
+            error={!!newPasswordError}
+            helperText={newPasswordError}
           />
-
-          {/* Confirm Password Field */}
           <TextField
             label="Confirm Password"
             variant="outlined"
@@ -324,7 +318,23 @@ const ListUsers = () => {
           <Button onClick={handleCloseResetDialog} color="primary">
             Cancel
           </Button>
-          <Button onClick={handleResetPassword} color="secondary">
+          <Button 
+           sx={{
+            // width:"130px",
+         
+            bgcolor: colors.blueAccent[500],
+            color:colors.blueAccent[100],
+          display:"flex",
+            fontWeight: "bold",
+            p: "10px 10px",
+           
+            
+            transition: ".3s ease",
+            ":hover": {
+              bgcolor: colors.blueAccent[700], // Adjust the color for hover state if needed
+            },
+          }}
+          onClick={handleResetPassword} color="secondary">
             Reset Password
           </Button>
         </DialogActions>

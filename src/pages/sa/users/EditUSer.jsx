@@ -99,8 +99,9 @@ const EditUser = () => {
   // Handle form submission
   const handleSubmit = async (values, actions) => {
     try {
-      const response = await axios.put(
-        `${apis.baseUrl}/register/updateUser/${userId}`,
+      values.user_id = id;
+      const response = await axios.post(
+        `${apis.baseUrl}/register/editUser`,
         values,
         {
           headers: {

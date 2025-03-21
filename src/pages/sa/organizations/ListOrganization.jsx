@@ -44,7 +44,7 @@ import AddButton from "../../../components/btn/AddButton";
    const handleStatusToggle = async (id, currentStatus) => {
   try {
     // Determine new status based on current status
-    const newStatus = currentStatus === 1 ? 0 : 1;  // Toggling between 1 (Active) and 0 (Inactive)
+    const newStatus = currentStatus === true ? 0 : 1;  // Toggling between 1 (Active) and 0 (Inactive)
 
     // Optimistically update the UI before the API call
     setOrganizations((prevOrgs) =>
@@ -154,7 +154,7 @@ import AddButton from "../../../components/btn/AddButton";
         renderCell: (params) => (
           <Switch
           color="secondary"
-            checked={params.value == 1}
+            checked={params.value == true}
             onChange={() => handleStatusToggle(params.row.org_id, params.value)}
            
           />

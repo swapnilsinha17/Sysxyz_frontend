@@ -1,4 +1,4 @@
-import { Box, Button, TextField, useMediaQuery } from "@mui/material";
+import { Box, Button, TextField, useMediaQuery ,FormControl,InputLabel, Select, MenuItem} from "@mui/material";
 import { Header } from "../../../components";
 import { useNavigate } from "react-router-dom";
 import { Formik } from "formik";
@@ -7,6 +7,77 @@ import * as Yup from "yup";
 
 import { toast , ToastContainer} from "react-toastify";
 import { Typography, useTheme } from '@mui/material';
+
+
+const statesList = [
+  { code: 'UP', name: 'Uttar Pradesh' },
+  { code: 'KA', name: 'Karnataka' },
+  { code: 'MH', name: 'Maharashtra' },
+  { code: 'WB', name: 'West Bengal' },
+  { code: 'GJ', name: 'Gujarat' },
+  { code: 'DL', name: 'Delhi' },
+  { code: 'RJ', name: 'Rajasthan' },
+  { code: 'AP', name: 'Andhra Pradesh' },
+  { code: 'BR', name: 'Bihar' },
+  { code: 'PB', name: 'Punjab' },
+  { code: 'HR', name: 'Haryana' },
+  { code: 'JK', name: 'Jammu and Kashmir' },
+  { code: 'MP', name: 'Madhya Pradesh' },
+  { code: 'KL', name: 'Kerala' },
+  { code: 'OR', name: 'Odisha' },
+  { code: 'AS', name: 'Assam' },
+  { code: 'CG', name: 'Chhattisgarh' },
+  { code: 'UT', name: 'Uttarakhand' },
+  { code: 'HP', name: 'Himachal Pradesh' },
+  { code: 'JH', name: 'Jharkhand' },
+  { code: 'TN', name: 'Tamil Nadu' },
+  { code: 'NL', name: 'Nagaland' },
+  { code: 'SK', name: 'Sikkim' },
+  { code: 'AR', name: 'Arunachal Pradesh' },
+  { code: 'ML', name: 'Meghalaya' },
+  { code: 'MZ', name: 'Mizoram' },
+  { code: 'TR', name: 'Tripura' },
+  { code: 'AM', name: 'Andaman and Nicobar Islands' },
+  { code: 'LD', name: 'Lakshadweep' },
+  { code: 'DN', name: 'Dadra and Nagar Haveli and Daman and Diu' },
+  { code: 'PY', name: 'Puducherry' },
+];
+
+const citiesList = {
+  UP: ['Lucknow', 'Agra', 'Kanpur', 'Varanasi', 'Allahabad', 'Meerut', 'Gorakhpur', 'Aligarh', 'Mathura', 'Firozabad'],
+  KA: ['Bangalore', 'Mysore', 'Hubli', 'Mangalore', 'Belgaum', 'Bellary', 'Tumkur', 'Davangere', 'Mandya', 'Chitradurga'],
+  MH: ['Mumbai', 'Pune', 'Nagpur', 'Nashik', 'Aurangabad', 'Thane', 'Kalyan', 'Solapur', 'Kolhapur', 'Ratnagiri'],
+  TN: ['Chennai', 'Coimbatore', 'Madurai', 'Trichy', 'Salem', 'Tirunelveli', 'Tiruchirapalli', 'Erode', 'Vellore', 'Dindigul'],
+  WB: ['Kolkata', 'Siliguri', 'Asansol', 'Durgapur', 'Howrah', 'Medinipur', 'Bardhaman', 'Malda', 'Kolar', 'Birbhum'],
+  GJ: ['Ahmedabad', 'Surat', 'Vadodara', 'Rajkot', 'Bhavnagar', 'Junagadh', 'Navsari', 'Anand', 'Valsad', 'Gandhinagar'],
+  DL: ['New Delhi', 'Old Delhi', 'Dwarka', 'Karol Bagh', 'Connaught Place', 'Lajpat Nagar', 'Chandni Chowk', 'Rohini', 'Vikas Puri', 'Preet Vihar'],
+  RJ: ['Jaipur', 'Udaipur', 'Jodhpur', 'Kota', 'Ajmer', 'Bikaner', 'Alwar', 'Chittorgarh', 'Sikar', 'Bhilwara'],
+  AP: ['Hyderabad', 'Visakhapatnam', 'Vijayawada', 'Guntur', 'Tirupati', 'Nellore', 'Rajahmundry', 'Kakinada', 'Anantapur', 'Chittoor'],
+  BR: ['Patna', 'Gaya', 'Bhagalpur', 'Muzaffarpur', 'Munger', 'Purnia', 'Darbhanga', 'Siwan', 'Buxar', 'Katihar'],
+  PB: ['Chandigarh', 'Amritsar', 'Ludhiana', 'Jalandhar', 'Patiala', 'Bathinda', 'Moga', 'Hoshiarpur', 'Mohali', 'Ferozepur'],
+  HR: ['Gurugram', 'Faridabad', 'Panipat', 'Ambala', 'Sonipat', 'Rohtak', 'Hisar', 'Karnal', 'Yamunanagar', 'Rewari'],
+  JK: ['Srinagar', 'Jammu', 'Anantnag', 'Baramulla', 'Pulwama', 'Kupwara', 'Kathua', 'Rajouri', 'Poonch', 'Kishtwar'],
+  MP: ['Bhopal', 'Indore', 'Gwalior', 'Jabalpur', 'Ujjain', 'Sagar', 'Rewa', 'Satna', 'Guna', 'Dewas'],
+  KL: ['Thiruvananthapuram', 'Kochi', 'Kozhikode', 'Kollam', 'Palakkad', 'Kannur', 'Kottayam', 'Malappuram', 'Thrissur', 'Alappuzha'],
+  OR: ['Bhubaneswar', 'Cuttack', 'Rourkela', 'Berhampur', 'Sambalpur', 'Balasore', 'Koraput', 'Rayagada', 'Angul', 'Jajpur'],
+  AS: ['Guwahati', 'Dibrugarh', 'Silchar', 'Jorhat', 'Tinsukia', 'Nagaon', 'Sibsagar', 'Bongaigaon', 'Tezpur', 'Bailong'],
+  CG: ['Raipur', 'Bilaspur', 'Korba', 'Durg', 'Raigarh', 'Jagdalpur', 'Rajnandgaon', 'Bemetara', 'Surajpur', 'Mungeli'],
+  UT: ['Dehradun', 'Haridwar', 'Rishikesh', 'Nainital', 'Roorkee', 'Haldwani', 'Pauri', 'Tehri', 'Kashipur', 'Ramnagar'],
+  HP: ['Shimla', 'Manali', 'Dharamshala', 'Kullu', 'Solan', 'Mandi', 'Bilaspur', 'Hamirpur', 'Kangra', 'Palampur'],
+  JH: ['Ranchi', 'Jamshedpur', 'Dhanbad', 'Bokaro', 'Hazaribagh', 'Deoghar', 'Giridih', 'Dumka', 'Ramgarh', 'Chaibasa'],
+  NL: ['Kohima', 'Dimapur', 'Mokokchung', 'Wokha', 'Peren', 'Zunheboto', 'Mon', 'Tuensang', 'Kiphire', 'Longleng'],
+  SK: ['Gangtok', 'Namchi', 'Mangan', 'Rangpo', 'Jorethang', 'Yuksom', 'Pakyong', 'Martam', 'Singtam', 'Tadong'],
+  AR: ['Itanagar', 'Naharlagun', 'Pasighat', 'Tawang', 'Ziro', 'Tezu', 'Seppa', 'Aalo', 'Changlang', 'Rupa'],
+  ML: ['Shillong', 'Jowai', 'Nongpoh', 'Tura', 'Williamnagar', 'Mawkyrwat', 'Baghmara', 'Nongstoin', 'Mawlai', 'Mairang'],
+  MZ: ['Aizawl', 'Lunglei', 'Champhai', 'Kolasib', 'Serchhip', 'Saiha', 'Lawngtlai', 'Mamit', 'Hnahthial', 'Khawzawl'],
+  TR: ['Agartala', 'Udaipur', 'Ambassa', 'Kailashahar', 'Belonia', 'Sabroom', 'Khowai', 'Radhakishorepur', 'Jirania', 'Badharghat'],
+  AM: ['Port Blair', 'Car Nicobar', 'Campbell Bay', 'Diglipur', 'Mayabunder', 'Rangat', 'Havelock', 'Baratang', 'Little Andaman', 'Kalapathar'],
+  LD: ['Kavaratti', 'Agatti', 'Andrott', 'Bangaram', 'Suheli Par', 'Kalapeni', 'Minicoy', 'Kochi', 'Pitti Island', 'Lakshadweep'],
+  DN: ['Daman', 'Diu', 'Silvassa', 'Khanvel', 'Vapi', 'Dadra', 'Damanji', 'Daman District', 'Silvassa District', 'Vansda'],
+  PY: ['Puducherry', 'Karaikal', 'Yanam', 'Mahe'],
+};
+
+
 const initialValues ={
   org_name: "",
   access_start_date: "",
@@ -70,6 +141,11 @@ const AddOrganization = () => {
   const colors = tokens(theme.palette.mode);
   console.log("ffffffffffffffffffff",colors);
   const isNonMobile = useMediaQuery("(min-width:600px)");
+  const handleStateChange = (e, setFieldValue) => {
+    const stateCode = e.target.value;
+    setFieldValue("state", stateCode); // Set state
+    setFieldValue("city", ""); // Reset city
+  };
 
 const handleSubmit = async (values, actions) => {
   try {
@@ -96,6 +172,7 @@ const handleSubmit = async (values, actions) => {
     navigate('/sa/organizations'); // Redirect to the organizations page
 
   } catch (error) {
+    toast.error(error.response.data.message);
     // Handle any errors that occur during the request
     console.error('Error adding organization:', error);
   }
@@ -127,6 +204,7 @@ const handleSubmit = async (values, actions) => {
           handleBlur,
           handleChange,
           handleSubmit,
+          setFieldValue
         }) => (
           <form onSubmit={handleSubmit}>
             {/* Fieldset Wrapper */}
@@ -202,7 +280,11 @@ const handleSubmit = async (values, actions) => {
                   type="text"
                   label="PAN"
                   onBlur={handleBlur}
-                  onChange={handleChange}
+                  // onChange={handleChange}
+                  onChange={(e) => {
+                    handleChange(e);
+                    setFieldValue("PAN", e.target.value.toUpperCase()); // Convert PAN to uppercase
+                  }}
                   value={values.PAN}
                   name="PAN"
                   error={touched.PAN && Boolean(errors.PAN)}
@@ -218,7 +300,11 @@ const handleSubmit = async (values, actions) => {
                   type="text"
                   label="GST No."
                   onBlur={handleBlur}
-                  onChange={handleChange}
+                  // onChange={handleChange}
+                  onChange={(e) => {
+                    handleChange(e);
+                    setFieldValue("GST_No", e.target.value.toUpperCase()); // Convert PAN to uppercase
+                  }}
                   value={values.GST_No}
                   name="GST_No"
                   error={touched.GST_No && Boolean(errors.GST_No)}
@@ -228,7 +314,41 @@ const handleSubmit = async (values, actions) => {
                   
                   }}
                 />
-                <TextField
+                <FormControl fullWidth variant="filled" sx={{ gridColumn: "span 1" }}>
+                  <InputLabel>State</InputLabel>
+                  <Select
+                    label="State"
+                    value={values.state}
+                    onChange={(e) => handleStateChange(e, setFieldValue)}
+                    error={touched.state && Boolean(errors.state)}
+                  >
+                    {statesList.map((state) => (
+                      <MenuItem key={state.code} value={state.code}>
+                        {state.name}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+                <FormControl fullWidth variant="filled" sx={{ gridColumn: "span 1" }}>
+                  <InputLabel>City</InputLabel>
+                  <Select
+                    label="City"
+                    value={values.city}
+                    onChange={handleChange}
+                    name="city"
+                    error={touched.city && Boolean(errors.city)}
+                    disabled={!values.state}
+                  >
+                    {values.state &&
+                      citiesList[values.state]?.map((city) => (
+                        <MenuItem key={city} value={city}>
+                          {city}
+                        </MenuItem>
+                      ))}
+                  </Select>
+                </FormControl>
+              
+                {/* <TextField
                   fullWidth
                   variant="filled"
                   type="text"
@@ -259,7 +379,7 @@ const handleSubmit = async (values, actions) => {
                     gridColumn: "span 1",
                     
                   }}
-                />
+                /> */}
               </Box>
             </fieldset>
 
