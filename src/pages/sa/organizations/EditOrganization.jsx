@@ -1,4 +1,4 @@
-import { Box, Button, TextField, Typography, useMediaQuery, useTheme } from "@mui/material";
+import { Box, Button, TextField, Typography, useMediaQuery, useTheme,FormControl,InputLabel, Select, MenuItem } from "@mui/material";
 import { Header } from "../../../components";
 import { useNavigate, useParams } from "react-router-dom";
 import { Formik } from "formik";
@@ -10,6 +10,73 @@ import { tokens } from "../../../theme";
 import CancelLink from "../../../components/btn/HyperLinkBtn";
 import AddButton from "../../../components/btn/AddButton";
 
+const statesList = [
+  { code: 'UP', name: 'Uttar Pradesh' },
+  { code: 'KA', name: 'Karnataka' },
+  { code: 'MH', name: 'Maharashtra' },
+  { code: 'WB', name: 'West Bengal' },
+  { code: 'GJ', name: 'Gujarat' },
+  { code: 'DL', name: 'Delhi' },
+  { code: 'RJ', name: 'Rajasthan' },
+  { code: 'AP', name: 'Andhra Pradesh' },
+  { code: 'BR', name: 'Bihar' },
+  { code: 'PB', name: 'Punjab' },
+  { code: 'HR', name: 'Haryana' },
+  { code: 'JK', name: 'Jammu and Kashmir' },
+  { code: 'MP', name: 'Madhya Pradesh' },
+  { code: 'KL', name: 'Kerala' },
+  { code: 'OR', name: 'Odisha' },
+  { code: 'AS', name: 'Assam' },
+  { code: 'CG', name: 'Chhattisgarh' },
+  { code: 'UT', name: 'Uttarakhand' },
+  { code: 'HP', name: 'Himachal Pradesh' },
+  { code: 'JH', name: 'Jharkhand' },
+  { code: 'TN', name: 'Tamil Nadu' },
+  { code: 'NL', name: 'Nagaland' },
+  { code: 'SK', name: 'Sikkim' },
+  { code: 'AR', name: 'Arunachal Pradesh' },
+  { code: 'ML', name: 'Meghalaya' },
+  { code: 'MZ', name: 'Mizoram' },
+  { code: 'TR', name: 'Tripura' },
+  { code: 'AM', name: 'Andaman and Nicobar Islands' },
+  { code: 'LD', name: 'Lakshadweep' },
+  { code: 'DN', name: 'Dadra and Nagar Haveli and Daman and Diu' },
+  { code: 'PY', name: 'Puducherry' },
+];
+
+const citiesList = {
+  UP: ['Lucknow', 'Agra', 'Kanpur', 'Varanasi', 'Allahabad', 'Meerut', 'Gorakhpur', 'Aligarh', 'Mathura', 'Firozabad'],
+  KA: ['Bangalore', 'Mysore', 'Hubli', 'Mangalore', 'Belgaum', 'Bellary', 'Tumkur', 'Davangere', 'Mandya', 'Chitradurga'],
+  MH: ['Mumbai', 'Pune', 'Nagpur', 'Nashik', 'Aurangabad', 'Thane', 'Kalyan', 'Solapur', 'Kolhapur', 'Ratnagiri'],
+  TN: ['Chennai', 'Coimbatore', 'Madurai', 'Trichy', 'Salem', 'Tirunelveli', 'Tiruchirapalli', 'Erode', 'Vellore', 'Dindigul'],
+  WB: ['Kolkata', 'Siliguri', 'Asansol', 'Durgapur', 'Howrah', 'Medinipur', 'Bardhaman', 'Malda', 'Kolar', 'Birbhum'],
+  GJ: ['Ahmedabad', 'Surat', 'Vadodara', 'Rajkot', 'Bhavnagar', 'Junagadh', 'Navsari', 'Anand', 'Valsad', 'Gandhinagar'],
+  DL: ['New Delhi', 'Old Delhi', 'Dwarka', 'Karol Bagh', 'Connaught Place', 'Lajpat Nagar', 'Chandni Chowk', 'Rohini', 'Vikas Puri', 'Preet Vihar'],
+  RJ: ['Jaipur', 'Udaipur', 'Jodhpur', 'Kota', 'Ajmer', 'Bikaner', 'Alwar', 'Chittorgarh', 'Sikar', 'Bhilwara'],
+  AP: ['Hyderabad', 'Visakhapatnam', 'Vijayawada', 'Guntur', 'Tirupati', 'Nellore', 'Rajahmundry', 'Kakinada', 'Anantapur', 'Chittoor'],
+  BR: ['Patna', 'Gaya', 'Bhagalpur', 'Muzaffarpur', 'Munger', 'Purnia', 'Darbhanga', 'Siwan', 'Buxar', 'Katihar'],
+  PB: ['Chandigarh', 'Amritsar', 'Ludhiana', 'Jalandhar', 'Patiala', 'Bathinda', 'Moga', 'Hoshiarpur', 'Mohali', 'Ferozepur'],
+  HR: ['Gurugram', 'Faridabad', 'Panipat', 'Ambala', 'Sonipat', 'Rohtak', 'Hisar', 'Karnal', 'Yamunanagar', 'Rewari'],
+  JK: ['Srinagar', 'Jammu', 'Anantnag', 'Baramulla', 'Pulwama', 'Kupwara', 'Kathua', 'Rajouri', 'Poonch', 'Kishtwar'],
+  MP: ['Bhopal', 'Indore', 'Gwalior', 'Jabalpur', 'Ujjain', 'Sagar', 'Rewa', 'Satna', 'Guna', 'Dewas'],
+  KL: ['Thiruvananthapuram', 'Kochi', 'Kozhikode', 'Kollam', 'Palakkad', 'Kannur', 'Kottayam', 'Malappuram', 'Thrissur', 'Alappuzha'],
+  OR: ['Bhubaneswar', 'Cuttack', 'Rourkela', 'Berhampur', 'Sambalpur', 'Balasore', 'Koraput', 'Rayagada', 'Angul', 'Jajpur'],
+  AS: ['Guwahati', 'Dibrugarh', 'Silchar', 'Jorhat', 'Tinsukia', 'Nagaon', 'Sibsagar', 'Bongaigaon', 'Tezpur', 'Bailong'],
+  CG: ['Raipur', 'Bilaspur', 'Korba', 'Durg', 'Raigarh', 'Jagdalpur', 'Rajnandgaon', 'Bemetara', 'Surajpur', 'Mungeli'],
+  UT: ['Dehradun', 'Haridwar', 'Rishikesh', 'Nainital', 'Roorkee', 'Haldwani', 'Pauri', 'Tehri', 'Kashipur', 'Ramnagar'],
+  HP: ['Shimla', 'Manali', 'Dharamshala', 'Kullu', 'Solan', 'Mandi', 'Bilaspur', 'Hamirpur', 'Kangra', 'Palampur'],
+  JH: ['Ranchi', 'Jamshedpur', 'Dhanbad', 'Bokaro', 'Hazaribagh', 'Deoghar', 'Giridih', 'Dumka', 'Ramgarh', 'Chaibasa'],
+  NL: ['Kohima', 'Dimapur', 'Mokokchung', 'Wokha', 'Peren', 'Zunheboto', 'Mon', 'Tuensang', 'Kiphire', 'Longleng'],
+  SK: ['Gangtok', 'Namchi', 'Mangan', 'Rangpo', 'Jorethang', 'Yuksom', 'Pakyong', 'Martam', 'Singtam', 'Tadong'],
+  AR: ['Itanagar', 'Naharlagun', 'Pasighat', 'Tawang', 'Ziro', 'Tezu', 'Seppa', 'Aalo', 'Changlang', 'Rupa'],
+  ML: ['Shillong', 'Jowai', 'Nongpoh', 'Tura', 'Williamnagar', 'Mawkyrwat', 'Baghmara', 'Nongstoin', 'Mawlai', 'Mairang'],
+  MZ: ['Aizawl', 'Lunglei', 'Champhai', 'Kolasib', 'Serchhip', 'Saiha', 'Lawngtlai', 'Mamit', 'Hnahthial', 'Khawzawl'],
+  TR: ['Agartala', 'Udaipur', 'Ambassa', 'Kailashahar', 'Belonia', 'Sabroom', 'Khowai', 'Radhakishorepur', 'Jirania', 'Badharghat'],
+  AM: ['Port Blair', 'Car Nicobar', 'Campbell Bay', 'Diglipur', 'Mayabunder', 'Rangat', 'Havelock', 'Baratang', 'Little Andaman', 'Kalapathar'],
+  LD: ['Kavaratti', 'Agatti', 'Andrott', 'Bangaram', 'Suheli Par', 'Kalapeni', 'Minicoy', 'Kochi', 'Pitti Island', 'Lakshadweep'],
+  DN: ['Daman', 'Diu', 'Silvassa', 'Khanvel', 'Vapi', 'Dadra', 'Damanji', 'Daman District', 'Silvassa District', 'Vansda'],
+  PY: ['Puducherry', 'Karaikal', 'Yanam', 'Mahe'],
+};
 // Validation Schema (same as Add)
 const validationSchema = Yup.object({
   org_name: Yup.string().required("Company Name is required").min(3),
@@ -57,7 +124,11 @@ const EditOrganization = () => {
 
     fetchOrganization();
   }, [id]);
-
+  const handleStateChange = (e, setFieldValue) => {
+    const stateCode = e.target.value;
+    setFieldValue("state", stateCode); // Set state
+    setFieldValue("city", ""); // Reset city
+  };
   const handleSubmit = async (values, actions) => {
     try {
         values.org_id = id;
@@ -84,7 +155,7 @@ const EditOrganization = () => {
         onSubmit={handleSubmit}
         enableReinitialize // Ensure form updates when data is fetched
       >
-        {({ values, errors, touched, handleBlur, handleChange, handleSubmit }) => (
+        {({ values, errors, touched, handleBlur, handleChange, handleSubmit,setFieldValue }) => (
           <form onSubmit={handleSubmit}>
             <fieldset style={{ border: "2px solid #ddd", borderRadius: "8px", padding: "20px", marginBottom: "20px" }}>
               <legend style={{ fontSize: "1.2rem", padding: "0 10px", marginBottom: "10px" }}>
@@ -111,13 +182,44 @@ const EditOrganization = () => {
                   onBlur={handleBlur} onChange={handleChange} value={values.GST_No} error={touched.GST_No && Boolean(errors.GST_No)}
                   helperText={touched.GST_No && errors.GST_No} />
 
-                <TextField fullWidth variant="filled" type="text" label="State" name="state"
-                  onBlur={handleBlur} onChange={handleChange} value={values.state} error={touched.state && Boolean(errors.state)}
-                  helperText={touched.state && errors.state} />
+<FormControl fullWidth variant="filled" sx={{ gridColumn: "span 2" }}>
+                    <InputLabel>State</InputLabel>
+                    <Select
+                      label="State"
+                      name="state"
+                      value={values.state}
+                      onBlur={handleBlur}
+                      onChange={(e) => handleStateChange(e, setFieldValue)}
+                      error={touched.state && Boolean(errors.state)}
+                    >
+                      {statesList.map((state) => (
+                        <MenuItem key={state.code} value={state.code}>
+                          {state.name}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                    {touched.state && errors.state && <Typography color="error">{errors.state}</Typography>}
+                  </FormControl>
 
-                <TextField fullWidth variant="filled" type="text" label="City" name="city"
-                  onBlur={handleBlur} onChange={handleChange} value={values.city} error={touched.city && Boolean(errors.city)}
-                  helperText={touched.city && errors.city} />
+                  <FormControl fullWidth variant="filled" sx={{ gridColumn: "span 2" }}>
+                    <InputLabel>City</InputLabel>
+                    <Select
+                      label="City"
+                      name="city"
+                      value={values.city}
+                      onBlur={handleBlur}
+                      onChange={handleChange}
+                      error={touched.city && Boolean(errors.city)}
+                    >
+                      {values.state &&
+                                           citiesList[values.state]?.map((city) => (
+                                             <MenuItem key={city} value={city}>
+                                               {city}
+                                             </MenuItem>
+                                           ))}
+                    </Select>
+                    {touched.city && errors.city && <Typography color="error">{errors.city}</Typography>}
+                  </FormControl>
               </Box>
             </fieldset>
 

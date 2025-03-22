@@ -9,7 +9,7 @@ import { apis } from "../../../utils/utills";
 
 // Initial values for Formik
 const initialValues = {
-  org_id: "",
+
   department_name: "",
 };
 
@@ -17,7 +17,7 @@ const checkoutSchema = Yup.object({
   department_name: Yup.string()
     .required("Department Name is required")
     .min(3, "Department Name must be at least 3 characters long"),
-  org_id: Yup.string().required("Please select Organization"),
+ 
 });
 
 const EditDepartment = () => {
@@ -26,7 +26,7 @@ const EditDepartment = () => {
   const [loading, setLoading] = useState(true); // Loading state for API request
   const isNonMobile = useMediaQuery("(min-width:600px)");
   const navigate = useNavigate();
-  const { departmentId } = useParams(); // Get departmentId from URL
+  const { id } = useParams(); // Get departmentId from URL
 
   // Fetch companies and department data when component mounts
   useEffect(() => {
@@ -45,26 +45,32 @@ const EditDepartment = () => {
 
     const fetchDepartment = async () => {
       try {
-        const response = await axios.get(`${apis.baseUrl}/sa/getDepartment/${departmentId}`, {
+        const response = await axios.post(`${apis.baseUrl}/sa/getDepartmentById`,
+          {dept_id:id},
+          {
           headers: {
             Authorization: sessionStorage.getItem("auth_token"),
           },
         });
-        setDepartment(response?.data?.department); // Assuming the response contains the department data
+        setDepartment(response?.data?.org); // Assuming the response contains the department data
       } catch (error) {
         console.error("Error fetching department:", error);
       }
     };
-
+    setLoading(false);    
     fetchCompanies();
     fetchDepartment();
-  }, [departmentId]);
+  }, [id]);
 
   // Handle form submission
   const handleSubmit = async (values, actions) => {
     try {
-      const response = await axios.put(
-        `${apis.baseUrl}/sa/updateDepartment/${departmentId}`,
+      values.dept_id= id;
+      const user = JSON.parse(sessionStorage.getItem("user")); 
+      values.org_id = user.org_id;
+     
+      const response = await axios.post(
+        `${apis.baseUrl}/sa/editDepartment`,
         values,
         {
           headers: {
@@ -79,7 +85,7 @@ const EditDepartment = () => {
         values: initialValues,
       });
 
-      navigate("/departments");
+      navigate("/admin/departments");
     } catch (error) {
       console.error("Error updating department:", error);
     }
@@ -142,31 +148,7 @@ const EditDepartment = () => {
                   },
                 }}
               >
-                <FormControl fullWidth sx={{ gridColumn: "span 2" }}>
-                  <InputLabel id="org_id-label">Select Company</InputLabel>
-                  <Select
-                    labelId="org_id-label"
-                    id="org_id"
-                    name="org_id"
-                    value={values.org_id}
-                    label="Select Company"
-                    onBlur={handleBlur}
-                    onChange={handleChange}
-                    error={touched.org_id && Boolean(errors.org_id)}
-                  >
-                    {companies.map((company) => (
-                      <MenuItem key={company.org_id} value={company.org_id}>
-                        {company.org_name}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                  {touched.org_id && errors.org_id && (
-                    <div style={{ color: "red", fontSize: "12px" }}>
-                      {errors.org_id}
-                    </div>
-                  )}
-                </FormControl>
-
+            
                 <TextField
                   fullWidth
                   variant="filled"

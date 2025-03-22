@@ -1,4 +1,4 @@
-import { Box, Button, TextField, MenuItem, Select, InputLabel, FormControl, RadioGroup, FormControlLabel, Radio, useMediaQuery } from "@mui/material";
+import { Box, Button, TextField, MenuItem, Select, InputLabel, FormControl, RadioGroup, FormControlLabel, Radio, useMediaQuery, Typography } from "@mui/material";
 import { Header } from "../../../components";
 import { useNavigate, useParams } from "react-router-dom";
 import { Formik } from "formik";
@@ -6,6 +6,8 @@ import * as Yup from "yup";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { apis } from "../../../utils/utills";
+import CancelLink from "../../../components/btn/HyperLinkBtn";
+import AddButton from "../../../components/btn/AddButton";
 
 // Initial values for Formik
 const initialValues = {
@@ -35,7 +37,7 @@ const EditUser = () => {
   const [user, setUser] = useState(null); // State to store user data
   const isNonMobile = useMediaQuery("(min-width:600px)");
   const navigate = useNavigate();
-  const { userId } = useParams(); // Get userId from URL params
+  const { id } = useParams(); // Get userId from URL params
 
   // Fetch companies and departments from API when component mounts
   useEffect(() => {
@@ -58,19 +60,20 @@ const EditUser = () => {
     // Fetch user details when the component mounts
     const fetchUserDetails = async () => {
       try {
-        const response = await axios.get(`${apis.baseUrl}/register/getUserDetails/${userId}`, {
+        const response = await axios.post(`${apis.baseUrl}/register/getUserById`,{user_id:id}, {
           headers: {
             Authorization: sessionStorage.getItem("auth_token"),
           },
         });
-        setUser(response?.data?.user); // Assuming the response contains user data
-        fetchDepartments(response?.data?.user.org_id); // Fetch departments for the user's company
+        setUser(response?.data?.data); // Assuming the response contains user data
+        fetchDepartments(response?.data?.org_id); // Fetch departments for the user's company
+        setLoading(false);
       } catch (error) {
         console.error("Error fetching user details:", error);
       }
     };
     fetchUserDetails();
-  }, [userId]);
+  }, [id]);
 
   // Fetch departments when a company is selected
   const fetchDepartments = async (companyId) => {
@@ -96,8 +99,9 @@ const EditUser = () => {
   // Handle form submission
   const handleSubmit = async (values, actions) => {
     try {
-      const response = await axios.put(
-        `${apis.baseUrl}/register/updateUser/${userId}`,
+      values.user_id = id;
+      const response = await axios.post(
+        `${apis.baseUrl}/register/editUser  `,
         values,
         {
           headers: {
@@ -109,7 +113,7 @@ const EditUser = () => {
       actions.resetForm({
         values: initialValues,
       });
-      navigate("/sa/users");
+      navigate("/admin/users");
     } catch (error) {
       console.error("Error updating user:", error);
     }
@@ -120,11 +124,11 @@ const EditUser = () => {
   return (
     <Box m="20px">
       <Header
-        title="EDIT USER"
+        title="Edit User"
         subtitle="Edit user details by filling the form below"
       />
-
-      <Formik
+<div  style={{ marginTop: "30px" }}>
+<Formik
         onSubmit={handleSubmit}
         initialValues={user} // Use the fetched user data as the initial values
         validationSchema={checkoutSchema}
@@ -152,12 +156,14 @@ const EditUser = () => {
                 style={{
                   fontSize: "1.2rem",
                   fontWeight: "bold",
-                  color: "#333",
+                 
                   padding: "0 10px",
                   marginBottom: "10px",
                 }}
               >
-                Company Information
+              
+               
+                <Typography>Company Information</Typography>
               </legend>
 
               <Box
@@ -237,12 +243,7 @@ const EditUser = () => {
                   helperText={touched.employee_code && errors.employee_code}
                   sx={{
                     gridColumn: "span 2",
-                    backgroundColor: "#F2F0F0",
-                    border: "1px solid #ddd",
-                    borderRadius: "4px",
-                    "& .MuiFilledInput-root": {
-                      backgroundColor: "#F2F0F0",
-                    },
+                   
                   }}
                 />
               </Box>
@@ -261,12 +262,14 @@ const EditUser = () => {
                 style={{
                   fontSize: "1.2rem",
                   fontWeight: "bold",
-                  color: "#333",
+                 
                   padding: "0 10px",
                   marginBottom: "10px",
                 }}
               >
-                User Information
+                
+                
+                <Typography>  User Information</Typography>
               </legend>
 
               <Box
@@ -292,12 +295,12 @@ const EditUser = () => {
                   helperText={touched.full_name && errors.full_name}
                   sx={{
                     gridColumn: "span 2",
-                    backgroundColor: "#F2F0F0",
-                    border: "1px solid #ddd",
-                    borderRadius: "4px",
-                    "& .MuiFilledInput-root": {
-                      backgroundColor: "#F2F0F0",
-                    },
+                    // backgroundColor: "#F2F0F0",
+                    // border: "1px solid #ddd",
+                    // borderRadius: "4px",
+                    // "& .MuiFilledInput-root": {
+                    //   backgroundColor: "#F2F0F0",
+                    // },
                   }}
                 />
 
@@ -314,12 +317,12 @@ const EditUser = () => {
                   helperText={touched.phone && errors.phone}
                   sx={{
                     gridColumn: "span 2",
-                    backgroundColor: "#F2F0F0",
-                    border: "1px solid #ddd",
-                    borderRadius: "4px",
-                    "& .MuiFilledInput-root": {
-                      backgroundColor: "#F2F0F0",
-                    },
+                    // backgroundColor: "#F2F0F0",
+                    // border: "1px solid #ddd",
+                    // borderRadius: "4px",
+                    // "& .MuiFilledInput-root": {
+                    //   backgroundColor: "#F2F0F0",
+                    // },
                   }}
                 />
 
@@ -336,12 +339,12 @@ const EditUser = () => {
                   helperText={touched.email && errors.email}
                   sx={{
                     gridColumn: "span 2",
-                    backgroundColor: "#F2F0F0",
-                    border: "1px solid #ddd",
-                    borderRadius: "4px",
-                    "& .MuiFilledInput-root": {
-                      backgroundColor: "#F2F0F0",
-                    },
+                    // backgroundColor: "#F2F0F0",
+                    // border: "1px solid #ddd",
+                    // borderRadius: "4px",
+                    // "& .MuiFilledInput-root": {
+                    //   backgroundColor: "#F2F0F0",
+                    // },
                   }}
                 />
               </Box>
@@ -360,12 +363,12 @@ const EditUser = () => {
                 style={{
                   fontSize: "1.2rem",
                   fontWeight: "bold",
-                  color: "#333",
+               
                   padding: "0 10px",
                   marginBottom: "10px",
                 }}
               >
-                Role Information
+               <Typography>Role Information</Typography> 
               </legend>
 
               <Box>
@@ -401,27 +404,18 @@ const EditUser = () => {
 
             <div className="flex gap-4 justify-end">
               {/* Cancel Button */}
-              <Box display="flex" alignItems="center" justifyContent="end" mt="20px">
-                <Button
-                  onClick={() => navigate("/sa/users")}
-                  type="button"
-                  color="primary"
-                  variant="contained"
-                >
-                  Cancel
-                </Button>
-              </Box>
-
-              {/* Submit Button */}
-              <Box display="flex" alignItems="center" justifyContent="end" mt="20px">
-                <Button type="submit" color="secondary" variant="contained">
-                  Submit
-                </Button>
+              <Box display="flex" alignItems="center" justifyContent="end" gap={4}>
+                
+                <CancelLink  Hyperbtntext="Cancel" hyperLinkText="/sa/users"/>
+              
+                <AddButton btn=" Submit"/>
               </Box>
             </div>
           </form>
         )}
       </Formik>
+</div>
+      
     </Box>
   );
 };

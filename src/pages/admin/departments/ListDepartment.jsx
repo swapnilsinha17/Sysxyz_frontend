@@ -74,7 +74,7 @@ const ListDepartment = () => {
           {/* Edit Button */}
           
           <Button
-            onClick={() => navigate(`/sa/departments/edit/${params.row.dept_id}`)}
+            onClick={() => navigate(`/admin/departments/edit/${params.row.dept_id}`)}
             sx={{
               backgroundColor: colors.blueAccent[700],
               marginRight: 2,

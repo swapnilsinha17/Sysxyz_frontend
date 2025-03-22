@@ -9,7 +9,7 @@ import { apis } from "../../../utils/utills";
 
 // Initial values for Formik
 const initialValues = {
-  org_id: "",
+
   dept_id: "",
   employee_code: "",
   full_name: "",
@@ -19,7 +19,6 @@ const initialValues = {
 };
 
 const checkoutSchema = Yup.object({
-  org_id: Yup.string().required("Please select a Company"),
   dept_id: Yup.string().required("Please select a Department"),
   employee_code: Yup.string().required("Employee Code is required"),
   full_name: Yup.string().required("Name is required").min(3, "Name must be at least 3 characters"),
@@ -37,51 +36,39 @@ const AddUser = () => {
 
   // Fetch companies and departments from API when component mounts
   useEffect(() => {
-    const fetchCompanies = async () => {
+    const fetchDepartments = async () => {
       try {
-        const response = await axios.get(`${apis.baseUrl}/sa/getOrganizationlist`, {
+        const user = JSON.parse(sessionStorage.getItem("user")); 
+        const comapnyId = user.org_id;
+       
+        const response = await axios.get(`${apis.baseUrl}/sa/getDepartmentList`, {
           headers: {
             Authorization: sessionStorage.getItem("auth_token"),
           },
         });
-        console.log(response)
-        setCompanies(response?.data?.org?.organizations); // Assuming the response contains a list of companies
+        console.log(response.data)
+        setDepartments(response?.data?.org.departments); // Assuming the response contains a list of departments
       } catch (error) {
-        console.error("Error fetching companies:", error);
-      } finally {
-        setLoading(false); // Set loading to false once the data is fetched
+        console.error("Error fetching departments:", error);
       }
     };
-    fetchCompanies();
+    fetchDepartments();
   }, []);
 
   // Fetch departments when a company is selected
-  const fetchDepartments = async (companyId) => {
-    try {
-      const response = await axios.get(`${apis.baseUrl}/sa/getDepartmentList`, {
-        headers: {
-          Authorization: sessionStorage.getItem("auth_token"),
-        },
-      });
-      console.log(response.data)
-      setDepartments(response?.data?.org.departments); // Assuming the response contains a list of departments
-    } catch (error) {
-      console.error("Error fetching departments:", error);
-    }
-  };
+  
 
   // Handle company change
-  const handleCompanyChange = (e, setFieldValue) => {
-    const companyId = e.target.value;
-    setFieldValue("org_id", companyId);
-    fetchDepartments(companyId);
-  };
+ 
 
   // Handle form submission
   const handleSubmit = async (values, actions) => {
     try {
         values.password = "Qwerty@123"
         values.language_id = 1; 
+        const user = JSON.parse(sessionStorage.getItem("user")); 
+        values.org_id = user.org_id;
+       
       const response = await axios.post(
         `${apis.baseUrl}/register/addUser`,
         values,
@@ -98,7 +85,7 @@ const AddUser = () => {
         values: initialValues,
       });
 
-      navigate("/sa/users");
+      navigate("/admin/users");
     } catch (error) {
       console.error("Error adding user:", error);
     }
@@ -157,34 +144,7 @@ const AddUser = () => {
                   },
                 }}
               >
-                <FormControl fullWidth sx={{ gridColumn: "span 2" }}>
-                  <InputLabel id="org_id-label">Select Company</InputLabel>
-                  <Select
-                    labelId="org_id-label"
-                    id="org_id"
-                    name="org_id"
-                    value={values.org_id}
-                    label="Select Company"
-                    onBlur={handleBlur}
-                    onChange={(e) => handleCompanyChange(e, setFieldValue)}
-                    error={touched.org_id && Boolean(errors.org_id)}
-                  >
-                    {loading ? (
-                      <MenuItem disabled>Loading...</MenuItem>
-                    ) : (
-                      companies.map((company) => (
-                        <MenuItem key={company.org_id} value={company.org_id}>
-                          {company.org_name}
-                        </MenuItem>
-                      ))
-                    )}
-                  </Select>
-                  {touched.org_id && errors.org_id && (
-                    <div style={{ color: "red", fontSize: "12px" }}>
-                      {errors.org_id}
-                    </div>
-                  )}
-                </FormControl>
+              
 
                 <FormControl fullWidth sx={{ gridColumn: "span 2" }}>
                   <InputLabel id="dept_id-label">Select Department</InputLabel>

@@ -9,7 +9,7 @@ import { apis } from "../../../utils/utills";
 
 // Initial values for Formik
 const initialValues = {
-  org_id: "",
+ 
   department_name: "",
 };
 
@@ -17,7 +17,6 @@ const checkoutSchema = Yup.object({
   department_name: Yup.string()
     .required("Department Name is required")
     .min(3, "Department Name must be at least 3 characters long"),
-  org_id: Yup.string().required("Please select Organization"),
 });
 
 const AddDepartment = () => {
@@ -48,6 +47,8 @@ const AddDepartment = () => {
   // Handle form submission
   const handleSubmit = async (values, actions) => {
     try {
+      const user = JSON.parse(sessionStorage.getItem("user")); 
+      values.org_id = user.org_id;
       const response = await axios.post(
         `${apis.baseUrl}/sa/addDepartment`,
         values,
@@ -122,34 +123,7 @@ const AddDepartment = () => {
                   },
                 }}
               >
-                <FormControl fullWidth sx={{ gridColumn: "span 2" }}>
-                  <InputLabel id="org_id-label">Select Company</InputLabel>
-                  <Select
-                    labelId="org_id-label"
-                    id="org_id"
-                    name="org_id"
-                    value={values.org_id}
-                    label="Select Company"
-                    onBlur={handleBlur}
-                    onChange={handleChange}
-                    error={touched.org_id && Boolean(errors.org_id)}
-                  >
-                    {loading ? (
-                      <MenuItem disabled>Loading...</MenuItem>
-                    ) : (
-                      companies.map((company) => (
-                        <MenuItem key={company.org_id} value={company.org_id}>
-                          {company.org_name}
-                        </MenuItem>
-                      ))
-                    )}
-                  </Select>
-                  {touched.org_id && errors.org_id && (
-                    <div style={{ color: "red", fontSize: "12px" }}>
-                      {errors.org_id}
-                    </div>
-                  )}
-                </FormControl>
+                
 
                 <TextField
                   fullWidth
